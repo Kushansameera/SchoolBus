@@ -214,6 +214,7 @@ public class TempStudentFragment extends Fragment {
 
     private void checkStuId() {
         mProgressDialog.setMessage("Wait");
+        
         mProgressDialog.show();
         mProgressDialog.setCancelable(false);
         ref.child("Drivers").child(driverId).addListenerForSingleValueEvent(new ValueEventListener() {
