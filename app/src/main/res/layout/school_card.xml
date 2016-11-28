@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2.5dp"
+    app:cardCornerRadius="5dp">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/school_loc_image"
+            android:layout_width="57dp"
+            android:layout_height="42dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_school" />
+
+        <TextView
+            android:id="@+id/txtSchoolName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

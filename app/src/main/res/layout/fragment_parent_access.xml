@@ -1,0 +1,68 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kusha.schoolbus.fragments.parent.ParentAccessFragment">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f81616"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <TextView
+                android:text="Insert Access Key which you got from the relevant Driver. If not Please Contact The Driver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView6"
+                android:textSize="19sp"
+                android:layout_marginTop="2dp"
+                android:paddingLeft="10dp"
+                android:layout_weight="0.14"
+                android:background="#f37272"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:textColor="@color/cardview_light_background" />
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_access"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="25dp">
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/txtAccessKey"
+                android:hint="Access Key"
+                android:layout_weight="1"
+                android:textSize="19sp"
+                android:inputType="numberSigned" />
+
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:text="Get Access"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnGetAccess"
+            android:textColor="@android:color/background_light"
+            android:background="#387EF5"
+            android:layout_marginTop="10dp" />
+
+    </LinearLayout>
+</FrameLayout>

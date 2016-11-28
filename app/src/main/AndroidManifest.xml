@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.kusha.schoolbus">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- Required to show current location -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Required OpenGL ES 2.0. for Maps V2 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <application
+        android:name=".application.ApplicationClass"
+        android:allowBackup="true"
+        android:icon="@drawable/buslogo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activities.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.SignupActivity" />
+        <activity
+            android:name=".activities.driver.DriverActivity"
+            android:label="@string/title_activity_driver"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.driver.PaymentActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kusha.schoolbus.activities.driver.DriverActivity" />
+        </activity>
+        <activity android:name=".activities.driver.RouteSettingActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kusha.schoolbus.activities.driver.DriverActivity" />
+        </activity>
+        <activity android:name=".activities.parent.SelectDriverActivity" />
+        <activity
+            android:name=".activities.parent.ParentActivity"
+            android:label="@string/title_activity_parent"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <!-- Goolge API Key -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value=" AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw " />
+
+        <activity android:name=".activities.driver.StudentActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kusha.schoolbus.activities.driver.DriverActivity" />
+        </activity>
+    </application>
+
+</manifest>

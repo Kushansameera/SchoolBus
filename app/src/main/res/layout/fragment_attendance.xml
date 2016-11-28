@@ -1,0 +1,54 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kusha.schoolbus.fragments.parent.AttendanceFragment">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="264dp"
+        android:weightSum="1">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Is The Child Coming Today"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_height="57dp"
+            android:id="@+id/radioGroup"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="0.20">
+
+            <RadioButton
+                android:text="Yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButtonParent"
+                android:layout_weight="0.16"
+                android:checked="true"/>
+
+            <RadioButton
+                android:text="No"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButtonChild"
+                android:layout_weight="0.15" />
+        </RadioGroup>
+        <Button
+            android:text="Submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/btnSubmit"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/background_light" />
+    </LinearLayout>
+</FrameLayout>

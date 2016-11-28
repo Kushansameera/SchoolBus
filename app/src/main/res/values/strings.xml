@@ -1,0 +1,92 @@
+<resources>
+    <string name="app_name">SchoolBus</string>
+    <string-array name="user_type_array">
+        <item>Driver</item>
+        <item>Parent</item>
+    </string-array>
+    <string name="title_activity_driver">DriverActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="route_fragment">Route Fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="student_fragment">Student fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="payment_fragment">Payment fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="message_fragment">Message fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="route_setting_fragment">Route Setting fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="setting_fragment">Setting fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="student_grade">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+    </string-array>
+    <string-array name="student_class">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+        <item>F</item>
+    </string-array>
+
+    <string-array name="locations">
+        <item>Kadawatha</item>
+        <item>Mahara Junction</item>
+        <item>Kiribathgoda</item>
+        <item>Peliyagoda</item>
+        <item>Orugodawatta</item>
+    </string-array>
+
+    <string-array name="years">
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+    </string-array>
+
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+    <string name="title_activity_parent">ParentActivity</string>
+
+
+</resources>

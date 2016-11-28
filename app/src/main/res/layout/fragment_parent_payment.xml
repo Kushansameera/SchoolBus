@@ -1,0 +1,68 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kusha.schoolbus.fragments.parent.ParentPaymentragment">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="25dp"
+            android:weightSum="1">
+            <TextView
+                android:layout_width="157dp"
+                android:layout_height="wrap_content"
+                android:textSize="19dp"
+                android:layout_marginLeft="6dp"
+                android:text="Year"
+                android:layout_weight="0.03" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="19dp"
+                android:text="Month"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:weightSum="1"
+            android:background="@android:color/darker_gray">
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerYear"
+                android:layout_gravity="center"
+                android:entries="@array/years"
+                android:layout_weight="0.15">
+
+            </Spinner>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="52dp"
+                android:id="@+id/spinnerMonth"
+                android:entries="@array/months"
+                android:layout_weight="0.04">
+
+            </Spinner>
+        </LinearLayout>
+        <Button
+            android:text="Search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnSearch"
+            android:textColor="@android:color/background_light"
+            android:background="#387EF5"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+</FrameLayout>

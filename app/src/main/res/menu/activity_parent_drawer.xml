@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_bus_location"
+            android:icon="@drawable/ic_map"
+            android:title="Bus Location" />
+        <item
+            android:id="@+id/nav_attendance"
+            android:icon="@drawable/ic_attend"
+            android:title="Attendance" />
+        <item
+            android:id="@+id/nav_message"
+            android:icon="@drawable/ic_message"
+            android:title="Messages" />
+        <item
+            android:id="@+id/nav_children"
+            android:icon="@drawable/ic_student"
+            android:title="Children" />
+        <item
+            android:id="@+id/nav_payment"
+            android:icon="@drawable/ic_payment"
+            android:title="Payments" />
+        <item
+            android:id="@+id/nav_driver"
+            android:icon="@drawable/ic_driver"
+            android:title="Driver" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Log Out" />
+    </group>
+
+
+
+</menu>

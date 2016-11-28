@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "752459694716",
+    "firebase_url": "https://schoolbus-708f4.firebaseio.com",
+    "project_id": "schoolbus-708f4",
+    "storage_bucket": "schoolbus-708f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752459694716:android:cb67989e94b3dcb9",
+        "android_client_info": {
+          "package_name": "com.example.kusha.schoolbus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752459694716-omle37dbs5u0cc2eimtt8q9fcidnqm46.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIcVSAC0jdw69o6l34D2oRGe4Rv2FLeuI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
