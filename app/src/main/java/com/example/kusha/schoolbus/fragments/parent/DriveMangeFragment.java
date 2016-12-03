@@ -2,26 +2,26 @@ package com.example.kusha.schoolbus.fragments.parent;
 
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Handler;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.adapter.ManageDriversAdapter;
-import com.example.kusha.schoolbus.fragments.driver.ViewStudentFragment;
 import com.example.kusha.schoolbus.models.ManageDrivers;
 import com.example.kusha.schoolbus.models.ManageParents;
 import com.example.kusha.schoolbus.models.User;
@@ -51,11 +51,11 @@ public class DriveMangeFragment extends Fragment {
     private boolean flag = false;
     RecyclerView rcvManageDrivers;
     ManageDriversAdapter adapter;
+    EditText txtFilter;
     List<User> drivers = new ArrayList<>();
+    private User user;
 
-    public DriveMangeFragment() {
-        // Required empty public constructor
-    }
+    public DriveMangeFragment() {}
 
 
     @Override
@@ -63,6 +63,7 @@ public class DriveMangeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_drive_mange, container, false);
         rcvManageDrivers = (RecyclerView) rootView.findViewById(R.id.rcvManageDrivers);
+        txtFilter = (EditText)rootView.findViewById(R.id.txtFilterName);
         mProgressDialog = new ProgressDialog(getActivity());
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
@@ -83,11 +84,7 @@ public class DriveMangeFragment extends Fragment {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.view_item:
-//                                ViewStudentFragment.currentStudentId = stuId;
-//                                ViewStudentFragment.driverId = userId;
-//                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                                ft.replace(R.id.current_student_frame_container, new ViewStudentFragment());
-//                                ft.commit();
+                                getDriverId(driverEmail);
                                 return true;
                             case R.id.add_item:
                                 addDriver(driverEmail);
@@ -242,6 +239,73 @@ public class DriveMangeFragment extends Fragment {
                     }, 2000);
 
                 }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void showDriverData(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setMessage("Driver Info");
+        alertDialogBuilder.setIcon(R.drawable.ic_info);
+
+        LinearLayout layout = new LinearLayout(getActivity());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        final TextView name = new TextView(getActivity());
+        final TextView email = new TextView(getActivity());
+        final TextView phone = new TextView(getActivity());
+
+        name.setText("\t\t\t\t\t\tName  : "+user.getName());
+        email.setText("\t\t\t\t\t\tEmail  : "+user.getEmail());
+        phone.setText("\t\t\t\t\t\tPhone : "+user.getPhoneNumber());
+
+        layout.addView(name);
+        layout.addView(email);
+        layout.addView(phone);
+
+        alertDialogBuilder.setView(layout);
+
+        alertDialogBuilder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialogBuilder.show();
+    }
+
+    private void getDriverId(String driverEmail){
+        Query queryRef;
+        queryRef = ref.child("Drivers").orderByChild("email").equalTo(driverEmail);
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            String driverID;
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data:dataSnapshot.getChildren()) {
+                    driverID = data.getKey();
+                    getDrverDetails(driverID);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void getDrverDetails(String driverID){
+        ref.child("Users").child(driverID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                showDriverData();
             }
 
             @Override

@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,11 @@ import android.widget.Toast;
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.application.GPSTracker;
 import com.example.kusha.schoolbus.fragments.parent.AddNewChildFragment;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -50,6 +56,7 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View stuLocFragment = inflater.inflate(R.layout.fragment_student_location, container, false);
+        PlaceAutocompleteFragment placeAutocompleteFragment = (PlaceAutocompleteFragment) this.getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
         btnSetLocation = (Button) stuLocFragment.findViewById(R.id.btnSet);
         btnSetLocation.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +82,24 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
 
             }
         });
+        placeAutocompleteFragment.setHint("Search Location");
+
+        placeAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.d("=====>",status.getStatusMessage());
+            }
+        });
+
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
+                .build();
+        placeAutocompleteFragment.setFilter(typeFilter);
 
         MapFragment mapFragment = (MapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

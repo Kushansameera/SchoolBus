@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kusha.schoolbus.R;
+import com.example.kusha.schoolbus.activities.parent.ManageDriversActivity;
 import com.example.kusha.schoolbus.activities.parent.ParentActivity;
 import com.example.kusha.schoolbus.models.DriverLocation;
 import com.firebase.client.DataSnapshot;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,9 +75,8 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
             alertDialogBuilder.setPositiveButton("Select", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
-                    Fragment fragment = new DriveMangeFragment();
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_parent, fragment).commit();
+                    Intent intent = new Intent(getActivity(), ManageDriversActivity.class);
+                    startActivity(intent);
                 }
             });
 
@@ -136,10 +137,12 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
     private void createMarker(DriverLocation location){
         this.busMap.clear();
         MarkerOptions marker = new MarkerOptions().position(new LatLng(location.getDriverLatitude(), location.getDriverLongitude())).title("Your Location");
-       // marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker_bus));
-        this.busMap.addMarker(marker);
+        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_map));
         marker.title("School Bus");
+//        marker.icon(BitmapDescriptorFactory
+//                .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
         marker.getSnippet();
+        this.busMap.addMarker(marker);
         this.busMap.animateCamera((CameraUpdateFactory.newLatLngZoom(new LatLng(location.getDriverLatitude(), location.getDriverLongitude()),15)));
     }
 }
