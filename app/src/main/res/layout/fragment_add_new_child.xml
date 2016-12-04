@@ -169,7 +169,8 @@
                     android:paddingTop="10dp"
                     android:textSize="14sp"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
@@ -206,7 +207,8 @@
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
@@ -243,7 +245,8 @@
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
