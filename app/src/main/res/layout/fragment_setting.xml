@@ -211,6 +211,7 @@
                             android:layout_height="wrap_content"
                             android:background="#387EF5"
                             android:text="Create"
+                            android:layout_gravity="center"
                             android:textColor="@android:color/background_light"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp" />
@@ -220,6 +221,7 @@
                             android:layout_height="wrap_content"
                             android:background="#387EF5"
                             android:text="Remove"
+                            android:layout_gravity="center"
                             android:textColor="@android:color/background_light"
                             android:layout_marginRight="10dp"
                             android:layout_width="185dp" />

@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
@@ -15,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.LoginActivity;
@@ -25,7 +28,11 @@ import com.example.kusha.schoolbus.fragments.driver.RouteFragment;
 import com.example.kusha.schoolbus.fragments.driver.SettingFragment;
 import com.example.kusha.schoolbus.fragments.driver.ViewStudentFragment;
 import com.example.kusha.schoolbus.models.DriverLocation;
+import com.example.kusha.schoolbus.models.User;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -35,7 +42,12 @@ public class DriverActivity extends AppCompatActivity
     public FirebaseAuth mFirebaseAuth;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     private static String userId;
+    private static String userEmail;
+    User mUser;
+    //String userName;
     Fragment fragment = null;
+    TextView navName;
+    TextView navEmail;
 
 
 //    TextView txtUserName;
@@ -53,14 +65,41 @@ public class DriverActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         userId = user.getUid().toString().trim();
+        userEmail = user.getEmail().toString().trim();
 
+        ref.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               // for (DataSnapshot data:dataSnapshot.getChildren()) {
+                    mUser = dataSnapshot.getValue(User.class);
+               // }
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
         updateLocation();
+        final View view = navigationView.getHeaderView(0);
+        final Handler key = new Handler();
+        key.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                navName = (TextView)view.findViewById(R.id.textDriverName);
+                navEmail = (TextView)view.findViewById(R.id.textDriverEmail);
+                navName.setText(mUser.getName());
+                navEmail.setText(userEmail);
+            }
+        }, 2000);
+
 
 
         try {

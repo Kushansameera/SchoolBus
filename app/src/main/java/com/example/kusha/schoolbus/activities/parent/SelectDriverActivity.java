@@ -1,14 +1,21 @@
 package com.example.kusha.schoolbus.activities.parent;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
+import com.example.kusha.schoolbus.models.Children;
 import com.example.kusha.schoolbus.models.ManageDrivers;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -29,7 +36,9 @@ public class SelectDriverActivity extends AppCompatActivity {
     private String userId;
     public FirebaseAuth mFirebaseAuth;
     private RadioGroup driverRadioGroup;
+    private RadioGroup childRadioGroup;
     List<ManageDrivers> manageDrivers = new ArrayList<>();
+    List<Children> childrens = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +51,9 @@ public class SelectDriverActivity extends AppCompatActivity {
         userId = user.getUid().toString().trim();
         showDrivers();
 
-        select = (Button)findViewById(R.id.btnDone);
-        driverRadioGroup = (RadioGroup)findViewById(R.id.radioGroupDrivers);
-
-
+        select = (Button) findViewById(R.id.btnDone);
+        driverRadioGroup = (RadioGroup) findViewById(R.id.radioGroupDrivers);
+        childRadioGroup = new RadioGroup(SelectDriverActivity.this);
 
 
         select.setOnClickListener(new View.OnClickListener() {
@@ -53,14 +61,44 @@ public class SelectDriverActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int selectedRadioId = driverRadioGroup.getCheckedRadioButtonId();
                 //RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioId);
-                ParentActivity.selectedDriverEmail = manageDrivers.get(selectedRadioId-1).getDriverEmail().toString().trim();
-                Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
-                startActivity(intent);
+//                ParentActivity.selectedDriverEmail = manageDrivers.get(selectedRadioId - 1).getDriverEmail().toString().trim();
+//                ParentActivity.selectedDriverID = manageDrivers.get(selectedRadioId - 1).getDriverId().toString().trim();
+                RadioButton selectedRadioButton = (RadioButton)findViewById(selectedRadioId);
+                String name = selectedRadioButton.getText().toString();
+                for(int i=0;i<manageDrivers.size();i++){
+                    if(name.equals(manageDrivers.get(i).getDriverName())){
+                        ParentActivity.selectedDriverEmail = manageDrivers.get(i).getDriverEmail();
+                        ParentActivity.selectedDriverID = manageDrivers.get(i).getDriverId();
+                        break;
+                    }
+                }
+                ref.child("Parents").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild("children")) {
+                            getChildData();
+
+                        } else {
+                            ParentActivity.selectedChildId = "";
+                            ParentActivity.selectedChildName = "";
+                            Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
+                            startActivity(intent);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
+
+//                Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
+//                startActivity(intent);
             }
         });
     }
 
-    public void showDrivers(){
+    public void showDrivers() {
         manageDrivers.clear();
         Query queryRef;
         queryRef = ref.child("Parents").child(userId).child("driver").orderByChild("regDrivers");
@@ -85,6 +123,57 @@ public class SelectDriverActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void getChildData() {
+        childrens.clear();
+        Query queryRef;
+        queryRef = ref.child("Parents").child(userId).child("children").child(ParentActivity.selectedDriverID);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                childrens.clear();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Children c = data.getValue(Children.class);
+                    childrens.add(c);
+                }
+                showChildren();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void showChildren() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Select Your Child");
+
+        for (int i = 0; i < childrens.size(); i++) {
+            RadioButton childRadioButton = new RadioButton(SelectDriverActivity.this);
+            childRadioButton.setText(childrens.get(i).getStuName());
+            childRadioButton.setTextSize(15);
+            childRadioGroup.addView(childRadioButton);
+        }
+
+        alertDialogBuilder.setView(childRadioGroup);
+
+        alertDialogBuilder.setPositiveButton("Select", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int selectedRadioId = childRadioGroup.getCheckedRadioButtonId()-childrens.size();
+                ParentActivity.selectedChildId = childrens.get(selectedRadioId).getStuId().toString().trim();
+                ParentActivity.selectedChildName = childrens.get(selectedRadioId).getStuName().toString().trim();
+                Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
+                startActivity(intent);
+                //Toast.makeText(SelectDriverActivity.this, "id= "+ParentActivity.selectedChildId+"\n Name= "+ParentActivity.selectedChildName, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alertDialogBuilder.show();
     }
 
 

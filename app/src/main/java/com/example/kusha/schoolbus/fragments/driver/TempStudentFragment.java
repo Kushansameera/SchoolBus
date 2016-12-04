@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.adapter.CustomAdapter;
+import com.example.kusha.schoolbus.application.GeoDistance;
+import com.example.kusha.schoolbus.models.Children;
 import com.example.kusha.schoolbus.models.RouteFees;
 import com.example.kusha.schoolbus.models.RouteLocations;
 import com.example.kusha.schoolbus.models.Schools;
@@ -40,15 +42,20 @@ import java.util.List;
 public class TempStudentFragment extends Fragment {
     public static String tempStudentId = "";
     public static String driverId = "";
-    private TextView txtTempStuName, txtTempStuSchool, txtTempStuGrade, txtTempStuClass, txtTempStuPickup, txtTempStuDrop, txtTempStuPickupTime, txtTempStuMonthlyFee;
-    private Spinner spinnerTempStuFrom;
-    private Button btnAccept, btnReject, btnMonthlyFee;
-    List<String> tempStuFrom = new ArrayList<>();
-    Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
-    private Student student;
+    public static String studistance="";
     private static String latestStudentID;
+
+    private TextView txtTempStuName, txtTempStuSchool, txtTempStuGrade, txtTempStuClass, txtTempStuPickup, txtTempStuDrop, txtTempStuPickupTime, txtTempStuMonthlyFee;
+    private Button btnAccept, btnReject, btnMonthlyFee;
+
+    Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
+
+    private Student student;
+    private Schools school;
+    private Double pricePerKm;
     boolean flag = false;
     private ProgressDialog mProgressDialog;
+    View stuRequestFragment;
 
     public TempStudentFragment() {
     }
@@ -57,7 +64,7 @@ public class TempStudentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View stuRequestFragment = inflater.inflate(R.layout.fragment_temp_student, container, false);
+        stuRequestFragment = inflater.inflate(R.layout.fragment_temp_student, container, false);
 
         txtTempStuName = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuName);
         txtTempStuSchool = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuSchool);
@@ -67,23 +74,19 @@ public class TempStudentFragment extends Fragment {
         txtTempStuDrop = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuDrop);
         txtTempStuPickupTime = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuPickupTime);
         txtTempStuMonthlyFee = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuMonthlyFee);
-        spinnerTempStuFrom = (Spinner) stuRequestFragment.findViewById(R.id.spinnerTempStuFrom);
         btnAccept = (Button) stuRequestFragment.findViewById(R.id.btnAccept);
         btnReject = (Button) stuRequestFragment.findViewById(R.id.btnReject);
         btnMonthlyFee = (Button) stuRequestFragment.findViewById(R.id.btnMonthlyFee);
         mProgressDialog = new ProgressDialog(getActivity());
-        setSpinnerValues();
         getTempStudentData();
+        getSchoolDetails();
+        getPricePerKm();
 
         btnMonthlyFee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (spinnerTempStuFrom.getSelectedItemPosition() != 0) {
-                    checkStuId();
-                    getMonthlyFee();
-                } else {
-                    Toast.makeText(getActivity(), "Please Select Nearest Pickup Location", Toast.LENGTH_SHORT).show();
-                }
+                checkStuId();
+                calculateMonthlyFee();
 
             }
         });
@@ -96,9 +99,11 @@ public class TempStudentFragment extends Fragment {
                         if (latestStudentID.equals("1")) {
                             ref.child("Drivers").child(driverId).child("permanent").child("studentCounter").setValue(1);
                             addStudent();
+                            saveStudentWithParent();
                             flag = false;
                         } else {
                             addStudent();
+                            saveStudentWithParent();
                             flag = false;
                         }
                     }
@@ -140,33 +145,6 @@ public class TempStudentFragment extends Fragment {
         return stuRequestFragment;
     }
 
-    private void setSpinnerValues() {
-        Query queryRef;
-        queryRef = ref.child("Drivers").child(driverId).child("route").orderByChild("routeLocations");
-        tempStuFrom.clear();
-        tempStuFrom.add("Select Nearest Pickup Location");
-
-        queryRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    for (DataSnapshot d : data.getChildren()) {
-                        RouteLocations s = d.getValue(RouteLocations.class);
-                        tempStuFrom.add(s.getLocName());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        CustomAdapter locFrom = new CustomAdapter(getActivity(), android.R.layout.simple_spinner_item, tempStuFrom, 0);
-        locFrom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTempStuFrom.setAdapter(locFrom);
-    }
 
     private void getTempStudentData() {
         ref.child("Drivers").child(driverId).child("temp").child("tempStudent").child(tempStudentId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -189,32 +167,30 @@ public class TempStudentFragment extends Fragment {
         });
     }
 
-    private void getMonthlyFee() {
-        ref.child("Drivers").child(driverId).child("fees").child("routeFees").addListenerForSingleValueEvent(new ValueEventListener() {
+    private void calculateMonthlyFee() {
+        mProgressDialog.setMessage("Calculating");
+        mProgressDialog.show();
+        mProgressDialog.setCancelable(false);
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+student.getStuPickLatitude()+","+student.getStuPickLongitude()+"&destinations="+school.getSchoolLatitude()+","+school.getSchoolLongitude()+"&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw";
+        new GeoDistance(stuRequestFragment.getContext()).execute(url);
+        final Handler key = new Handler();
+        key.postDelayed(new Runnable() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String from = spinnerTempStuFrom.getSelectedItem().toString();
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    RouteFees routeFees = data.getValue(RouteFees.class);
-                    if (routeFees.getTo().equals(student.getStuSchool()) && routeFees.getFrom().equals(from)) {
-                        txtTempStuMonthlyFee.setText(routeFees.getFee());
-                        student.setStuFrom(routeFees.getFrom());
-                        student.setStuMonthlyFee(routeFees.getFee());
-                        break;
-                    }
-                }
+            public void run() {
+                double dis = Double.valueOf(studistance)/1000;
+                int newDis = (int)Math.round(dis);
+                int monthlyFee = newDis*((int)Math.round(pricePerKm));
+                txtTempStuMonthlyFee.setText(String.valueOf(monthlyFee));
+                student.setStuMonthlyFee(String.valueOf(monthlyFee));
+                mProgressDialog.dismiss();
             }
+        }, 2000);
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
 
-            }
-        });
     }
 
     private void checkStuId() {
-        mProgressDialog.setMessage("Wait");
-        
+        mProgressDialog.setMessage("Calculating");
         mProgressDialog.show();
         mProgressDialog.setCancelable(false);
         ref.child("Drivers").child(driverId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -241,10 +217,10 @@ public class TempStudentFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Integer currentValue = Integer.parseInt(dataSnapshot.getValue().toString());
-                Integer newValue = currentValue+1;
+                Integer newValue = currentValue + 1;
                 latestStudentID = newValue.toString();
                 ref.child("Drivers").child(driverId).child("permanent").child("studentCounter").setValue(latestStudentID);
-                mProgressDialog.dismiss();
+                //mProgressDialog.dismiss();
                 flag = true;
 
             }
@@ -278,9 +254,56 @@ public class TempStudentFragment extends Fragment {
 
     }
 
+    private void saveStudentWithParent(){
+        Children children = new Children();
+        children.setStuId(latestStudentID);
+        children.setStuName(student.getStuName());
+        ref.child("Parents").child(student.getParentID()).child("children").child(driverId).child(latestStudentID).setValue(children);
+
+    }
+
     private void deleteData() {
         ref.child("Drivers").child(driverId).child("temp").child("tempStudent").child(tempStudentId).removeValue();
     }
+
+    private void getSchoolDetails(){
+        Query queryRef;
+        queryRef = ref.child("Drivers").child(driverId).child("schools").orderByChild("routeSchools");
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data:dataSnapshot.getChildren()) {
+                    for(DataSnapshot d:data.getChildren()){
+                        school = d.getValue(Schools.class);
+                        if(school.getSchoolName().equals(student.getStuSchool())){
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void getPricePerKm(){
+        ref.child("Drivers").child(driverId).child("pricePerKm").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                pricePerKm = Double.valueOf(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
 
 
 }

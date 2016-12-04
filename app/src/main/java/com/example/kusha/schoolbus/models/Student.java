@@ -22,6 +22,15 @@ public class Student {
     private String stuPayment;
     private String parentEmail;
     private String stuMonthlyFee;
+    private String parentID;
+
+    public String getParentID() {
+        return parentID;
+    }
+
+    public void setParentID(String parentID) {
+        this.parentID = parentID;
+    }
 
     public String getStuGender() {
         return stuGender;

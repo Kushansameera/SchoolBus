@@ -155,36 +155,6 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginTop="10dp"
-            android:weightSum="1">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="166dp"
-                android:layout_height="match_parent"
-                android:background="#d0d0d0"
-                android:layout_weight="0.97">
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/spinnerTempStuFrom" />
-            </LinearLayout>
-
-            <Button
-                android:text="Fee"
-                android:layout_width="48dp"
-                android:layout_height="33dp"
-                android:id="@+id/btnMonthlyFee"
-                android:textColor="@android:color/background_light"
-                android:background="#387EF5"
-                android:layout_marginLeft="10dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
 
@@ -199,8 +169,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtTempStuMonthlyFee"
-                android:layout_weight="1"
+                android:layout_weight="0.74"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+            <Button
+                android:text="Fee"
+                android:layout_width="48dp"
+                android:layout_height="33dp"
+                android:id="@+id/btnMonthlyFee"
+                android:textColor="@android:color/background_light"
+                android:background="#387EF5"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.11" />
         </LinearLayout>
 
         <LinearLayout

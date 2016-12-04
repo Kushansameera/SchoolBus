@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
@@ -15,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
@@ -27,6 +30,13 @@ import com.example.kusha.schoolbus.fragments.parent.MessageFragment;
 import com.example.kusha.schoolbus.fragments.parent.ParentAccessFragment;
 import com.example.kusha.schoolbus.fragments.parent.ParentPaymentragment;
 import com.example.kusha.schoolbus.fragments.parent.SettingsParentFragment;
+import com.example.kusha.schoolbus.models.User;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ParentActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +44,16 @@ public class ParentActivity extends AppCompatActivity
     Fragment fragment = null;
     public static String selectedDriverID;
     public static String selectedDriverEmail = "";
+    public static String selectedChildId = "";
+    public static String selectedChildName = "";
+
+    public FirebaseAuth mFirebaseAuth;
+    private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
+    public static String userId;
+    private static String userEmail;
+    User mUser;
+    TextView navName;
+    TextView navEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +80,39 @@ public class ParentActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Toast.makeText(ParentActivity.this, selectedDriverEmail, Toast.LENGTH_SHORT).show();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        userId = user.getUid().toString().trim();
+        userEmail = user.getEmail().toString().trim();
 
-        try{
+        ref.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // for (DataSnapshot data:dataSnapshot.getChildren()) {
+                mUser = dataSnapshot.getValue(User.class);
+                // }
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        final View view = navigationView.getHeaderView(0);
+        final Handler key = new Handler();
+        key.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                navName = (TextView)view.findViewById(R.id.textParentName);
+                navEmail = (TextView)view.findViewById(R.id.textParentEmail);
+                navName.setText(mUser.getName());
+                navEmail.setText(userEmail);
+            }
+        }, 2000);
+
+        try {
             getSupportActionBar().setTitle("Bus Location");
             fragment = new BusLocationFragment();
             FragmentManager fragmentManager = getFragmentManager();
@@ -116,15 +166,15 @@ public class ParentActivity extends AppCompatActivity
             changeFragmentAttendance();
         } else if (id == R.id.nav_message) {
             changeFragmentMessage();
-        }else if (id == R.id.nav_children) {
+        } else if (id == R.id.nav_children) {
             changeFragmentChildren();
-        }else if(id == R.id.nav_payment){
+        } else if (id == R.id.nav_payment) {
             changeFragmentPayments();
-        }else if (id == R.id.nav_settings) {
+        } else if (id == R.id.nav_settings) {
             changeFragmentSettings();
         } else if (id == R.id.nav_driver) {
             changeFragmentDriver();
-        }else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_logout) {
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setMessage("Are you sure,You wanted to Sign out");
@@ -139,10 +189,10 @@ public class ParentActivity extends AppCompatActivity
                 }
             });
 
-            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    finish();
+                    dialog.dismiss();
                 }
             });
 
@@ -190,10 +240,8 @@ public class ParentActivity extends AppCompatActivity
 
     public void changeFragmentDriver() {
         try {
-            getSupportActionBar().setTitle("Driver");
-            fragment = new DriveMangeFragment();
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_frame_container_parent, fragment).commit();
+            Intent intent = new Intent(ParentActivity.this, ManageDriversActivity.class);
+            startActivity(intent);
         } catch (Exception e) {
             Log.d("Driver", e.getMessage());
         }

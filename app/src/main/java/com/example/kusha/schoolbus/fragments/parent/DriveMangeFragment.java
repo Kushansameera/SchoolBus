@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
-import com.example.kusha.schoolbus.adapter.ManageDriversAdapter;
+import com.example.kusha.schoolbus.adapter.AllDriversAdapter;
 import com.example.kusha.schoolbus.models.ManageDrivers;
 import com.example.kusha.schoolbus.models.ManageParents;
 import com.example.kusha.schoolbus.models.User;
@@ -50,7 +50,7 @@ public class DriveMangeFragment extends Fragment {
     private String driverId;
     private boolean flag = false;
     RecyclerView rcvManageDrivers;
-    ManageDriversAdapter adapter;
+    AllDriversAdapter adapter;
     EditText txtFilter;
     List<User> drivers = new ArrayList<>();
     private User user;
@@ -70,11 +70,11 @@ public class DriveMangeFragment extends Fragment {
         userId = user.getUid().toString().trim();
 
         rcvManageDrivers.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ManageDriversAdapter(getActivity(), drivers);
+        adapter = new AllDriversAdapter(getActivity(), drivers);
         showDrivers();
         rcvManageDrivers.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new ManageDriversAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new AllDriversAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 final String driverEmail = drivers.get(position).getEmail();
@@ -161,6 +161,7 @@ public class DriveMangeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 manageDrivers.setDriverEmail(dataSnapshot.child("Users").child(driverID).child("email").getValue().toString().trim());
                 manageDrivers.setDriverName(dataSnapshot.child("Users").child(driverID).child("name").getValue().toString().trim());
+                manageDrivers.setDriverId(driverID);
                 ref.child("Parents").child(userId).child("driver").child("regDrivers").child(driverID).setValue(manageDrivers);
             }
 

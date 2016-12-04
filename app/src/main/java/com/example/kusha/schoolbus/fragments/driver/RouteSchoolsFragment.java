@@ -29,6 +29,13 @@ import com.firebase.client.MutableData;
 import com.firebase.client.Query;
 import com.firebase.client.Transaction;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -39,7 +46,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RouteSchoolsFragment extends Fragment {
+public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback {
 
     RecyclerView rcvSchools;
     SchoolsAdapter adapter;
@@ -54,6 +61,9 @@ public class RouteSchoolsFragment extends Fragment {
 
     EditText txtRouteSchoolName;
     ImageButton btnAddRouteSchool;
+    GoogleMap googleMap;
+    private String schoolLatitiude = "0";
+    private String schoolLongitude = "0";
 
 
     public RouteSchoolsFragment() {
@@ -73,6 +83,7 @@ public class RouteSchoolsFragment extends Fragment {
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         userId = user.getUid().toString().trim();
 
+
         rcvSchools.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new SchoolsAdapter(getActivity(), schools);
         showSchools();
@@ -81,12 +92,17 @@ public class RouteSchoolsFragment extends Fragment {
         btnAddRouteSchool.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (txtRouteSchoolName.getText().length() == 0) {
-                    Toast.makeText(getActivity(), "Please Enter School Name", Toast.LENGTH_SHORT).show();
+                if (schoolLatitiude.equals("0") && schoolLongitude.equals("0")) {
+                    Toast.makeText(getActivity(), "Please Select School Location", Toast.LENGTH_SHORT).show();
                 } else {
-                    checkSchoolExists();
-                    flag = false;
+                    if (txtRouteSchoolName.getText().length() == 0) {
+                        Toast.makeText(getActivity(), "Please Enter School Name", Toast.LENGTH_SHORT).show();
+                    } else {
+                        checkSchoolExists();
+                        flag = false;
+                    }
                 }
+
             }
         });
 
@@ -104,7 +120,7 @@ public class RouteSchoolsFragment extends Fragment {
                                 updateData(schoolId, schoolName);
                                 return true;
                             case R.id.deleteRoute:
-                                Log.d(">>>>>>>","delete");
+                                Log.d(">>>>>>>", "delete");
                                 deleteData(schoolId, schoolName);
                                 return true;
                             default:
@@ -117,6 +133,9 @@ public class RouteSchoolsFragment extends Fragment {
                 popup.show();
             }
         });
+
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapSchool);
+        mapFragment.getMapAsync(this);
 
         return routeSchoolFragment;
     }
@@ -186,9 +205,12 @@ public class RouteSchoolsFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 routeSchools.setSchoolId(latestSchoolID);
                 routeSchools.setSchoolName(txtRouteSchoolName.getText().toString().trim());
+                routeSchools.setSchoolLatitude(schoolLatitiude);
+                routeSchools.setSchoolLongitude(schoolLongitude);
                 ref.child("Drivers").child(userId).child("schools").child("routeSchools").child(latestSchoolID).setValue(routeSchools);
                 Toast.makeText(getActivity(), "Successfully Added Location", Toast.LENGTH_SHORT).show();
                 txtRouteSchoolName.setText("");
+                googleMap.clear();
             }
 
             @Override
@@ -297,4 +319,34 @@ public class RouteSchoolsFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        LatLng SriLanka = new LatLng(7, 81);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SriLanka, 7));
+
+        this.googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                googleMap.clear();
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                markerOptions.draggable(true);
+                googleMap.addMarker(markerOptions);
+                schoolLatitiude = String.valueOf(latLng.latitude);
+                schoolLongitude = String.valueOf(latLng.longitude);
+            }
+        });
+
+        this.googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                marker.setVisible(false);
+                schoolLatitiude = "0";
+                schoolLongitude = "0";
+                return true;
+            }
+        });
+    }
 }

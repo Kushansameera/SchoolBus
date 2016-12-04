@@ -7,8 +7,18 @@ package com.example.kusha.schoolbus.models;
 public class ManageDrivers {
     private String driverName;
     private String driverEmail;
+    private String driverId;
+
 
     public ManageDrivers() {
+    }
+
+    public String getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(String driverId) {
+        this.driverId = driverId;
     }
 
     public String getDriverName() {

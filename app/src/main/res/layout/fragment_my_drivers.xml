@@ -1,0 +1,35 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kusha.schoolbus.fragments.parent.MyDriversFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:id="@+id/radioGroupMyDrivers"
+            android:orientation="vertical"
+            android:layout_height="200dp">
+
+        </RadioGroup>
+
+        <Button
+            android:text="Select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="85dp"
+            android:id="@+id/btnSelectDriver"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/background_light"
+            android:layout_below="@+id/radioGroupMyDrivers"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+</FrameLayout>

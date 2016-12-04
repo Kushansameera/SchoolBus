@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kusha.schoolbus.R;
-import com.example.kusha.schoolbus.models.ManageDrivers;
 import com.example.kusha.schoolbus.models.User;
 
 import java.util.List;
@@ -17,25 +16,25 @@ import java.util.List;
  * Created by kusha on 11/7/2016.
  */
 
-public class ManageDriversAdapter extends RecyclerView.Adapter<ManageDriversAdapter.ManageDriversViewHolder>{
+public class AllDriversAdapter extends RecyclerView.Adapter<AllDriversAdapter.AllDriversViewHolder>{
     List<User> manageDrivers;
     Context context;
     LayoutInflater layoutInflater;
 
-    public ManageDriversAdapter(Context context, List<User> drivers) {
+    public AllDriversAdapter(Context context, List<User> drivers) {
         this.manageDrivers = drivers;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
-    public ManageDriversAdapter.ManageDriversViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AllDriversViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = layoutInflater.inflate(R.layout.manage_driver_card, parent, false);
-        return new ManageDriversAdapter.ManageDriversViewHolder(v);
+        return new AllDriversViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ManageDriversAdapter.ManageDriversViewHolder holder, int position) {
+    public void onBindViewHolder(AllDriversViewHolder holder, int position) {
         User manageDriver = manageDrivers.get(position);
         holder.driverName.setText(manageDriver.getName());
         holder.driverEmail.setText(manageDriver.getEmail());
@@ -61,12 +60,12 @@ public class ManageDriversAdapter extends RecyclerView.Adapter<ManageDriversAdap
     }
 
 
-    public class ManageDriversViewHolder extends RecyclerView.ViewHolder {
+    public class AllDriversViewHolder extends RecyclerView.ViewHolder {
 
         TextView driverEmail;
         TextView driverName;
 
-        public ManageDriversViewHolder(final View itemView) {
+        public AllDriversViewHolder(final View itemView) {
             super(itemView);
 
             driverEmail = (TextView) itemView.findViewById(R.id.txtDriverEmail);

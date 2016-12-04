@@ -7,6 +7,24 @@ package com.example.kusha.schoolbus.models;
 public class Schools {
     private String schoolId;
     private String schoolName;
+    private String schoolLatitude;
+    private String schoolLongitude;
+
+    public String getSchoolLatitude() {
+        return schoolLatitude;
+    }
+
+    public void setSchoolLatitude(String schoolLatitude) {
+        this.schoolLatitude = schoolLatitude;
+    }
+
+    public String getSchoolLongitude() {
+        return schoolLongitude;
+    }
+
+    public void setSchoolLongitude(String schoolLongitude) {
+        this.schoolLongitude = schoolLongitude;
+    }
 
     public String getSchoolId() {
         return schoolId;

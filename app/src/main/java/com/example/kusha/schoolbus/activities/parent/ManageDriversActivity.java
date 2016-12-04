@@ -1,4 +1,4 @@
-package com.example.kusha.schoolbus.activities.driver;
+package com.example.kusha.schoolbus.activities.parent;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
@@ -10,11 +10,10 @@ import android.view.MenuItem;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.adapter.ViewPagerAdapter;
-import com.example.kusha.schoolbus.fragments.driver.RouteFeesFragment;
-import com.example.kusha.schoolbus.fragments.driver.RouteLocationFragment;
-import com.example.kusha.schoolbus.fragments.driver.RouteSchoolsFragment;
+import com.example.kusha.schoolbus.fragments.parent.MyDriversFragment;
+import com.example.kusha.schoolbus.fragments.parent.DriveMangeFragment;
 
-public class RouteSettingActivity extends AppCompatActivity {
+public class ManageDriversActivity extends AppCompatActivity {
     private TabLayout routeTabLayout;
     private ViewPager routeViewPager;
     ActionBar actionBar;
@@ -22,8 +21,8 @@ public class RouteSettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_setting);
-        setTitle("Route Setting");
+        setContentView(R.layout.activity_manage_drivers);
+        setTitle("Drivers");
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -35,9 +34,8 @@ public class RouteSettingActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        //adapter.addFragment(new RouteLocationFragment(), "Pickup Locations");
-        adapter.addFragment(new RouteSchoolsFragment(), "Schools");
-        adapter.addFragment(new RouteFeesFragment(), "Fee");
+        adapter.addFragment(new DriveMangeFragment(), "All");
+        adapter.addFragment(new MyDriversFragment(), "My");
         viewPager.setAdapter(adapter);
     }
 

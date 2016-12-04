@@ -348,6 +348,7 @@ public class AddNewChildFragment extends Fragment {
         student.setStuPickTime(stuPickTime);
         student.setParentEmail(userEmail);
         student.setStuGender(stuGender);
+        student.setParentID(userId);
 
 
         ref.child("Drivers").child(driverID).child("temp").child("tempStudent").child(latestTempStudentID).setValue(student, new Firebase.CompletionListener() {

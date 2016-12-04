@@ -2,19 +2,26 @@ package com.example.kusha.schoolbus.fragments.parent;
 
 
 import android.app.FragmentManager;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.parent.ParentActivity;
+import com.example.kusha.schoolbus.activities.parent.SelectDriverActivity;
+import com.example.kusha.schoolbus.models.Children;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -23,6 +30,9 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,12 +40,15 @@ import com.google.firebase.database.DatabaseReference;
 public class ParentAccessFragment extends Fragment {
 
     private EditText txtAccessKey;
-    private Button btnGetAccess;
+    private Button btnGetAccess,btnSelectChild;
     private String actualAccessKey, enteredAccessKey;
 
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     public FirebaseAuth mFirebaseAuth;
     private String driverID ;
+    View parentAccessFragment;
+    private RadioGroup childRadioGroup;
+    List<Children> childrens = new ArrayList<>();
 
 
     public ParentAccessFragment() {
@@ -45,9 +58,11 @@ public class ParentAccessFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View parentAccessFragment = inflater.inflate(R.layout.fragment_parent_access, container, false);
+        parentAccessFragment = inflater.inflate(R.layout.fragment_parent_access, container, false);
         txtAccessKey = (EditText) parentAccessFragment.findViewById(R.id.txtAccessKey);
         btnGetAccess = (Button) parentAccessFragment.findViewById(R.id.btnGetAccess);
+        btnSelectChild = (Button) parentAccessFragment.findViewById(R.id.btnSelectChild);
+        childRadioGroup = new RadioGroup(parentAccessFragment.getContext());
         getDriverID();
 
         final Handler key = new Handler();
@@ -68,8 +83,92 @@ public class ParentAccessFragment extends Fragment {
             }
         });
 
+        btnSelectChild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ref.child("Parents").child(ParentActivity.userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild("children")) {
+                            getChildData();
+
+                        } else {
+                            Toast.makeText(getActivity(), "You Haven't Registered Children Yet", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
+            }
+        });
+
 
         return parentAccessFragment;
+    }
+
+    private void getChildData() {
+        childrens.clear();
+        Query queryRef;
+        queryRef = ref.child("Parents").child(ParentActivity.userId).child("children").child(ParentActivity.selectedDriverID);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                childrens.clear();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Children c = data.getValue(Children.class);
+                    childrens.add(c);
+                }
+                showChildren();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void showChildren() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setMessage("Select Your Child");
+
+        for (int i = 0; i < childrens.size(); i++) {
+            RadioButton childRadioButton = new RadioButton(parentAccessFragment.getContext());
+            childRadioButton.setText(childrens.get(i).getStuName());
+            childRadioButton.setTextSize(15);
+            childRadioGroup.addView(childRadioButton);
+        }
+
+        alertDialogBuilder.setView(childRadioGroup);
+
+        alertDialogBuilder.setPositiveButton("Select", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                int selectedRadioId = childRadioGroup.getCheckedRadioButtonId()-childrens.size();
+//                ParentActivity.selectedChildId = childrens.get(selectedRadioId-1).getStuId().toString().trim();
+//                ParentActivity.selectedChildName = childrens.get(selectedRadioId-1).getStuName().toString().trim();
+                //Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
+                //startActivity(intent);
+                int selectedChildRadioId = childRadioGroup.getCheckedRadioButtonId();
+                RadioButton selectedRadioButton = (RadioButton)childRadioGroup.findViewById(selectedChildRadioId);
+                String name = selectedRadioButton.getText().toString();
+                for(int i=0;i<childrens.size();i++){
+                    if(name.equals(childrens.get(i).getStuName())){
+                        ParentActivity.selectedChildName = childrens.get(i).getStuName();
+                        ParentActivity.selectedChildId = childrens.get(i).getStuId();
+                        Toast.makeText(getActivity(), "id= "+ParentActivity.selectedChildId+"\n Name= "+ParentActivity.selectedChildName, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), ParentActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                }
+            }
+        });
+
+        alertDialogBuilder.show();
     }
 
     private void checkAccessKeyExists() {

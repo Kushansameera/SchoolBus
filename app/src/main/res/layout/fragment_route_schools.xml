@@ -14,6 +14,24 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="227dp">
+            <fragment
+                android:id="@+id/school_autocomplete_fragment"
+                android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <fragment
+                android:id="@+id/mapSchool"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="359dp"
+                android:layout_weight="0.96" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/layout_add_location"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -24,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:hint="Location"
+                android:hint="School Name"
                 android:inputType="textPersonName"
                 android:lines="1"
                 android:singleLine="true" />
