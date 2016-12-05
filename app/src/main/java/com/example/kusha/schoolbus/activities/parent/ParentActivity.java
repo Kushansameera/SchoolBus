@@ -111,6 +111,7 @@ public class ParentActivity extends AppCompatActivity
                 navEmail.setText(userEmail);
             }
         }, 2000);
+        Log.d("=======>Child Name: ",selectedChildName);
 
         try {
             getSupportActionBar().setTitle("Bus Location");
