@@ -1,5 +1,6 @@
 package com.example.kusha.schoolbus.activities.parent;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -39,6 +40,7 @@ public class SelectDriverActivity extends AppCompatActivity {
     private RadioGroup childRadioGroup;
     List<ManageDrivers> manageDrivers = new ArrayList<>();
     List<Children> childrens = new ArrayList<>();
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class SelectDriverActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         userId = user.getUid().toString().trim();
+        mProgressDialog = new ProgressDialog(SelectDriverActivity.this);
         showDrivers();
 
         select = (Button) findViewById(R.id.btnDone);
@@ -59,6 +62,9 @@ public class SelectDriverActivity extends AppCompatActivity {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mProgressDialog.setMessage("Wait");
+                mProgressDialog.show();
+                mProgressDialog.setCancelable(false);
                 int selectedRadioId = driverRadioGroup.getCheckedRadioButtonId();
                 //RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioId);
 //                ParentActivity.selectedDriverEmail = manageDrivers.get(selectedRadioId - 1).getDriverEmail().toString().trim();
@@ -76,11 +82,32 @@ public class SelectDriverActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChild("children")) {
-                            getChildData();
+                            ref.child("Parents").child(userId).child("children").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.hasChild(ParentActivity.selectedDriverID)){
+                                        getChildData();
+                                    }
+                                    else{
+                                        ParentActivity.selectedChildId = "";
+                                        ParentActivity.selectedChildName = "";
+                                        mProgressDialog.dismiss();
+                                        Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
+                                        startActivity(intent);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+
+                                }
+                            });
+
 
                         } else {
                             ParentActivity.selectedChildId = "";
                             ParentActivity.selectedChildName = "";
+                            mProgressDialog.dismiss();
                             Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
                             startActivity(intent);
 
@@ -149,6 +176,7 @@ public class SelectDriverActivity extends AppCompatActivity {
     }
 
     private void showChildren() {
+        mProgressDialog.dismiss();
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Select Your Child");
 
@@ -165,8 +193,8 @@ public class SelectDriverActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 int selectedRadioId = childRadioGroup.getCheckedRadioButtonId()-childrens.size();
-                ParentActivity.selectedChildId = childrens.get(selectedRadioId).getStuId().toString().trim();
-                ParentActivity.selectedChildName = childrens.get(selectedRadioId).getStuName().toString().trim();
+                ParentActivity.selectedChildId = childrens.get(selectedRadioId-1).getStuId().toString().trim();
+                ParentActivity.selectedChildName = childrens.get(selectedRadioId-1).getStuName().toString().trim();
                 Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
                 startActivity(intent);
                 //Toast.makeText(SelectDriverActivity.this, "id= "+ParentActivity.selectedChildId+"\n Name= "+ParentActivity.selectedChildName, Toast.LENGTH_SHORT).show();

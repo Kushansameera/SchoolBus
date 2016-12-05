@@ -90,7 +90,23 @@ public class ParentAccessFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChild("children")) {
-                            getChildData();
+                            ref.child("Parents").child(ParentActivity.userId).child("children").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.hasChild(ParentActivity.selectedDriverID)){
+                                        getChildData();
+                                    }
+                                    else {
+                                        Toast.makeText(getActivity(), "You Haven't Registered Children Yet", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+
+                                }
+                            });
+
 
                         } else {
                             Toast.makeText(getActivity(), "You Haven't Registered Children Yet", Toast.LENGTH_SHORT).show();
