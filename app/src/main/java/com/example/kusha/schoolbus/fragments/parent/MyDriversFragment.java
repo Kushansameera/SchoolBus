@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ import java.util.List;
  */
 public class MyDriversFragment extends Fragment {
 
-    Button btnSelect;
+    Button btnSelect, btnDelete;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     private String userId;
     public FirebaseAuth mFirebaseAuth;
@@ -44,6 +45,8 @@ public class MyDriversFragment extends Fragment {
     List<ManageDrivers> myDrivers = new ArrayList<>();
     //RecyclerView rcvMyeDrivers;
     User user;
+    String name;
+    int i = 0;
 
     public MyDriversFragment() {
         // Required empty public constructor
@@ -54,9 +57,10 @@ public class MyDriversFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.d("======>","onCreate");
+        Log.d("======>", "onCreate");
         final View myDriverFragment = inflater.inflate(R.layout.fragment_my_drivers, container, false);
-        btnSelect = (Button)myDriverFragment.findViewById(R.id.btnSelectDriver);
+        btnSelect = (Button) myDriverFragment.findViewById(R.id.btnSelectDriver);
+        btnDelete = (Button) myDriverFragment.findViewById(R.id.btnDeleteDriver);
         //rcvMyeDrivers = (RecyclerView) myDriverFragment.findViewById(R.id.rcvMyDrivers);
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
@@ -112,7 +116,7 @@ public class MyDriversFragment extends Fragment {
 //        });
 
 
-        driverRadioGroup = (RadioGroup)myDriverFragment.findViewById(R.id.radioGroupMyDrivers);
+        driverRadioGroup = (RadioGroup) myDriverFragment.findViewById(R.id.radioGroupMyDrivers);
 
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,24 +125,68 @@ public class MyDriversFragment extends Fragment {
                 //RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioId);
                 //ParentActivity.selectedDriverEmail = myDrivers.get(selectedRadioId-1).getDriverEmail().toString().trim();
                 int selectedRadioId = driverRadioGroup.getCheckedRadioButtonId();
-                RadioButton selectedRadioButton = (RadioButton)myDriverFragment.findViewById(selectedRadioId);
+                RadioButton selectedRadioButton = (RadioButton) myDriverFragment.findViewById(selectedRadioId);
                 String name = selectedRadioButton.getText().toString();
-                for(int i=0;i<myDrivers.size();i++){
-                    if(name.equals(myDrivers.get(i).getDriverName())){
+                for (int i = 0; i < myDrivers.size(); i++) {
+                    if (name.equals(myDrivers.get(i).getDriverName())) {
                         ParentActivity.selectedDriverEmail = myDrivers.get(i).getDriverEmail();
                         ParentActivity.selectedDriverID = myDrivers.get(i).getDriverId();
-                        Toast.makeText(getActivity(), name+" Selected", Toast.LENGTH_SHORT).show();
+                        ParentActivity.selectedDriverName = myDrivers.get(i).getDriverName();
+                        Toast.makeText(getActivity(), name + " Selected", Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
             }
         });
 
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            String mSelectedDriverID;
+
+            @Override
+            public void onClick(View v) {
+                int selectedRadioId = driverRadioGroup.getCheckedRadioButtonId();
+                RadioButton selectedRadioButton = (RadioButton) myDriverFragment.findViewById(selectedRadioId);
+                name = selectedRadioButton.getText().toString();
+                for (i = 0; i < myDrivers.size(); i++) {
+                    if (name.equals(myDrivers.get(i).getDriverName())) {
+                        mSelectedDriverID = myDrivers.get(i).getDriverId();
+                        break;
+                    }
+                }
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                alertDialogBuilder.setMessage("Are You Sure, Do You Want to Delete " + name);
+                alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ref.child("Parents").child(userId).child("driver").child("regDrivers").child(mSelectedDriverID).removeValue();
+                        ref.child("Drivers").child(mSelectedDriverID).child("parent").child("regParents").child(userId).removeValue();
+                        if (name.equals(ParentActivity.selectedDriverName)) {
+                            ParentActivity.selectedDriverName = "";
+                            ParentActivity.selectedDriverID = "";
+                            ParentActivity.selectedDriverEmail = "";
+                            ParentActivity.selectedChildName = "";
+                            ParentActivity.selectedChildId = "";
+                        }
+                        myDrivers.remove(i);
+                        Toast.makeText(getActivity(), "Driver Deleted", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                alertDialogBuilder.show();
+
+            }
+        });
         return myDriverFragment;
     }
 
 
-    public void showDrivers(){
+    public void showDrivers() {
         myDrivers.clear();
         Query queryRef;
         queryRef = ref.child("Parents").child(userId).child("driver").orderByChild("regDrivers");
@@ -146,9 +194,9 @@ public class MyDriversFragment extends Fragment {
         queryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(">>>>","data Change");
+                Log.d(">>>>", "data Change");
                 myDrivers.clear();
-                Log.d(">>>>","clear drivers");
+                Log.d(">>>>", "clear drivers");
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     for (DataSnapshot d : data.getChildren()) {
                         ManageDrivers m = d.getValue(ManageDrivers.class);
@@ -167,8 +215,8 @@ public class MyDriversFragment extends Fragment {
         });
     }
 
-    private void addRadioButtons(){
-        for(int i=0;i<myDrivers.size();i++){
+    private void addRadioButtons() {
+        for (int i = 0; i < myDrivers.size(); i++) {
             RadioButton driverRadioButton = new RadioButton(getActivity());
             driverRadioButton.setText(myDrivers.get(i).getDriverName());
             driverRadioButton.setTextSize(15);

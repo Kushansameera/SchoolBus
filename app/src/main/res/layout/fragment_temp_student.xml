@@ -99,6 +99,25 @@
             android:layout_marginTop="10dp">
 
             <TextView
+                android:text="Type                     : "
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView17" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtTempStuType"
+                android:layout_weight="1"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
                 android:text="Pickup Location : "
                 android:layout_height="wrap_content"
                 android:id="@+id/textView12"

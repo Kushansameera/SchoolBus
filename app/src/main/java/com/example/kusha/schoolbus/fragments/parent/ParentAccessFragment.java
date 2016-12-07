@@ -8,19 +8,21 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.parent.ParentActivity;
-import com.example.kusha.schoolbus.activities.parent.SelectDriverActivity;
 import com.example.kusha.schoolbus.models.Children;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -28,7 +30,6 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +41,13 @@ import java.util.List;
 public class ParentAccessFragment extends Fragment {
 
     private EditText txtAccessKey;
-    private Button btnGetAccess,btnSelectChild;
+    TextView txtCurrentChildName;
+    private Button btnAddNewChild, btnSelectChild;
     private String actualAccessKey, enteredAccessKey;
 
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     public FirebaseAuth mFirebaseAuth;
-    private String driverID ;
+    private String driverID;
     View parentAccessFragment;
     private RadioGroup childRadioGroup;
     List<Children> childrens = new ArrayList<>();
@@ -59,10 +61,12 @@ public class ParentAccessFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         parentAccessFragment = inflater.inflate(R.layout.fragment_parent_access, container, false);
-        txtAccessKey = (EditText) parentAccessFragment.findViewById(R.id.txtAccessKey);
-        btnGetAccess = (Button) parentAccessFragment.findViewById(R.id.btnGetAccess);
+        txtCurrentChildName = (TextView) parentAccessFragment.findViewById(R.id.txtCurrentChildName);
+        txtAccessKey = new EditText(getActivity());
+        btnAddNewChild = (Button) parentAccessFragment.findViewById(R.id.btnAddNewChild);
         btnSelectChild = (Button) parentAccessFragment.findViewById(R.id.btnSelectChild);
         childRadioGroup = new RadioGroup(parentAccessFragment.getContext());
+        txtCurrentChildName.setText(ParentActivity.selectedChildName);
         getDriverID();
 
         final Handler key = new Handler();
@@ -71,15 +75,38 @@ public class ParentAccessFragment extends Fragment {
             public void run() {
                 getCurrentAccessKey();
             }
-        },2000);
+        }, 2000);
 
-
-        btnGetAccess.setOnClickListener(new View.OnClickListener() {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        btnAddNewChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validate()) {
-                    changeFragmentChildren();
-                }
+                final LinearLayout layout = new LinearLayout(getActivity());
+                layout.setOrientation(LinearLayout.VERTICAL);
+                alertDialogBuilder.setMessage("Enter Access Key");
+                txtAccessKey.setInputType(InputType.TYPE_CLASS_TEXT);
+                txtAccessKey.setText("");
+                layout.addView(txtAccessKey);
+                alertDialogBuilder.setView(layout);
+
+                alertDialogBuilder.setPositiveButton("Get Access", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        layout.removeAllViews();
+                        if (validate()) {
+                            changeFragmentChildren();
+                        }
+                    }
+                });
+                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        layout.removeAllViews();
+                        dialog.cancel();
+                    }
+                });
+
+                alertDialogBuilder.show();
             }
         });
 
@@ -93,10 +120,9 @@ public class ParentAccessFragment extends Fragment {
                             ref.child("Parents").child(ParentActivity.userId).child("children").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.hasChild(ParentActivity.selectedDriverID)){
+                                    if (dataSnapshot.hasChild(ParentActivity.selectedDriverID)) {
                                         getChildData();
-                                    }
-                                    else {
+                                    } else {
                                         Toast.makeText(getActivity(), "You Haven't Registered Children Yet", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -169,13 +195,13 @@ public class ParentAccessFragment extends Fragment {
                 //Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
                 //startActivity(intent);
                 int selectedChildRadioId = childRadioGroup.getCheckedRadioButtonId();
-                RadioButton selectedRadioButton = (RadioButton)childRadioGroup.findViewById(selectedChildRadioId);
+                RadioButton selectedRadioButton = (RadioButton) childRadioGroup.findViewById(selectedChildRadioId);
                 String name = selectedRadioButton.getText().toString();
-                for(int i=0;i<childrens.size();i++){
-                    if(name.equals(childrens.get(i).getStuName())){
+                for (int i = 0; i < childrens.size(); i++) {
+                    if (name.equals(childrens.get(i).getStuName())) {
                         ParentActivity.selectedChildName = childrens.get(i).getStuName();
                         ParentActivity.selectedChildId = childrens.get(i).getStuId();
-                        Toast.makeText(getActivity(), "id= "+ParentActivity.selectedChildId+"\n Name= "+ParentActivity.selectedChildName, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "id= " + ParentActivity.selectedChildId + "\n Name= " + ParentActivity.selectedChildName, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getActivity(), ParentActivity.class);
                         startActivity(intent);
                         break;
@@ -194,7 +220,7 @@ public class ParentAccessFragment extends Fragment {
                 if (dataSnapshot.hasChild("accessKey")) {
                     getCurrentAccessKey();
                 } else {
-                    btnGetAccess.setEnabled(false);
+                    btnAddNewChild.setEnabled(false);
                     txtAccessKey.setEnabled(false);
                     Toast.makeText(getActivity(), "Driver Haven't Created a Access Key Yet", Toast.LENGTH_SHORT).show();
                 }

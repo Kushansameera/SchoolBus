@@ -1,7 +1,6 @@
 package com.example.kusha.schoolbus.fragments.parent;
 
 
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.parent.ManageDriversActivity;
@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.List;
+
 public class BusLocationFragment extends Fragment implements OnMapReadyCallback {
 
     GoogleMap busMap;
@@ -40,6 +42,7 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
     public FirebaseAuth mFirebaseAuth;
     private String userId;
     private String driverID;
+    TextView txtCurrentDriverName;
 
     public BusLocationFragment() {
     }
@@ -50,11 +53,11 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
                              Bundle savedInstanceState) {
 
         final View busLocationFragment = inflater.inflate(R.layout.fragment_bus_location, container, false);
-
+        txtCurrentDriverName = (TextView)busLocationFragment.findViewById(R.id.txtCurrentDriverName);
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         userId = user.getUid().toString().trim();
-
+        txtCurrentDriverName.setText(ParentActivity.selectedDriverName);
         MapFragment mapFragment = (MapFragment) this.getChildFragmentManager().findFragmentById(R.id.busMap);
         mapFragment.getMapAsync(this);
 

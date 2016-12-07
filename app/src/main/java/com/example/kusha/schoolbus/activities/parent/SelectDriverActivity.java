@@ -75,6 +75,7 @@ public class SelectDriverActivity extends AppCompatActivity {
                     if(name.equals(manageDrivers.get(i).getDriverName())){
                         ParentActivity.selectedDriverEmail = manageDrivers.get(i).getDriverEmail();
                         ParentActivity.selectedDriverID = manageDrivers.get(i).getDriverId();
+                        ParentActivity.selectedDriverName = manageDrivers.get(i).getDriverName();
                         break;
                     }
                 }

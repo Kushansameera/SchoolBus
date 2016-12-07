@@ -42,8 +42,9 @@ public class ParentActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Fragment fragment = null;
-    public static String selectedDriverID;
+    public static String selectedDriverID="";
     public static String selectedDriverEmail = "";
+    public static String selectedDriverName = "";
     public static String selectedChildId = "";
     public static String selectedChildName = "";
 
@@ -219,7 +220,7 @@ public class ParentActivity extends AppCompatActivity
 
     public void changeFragmentChildren() {
         try {
-            getSupportActionBar().setTitle("Add Child");
+            getSupportActionBar().setTitle("Children");
             fragment = new ParentAccessFragment();
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_frame_container_parent, fragment).commit();

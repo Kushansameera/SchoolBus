@@ -42,10 +42,10 @@ import java.util.List;
 public class TempStudentFragment extends Fragment {
     public static String tempStudentId = "";
     public static String driverId = "";
-    public static String studistance="";
+    public static String studistance = "";
     private static String latestStudentID;
 
-    private TextView txtTempStuName, txtTempStuSchool, txtTempStuGrade, txtTempStuClass, txtTempStuPickup, txtTempStuDrop, txtTempStuPickupTime, txtTempStuMonthlyFee;
+    private TextView txtTempStuType, txtTempStuName, txtTempStuSchool, txtTempStuGrade, txtTempStuClass, txtTempStuPickup, txtTempStuDrop, txtTempStuPickupTime, txtTempStuMonthlyFee;
     private Button btnAccept, btnReject, btnMonthlyFee;
 
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
@@ -56,6 +56,10 @@ public class TempStudentFragment extends Fragment {
     boolean flag = false;
     private ProgressDialog mProgressDialog;
     View stuRequestFragment;
+    String stuType;
+    String morningUrl = "", eveningUrl = "";
+    Double morningDis = 0.0, eveningDis = 0.0;
+    int newMorningDis,newEveningDis;
 
     public TempStudentFragment() {
     }
@@ -74,6 +78,7 @@ public class TempStudentFragment extends Fragment {
         txtTempStuDrop = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuDrop);
         txtTempStuPickupTime = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuPickupTime);
         txtTempStuMonthlyFee = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuMonthlyFee);
+        txtTempStuType = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuType);
         btnAccept = (Button) stuRequestFragment.findViewById(R.id.btnAccept);
         btnReject = (Button) stuRequestFragment.findViewById(R.id.btnReject);
         btnMonthlyFee = (Button) stuRequestFragment.findViewById(R.id.btnMonthlyFee);
@@ -151,12 +156,20 @@ public class TempStudentFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 student = dataSnapshot.getValue(Student.class);
+                txtTempStuType.setText(student.getStuType());
+                stuType = student.getStuType();
                 txtTempStuName.setText(student.getStuName());
                 txtTempStuSchool.setText(student.getStuSchool());
                 txtTempStuGrade.setText(student.getStuGrade());
                 txtTempStuClass.setText(student.getStuClass());
-                txtTempStuPickup.setText(student.getStuPickLocation());
-                txtTempStuDrop.setText(student.getStuDropLocation());
+                if (!stuType.equals("Morning Only")) {
+                    txtTempStuDrop.setText(student.getStuDropLocation());
+                    txtTempStuPickup.setText("-");
+                }
+                if (!stuType.equals("Evening Only")) {
+                    txtTempStuPickup.setText(student.getStuPickLocation());
+                    txtTempStuDrop.setText("-");
+                }
                 txtTempStuPickupTime.setText(student.getStuPickTime());
             }
 
@@ -171,15 +184,34 @@ public class TempStudentFragment extends Fragment {
         mProgressDialog.setMessage("Calculating");
         mProgressDialog.show();
         mProgressDialog.setCancelable(false);
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+student.getStuPickLatitude()+","+student.getStuPickLongitude()+"&destinations="+school.getSchoolLatitude()+","+school.getSchoolLongitude()+"&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw";
-        new GeoDistance(stuRequestFragment.getContext()).execute(url);
+
+        if (!stuType.equals("Evening Only")) {
+            morningUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + student.getStuPickLatitude() + "," + student.getStuPickLongitude() + "&destinations=" + school.getSchoolLatitude() + "," + school.getSchoolLongitude() + "&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw";
+            new GeoDistance(stuRequestFragment.getContext()).execute(morningUrl);
+            Log.d("========<>","eveningOnlyFalse");
+        }
+        if (!stuType.equals("Morning Only")) {
+            eveningUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + school.getSchoolLatitude() + "," + school.getSchoolLongitude() + "&destinations=" + student.getStuDropLatitude() + "," + student.getStuDropLongitude() + "&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw";
+            new GeoDistance(stuRequestFragment.getContext()).execute(eveningUrl);
+            Log.d("========<>","MorningOnlyFalse");
+        }
         final Handler key = new Handler();
         key.postDelayed(new Runnable() {
             @Override
             public void run() {
-                double dis = Double.valueOf(studistance)/1000;
-                int newDis = (int)Math.round(dis);
-                int monthlyFee = newDis*((int)Math.round(pricePerKm));
+                if (!stuType.equals("Evening Only")) {
+                    morningDis = Double.valueOf(studistance) / 1000;
+                    newMorningDis = (int) Math.round(morningDis);
+                    Log.d("========<>","EveningOnlyFalse  "+String.valueOf(newMorningDis));
+                }
+                if (!stuType.equals("Morning Only")) {
+                    eveningDis = Double.valueOf(studistance) / 1000;
+                    newEveningDis = (int) Math.round(eveningDis);
+                    Log.d("========<>","MorningOnlyFalse  "+String.valueOf(newEveningDis));
+                }
+
+                int monthlyFee = (newMorningDis+newEveningDis) * ((int) Math.round(pricePerKm));
+                Log.d("========<>","MorningOnlyFalse  "+String.valueOf(monthlyFee));
                 txtTempStuMonthlyFee.setText(String.valueOf(monthlyFee));
                 student.setStuMonthlyFee(String.valueOf(monthlyFee));
                 mProgressDialog.dismiss();
@@ -254,7 +286,7 @@ public class TempStudentFragment extends Fragment {
 
     }
 
-    private void saveStudentWithParent(){
+    private void saveStudentWithParent() {
         Children children = new Children();
         children.setStuId(latestStudentID);
         children.setStuName(student.getStuName());
@@ -266,16 +298,16 @@ public class TempStudentFragment extends Fragment {
         ref.child("Drivers").child(driverId).child("temp").child("tempStudent").child(tempStudentId).removeValue();
     }
 
-    private void getSchoolDetails(){
+    private void getSchoolDetails() {
         Query queryRef;
         queryRef = ref.child("Drivers").child(driverId).child("schools").orderByChild("routeSchools");
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data:dataSnapshot.getChildren()) {
-                    for(DataSnapshot d:data.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    for (DataSnapshot d : data.getChildren()) {
                         school = d.getValue(Schools.class);
-                        if(school.getSchoolName().equals(student.getStuSchool())){
+                        if (school.getSchoolName().equals(student.getStuSchool())) {
                             break;
                         }
                     }
@@ -290,7 +322,7 @@ public class TempStudentFragment extends Fragment {
         });
     }
 
-    private void getPricePerKm(){
+    private void getPricePerKm() {
         ref.child("Drivers").child(driverId).child("pricePerKm").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -303,7 +335,6 @@ public class TempStudentFragment extends Fragment {
             }
         });
     }
-
 
 
 }

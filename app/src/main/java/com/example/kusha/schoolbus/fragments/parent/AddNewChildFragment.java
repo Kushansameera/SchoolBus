@@ -62,7 +62,7 @@ public class AddNewChildFragment extends Fragment {
     private Button btnSubmit;
     private EditText txtStuName;
     private Spinner spinnerStuGrade, spinnerStuClass, spinnerStuFrom, spinnerStuSchool;
-    private RadioGroup genderRadioGroup;
+    private RadioGroup genderRadioGroup, stuTypeRadioGroup;
     private RadioButton genderRadioButton;
     private String stuId, stuName, stuSchool, stuGrade, stuClass, stuGender, stuPickupTime;
     public static double stuPickLatitude, stuPickLongitude, stuDropLatitude, stuDropLongitude;
@@ -70,13 +70,15 @@ public class AddNewChildFragment extends Fragment {
     public static int selectedSchool = 0, selectedLocation = 0;
     List<String> pickupLoc = new ArrayList<>();
     List<String> locSchools = new ArrayList<>();
+    Student student = new Student();
+    String studentType = "Both";
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private ProgressDialog progressDialog;
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     public FirebaseAuth mFirebaseAuth;
     private DatabaseReference mDatabase;
-    private String userId,userEmail;
+    private String userId, userEmail;
     boolean flag = false;
     private String driverID;
     private String latestTempStudentID;
@@ -105,6 +107,7 @@ public class AddNewChildFragment extends Fragment {
         //txtStuID = (TextView) addNewStudentFragment.findViewById(R.id.txtStuID);
         txtStuName = (EditText) addNewStudentFragment.findViewById(R.id.txtStudentName);
         genderRadioGroup = (RadioGroup) addNewStudentFragment.findViewById(R.id.radioGroupGender);
+        stuTypeRadioGroup = (RadioGroup) addNewStudentFragment.findViewById(R.id.radioGroupStudentTpe);
         spinnerStuSchool = (Spinner) addNewStudentFragment.findViewById(R.id.spinnerStuSchool);
         spinnerStuGrade = (Spinner) addNewStudentFragment.findViewById(R.id.spinnerGrade);
         spinnerStuClass = (Spinner) addNewStudentFragment.findViewById(R.id.spinnerClass);
@@ -122,7 +125,6 @@ public class AddNewChildFragment extends Fragment {
         txtDropLocation.setText(stuDropLoc);
 
 
-
         getDriverID();
         final Handler key = new Handler();
         key.postDelayed(new Runnable() {
@@ -130,7 +132,7 @@ public class AddNewChildFragment extends Fragment {
             public void run() {
                 checkTempStuId();
             }
-        },2000);
+        }, 2000);
 
 
         stuImage.setOnClickListener(new View.OnClickListener() {
@@ -178,13 +180,13 @@ public class AddNewChildFragment extends Fragment {
             public void onClick(View v) {
 
                 if (checkFields()) {
-                    if(flag){
-                        if(latestTempStudentID.equals("1")){
+                    //Toast.makeText(getActivity(), "Good to go", Toast.LENGTH_SHORT).show();
+                    if (flag) {
+                        if (latestTempStudentID.equals("1")) {
                             ref.child("Drivers").child(driverID).child("temp").child("tempStudentCounter").setValue(1);
                             addTempStudent();
                             flag = false;
-                        }
-                        else {
+                        } else {
                             addTempStudent();
                             flag = false;
                         }
@@ -199,6 +201,27 @@ public class AddNewChildFragment extends Fragment {
                     }, 2000);
                 }
 
+            }
+        });
+
+        stuTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checkedButton = (RadioButton) group.findViewById(checkedId);
+                studentType = checkedButton.getText().toString();
+                if (studentType.equals("Morning Only")) {
+                    btnStuDropLocation.setEnabled(false);
+                    btnStuPickLocation.setEnabled(true);
+                    txtDropLocation.setText("");
+
+                } else if (studentType.equals("Evening Only")) {
+                    btnStuDropLocation.setEnabled(true);
+                    btnStuPickLocation.setEnabled(false);
+                    txtPickLocation.setText("");
+                } else if (studentType.equals("Both")) {
+                    btnStuDropLocation.setEnabled(true);
+                    btnStuPickLocation.setEnabled(true);
+                }
             }
         });
         return addNewStudentFragment;
@@ -267,10 +290,10 @@ public class AddNewChildFragment extends Fragment {
         if (txtStuName.getText().toString().trim().length() == 0) {
             Toast.makeText(getActivity(), "Enter Student Name", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (txtPickLocation.getText().toString().trim().length() == 0) {
+        } else if (txtPickLocation.getText().toString().trim().length() == 0 && !studentType.equals("Evening Only")) {
             Toast.makeText(getActivity(), "Please Select Pick Location", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (txtDropLocation.getText().toString().trim().length() == 0) {
+        } else if (txtDropLocation.getText().toString().trim().length() == 0 && !studentType.equals("Morning Only")) {
             Toast.makeText(getActivity(), "Please Select Drop Location", Toast.LENGTH_SHORT).show();
             return false;
         } else if (txtPickTime.getText().toString().trim().length() == 0) {
@@ -332,24 +355,26 @@ public class AddNewChildFragment extends Fragment {
 
     private void addTempStudent() {
 
-        Student student = new Student();
-
         student.setStuID(latestTempStudentID);
         student.setStuName(stuName);
         student.setStuSchool(stuSchool);
         student.setStuGrade(stuGrade);
         student.setStuClass(stuClass);
-        student.setStuPickLatitude(Double.toString(stuPickLatitude));
-        student.setStuPickLongitude(Double.toString(stuPickLongitude));
-        student.setStuDropLatitude(Double.toString(stuDropLatitude));
-        student.setStuDropLongitude(Double.toString(stuDropLongitude));
-        student.setStuPickLocation(stuPickLoc);
-        student.setStuDropLocation(stuDropLoc);
+        if(!studentType.equals("Evening Only")){
+            student.setStuPickLatitude(Double.toString(stuPickLatitude));
+            student.setStuPickLongitude(Double.toString(stuPickLongitude));
+            student.setStuPickLocation(stuPickLoc);
+        }
+        if(!studentType.equals("Morning Only")){
+            student.setStuDropLatitude(Double.toString(stuDropLatitude));
+            student.setStuDropLongitude(Double.toString(stuDropLongitude));
+            student.setStuDropLocation(stuDropLoc);
+        }
         student.setStuPickTime(stuPickTime);
         student.setParentEmail(userEmail);
         student.setStuGender(stuGender);
         student.setParentID(userId);
-
+        student.setStuType(studentType);
 
         ref.child("Drivers").child(driverID).child("temp").child("tempStudent").child(latestTempStudentID).setValue(student, new Firebase.CompletionListener() {
             @Override
@@ -396,7 +421,6 @@ public class AddNewChildFragment extends Fragment {
             }
         });
     }
-
 
 
 }

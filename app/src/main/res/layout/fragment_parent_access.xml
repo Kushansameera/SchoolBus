@@ -12,57 +12,40 @@
         android:weightSum="1">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#f81616"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginTop="10dp">
+            <TextView
+                android:text="Child Name :"
+                android:layout_height="41dp"
+                android:id="@+id/textView2"
+                android:textSize="14sp"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:layout_width="wrap_content" />
 
             <TextView
-                android:text="Insert Access Key which you got from the relevant Driver. If not Please Contact The Driver"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView6"
-                android:textSize="19sp"
-                android:layout_marginTop="2dp"
-                android:paddingLeft="10dp"
-                android:layout_weight="0.14"
-                android:background="#f37272"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginBottom="2dp"
-                android:textColor="@color/cardview_light_background" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/txtCurrentChildName"
+                android:layout_weight="0.91"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:textSize="14sp"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp" />
         </LinearLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_access"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="25dp">
-
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/txtAccessKey"
-                android:hint="Access Key"
-                android:layout_weight="1"
-                android:textSize="19sp"
-                android:inputType="numberSigned" />
-
-        </android.support.design.widget.TextInputLayout>
         <Button
-            android:text="Get Access"
+            android:text="Add New Child"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnGetAccess"
+            android:id="@+id/btnAddNewChild"
             android:textColor="@android:color/background_light"
             android:background="#387EF5"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="30dp" />
 
         <Button
             android:text="Select Child"

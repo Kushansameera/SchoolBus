@@ -87,7 +87,7 @@ public class GeoDistance extends AsyncTask<String, Void, String> {
                 //JSONObject object_duration=object_elements.getJSONObject("duration");
                 JSONObject object_distance=object_elements.getJSONObject("distance");
 
-                Log.d("JSON","object_duration:");
+                Log.d("<<<<<<>>>>>>>>JSON","object_duration:"+object_distance.getString("value"));
                 return object_distance.getString("value");
 
             }

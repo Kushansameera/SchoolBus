@@ -4,11 +4,44 @@
     android:layout_height="match_parent"
     tools:context="com.example.kusha.schoolbus.fragments.parent.BusLocationFragment">
 
-    <fragment
-        android:id="@+id/busMap"
-        android:name="com.google.android.gms.maps.MapFragment"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.96" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="Driver Name :"
+                android:layout_height="41dp"
+                android:id="@+id/textView2"
+                android:textSize="14sp"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:layout_width="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/txtCurrentDriverName"
+                android:layout_weight="0.91"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:textSize="14sp"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp" />
+        </LinearLayout>
+
+        <fragment
+            android:id="@+id/busMap"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.96" />
+
+    </LinearLayout>
 
 </FrameLayout>

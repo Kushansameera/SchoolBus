@@ -20,16 +20,41 @@
 
         </RadioGroup>
 
-        <Button
-            android:text="Select"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="85dp"
-            android:id="@+id/btnSelectDriver"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/background_light"
+            android:layout_marginTop="45dp"
             android:layout_below="@+id/radioGroupMyDrivers"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true">
+
+            <Button
+                android:text="Select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="85dp"
+                android:id="@+id/btnSelectDriver"
+                android:background="@color/colorPrimary"
+                android:textColor="@android:color/background_light"
+                android:layout_below="@+id/radioGroupMyDrivers"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp" />
+
+            <Button
+                android:text="Delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="85dp"
+                android:id="@+id/btnDeleteDriver"
+                android:background="@color/colorPrimary"
+                android:textColor="@android:color/background_light"
+                android:layout_below="@+id/radioGroupMyDrivers"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp" />
+        </LinearLayout>
+
     </RelativeLayout>
 
 </FrameLayout>

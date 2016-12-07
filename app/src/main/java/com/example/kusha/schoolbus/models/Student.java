@@ -23,6 +23,15 @@ public class Student {
     private String parentEmail;
     private String stuMonthlyFee;
     private String parentID;
+    private String stuType;
+
+    public String getStuType() {
+        return stuType;
+    }
+
+    public void setStuType(String stuType) {
+        this.stuType = stuType;
+    }
 
     public String getParentID() {
         return parentID;

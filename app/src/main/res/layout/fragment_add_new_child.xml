@@ -7,22 +7,21 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:weightSum="1">
 
             <ImageView
-                android:layout_width="match_parent"
-                app:srcCompat="@drawable/ic_stu_photo"
                 android:id="@+id/imageButtonStu"
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginLeft="100dp"
-                android:layout_marginRight="100dp" />
+                android:layout_marginRight="100dp"
+                app:srcCompat="@drawable/ic_stu_photo" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_student_name"
@@ -33,262 +32,313 @@
 
 
                 <EditText
+                    android:id="@+id/txtStudentName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/txtStudentName"
-                    android:hint="Student Name"
                     android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Student Name"
+                    android:inputType="textPersonName"
                     android:textSize="14sp" />
 
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:layout_marginTop="25dp">
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal">
+
                 <TextView
-                    android:text="Gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
                     android:layout_marginRight="15dp"
+                    android:paddingLeft="5dp"
                     android:paddingTop="8dp"
-                    android:paddingLeft="5dp" />
+                    android:text="Gender"
+                    android:textSize="14sp" />
+
                 <RadioGroup
+                    android:id="@+id/radioGroupGender"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/radioGroupGender"
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:text="Male"
+                        android:id="@+id/radioButtonParent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/radioButtonParent"
                         android:layout_weight="1"
-                        android:checked="true"/>
+                        android:checked="true"
+                        android:text="Male" />
 
                     <RadioButton
-                        android:text="Female"
+                        android:id="@+id/radioButtonChild"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/radioButtonChild"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:text="Female" />
                 </RadioGroup>
             </LinearLayout>
 
             <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="25dp"
-                    android:layout_weight="1"
-                    android:weightSum="1">
-                    <TextView
-                        android:layout_width="178dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginLeft="5dp"
-                        android:text="Grade"
-                        android:layout_weight="0.04" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:text="Class"/>
-                </LinearLayout>
-
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="34dp"
-                    android:weightSum="1">
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="180dp"
-                        android:layout_height="match_parent"
-                        android:background="#d0d0d0">
-
-                        <Spinner
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/spinnerGrade"
-                            android:layout_marginLeft="6dp"
-                            android:entries="@array/student_grade"
-                            android:fadingEdge="horizontal|vertical"
-                            android:foregroundGravity="top">
-
-                        </Spinner>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:background="#d0d0d0">
-
-                        <Spinner
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/spinnerClass"
-                            android:entries="@array/student_class">
-
-                        </Spinner>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:weightSum="1">
-
-                <TextView
-                    android:text="Pickup Location :"
-                    android:layout_height="41dp"
-                    android:id="@+id/textView2"
-                    android:textSize="14sp"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="5dp"
-                    android:layout_weight="0.06"
-                    android:layout_width="100dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:id="@+id/txtLocationPick"
-                    android:layout_weight="0.85"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-                    android:textSize="14sp"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp" />
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ic_place"
-                    android:id="@+id/imageButtonStuPickLocation"
-                    android:layout_weight="0.07" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:weightSum="1">
-
-                <TextView
-                    android:text="Drop Location    :"
-                    android:layout_width="100dp"
-                    android:layout_height="41dp"
-                    android:id="@+id/textView3"
-                    android:textSize="14sp"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="5dp"
-                    android:layout_weight="0.06" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="14sp"
-                    android:id="@+id/txtLocationDrop"
-                    android:layout_weight="0.85"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp" />
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ic_place"
-                    android:id="@+id/imageButtonStuDropLocation"
-                    android:layout_weight="0.07" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:weightSum="1">
-
-                <TextView
-                    android:text="Pickup Time      :"
-                    android:layout_width="100dp"
-                    android:layout_height="41dp"
-                    android:id="@+id/textView4"
-                    android:textSize="14sp"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="5dp"
-                    android:layout_weight="0.06" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="14sp"
-                    android:id="@+id/txtPickuptime"
-                    android:layout_weight="0.85"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp" />
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ic_time"
-                    android:id="@+id/imageButtonStuPickupTime"
-                    android:layout_weight="0.07" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/spinnerScool"
-                android:layout_marginTop="25dp">
+                android:layout_marginTop="25dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="178dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0.04"
+                    android:text="Grade"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Class"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_width="180dp"
+                    android:layout_height="match_parent"
+                    android:background="#d0d0d0"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:text="School"
-                        android:layout_height="41dp"
-                        android:id="@+id/textView5"
-                        android:textSize="14sp"
-                        android:paddingTop="10dp"
-                        android:paddingLeft="5dp"
-                        android:layout_width="114dp" />
-
-                    <LinearLayout
-                        android:orientation="vertical"
+                    <Spinner
+                        android:id="@+id/spinnerGrade"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.06"
-                        android:background="#d0d0d0">
+                        android:layout_marginLeft="6dp"
+                        android:entries="@array/student_grade"
+                        android:fadingEdge="horizontal|vertical"
+                        android:foregroundGravity="top">
+
+                    </Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:background="#d0d0d0"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/spinnerClass"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:entries="@array/student_class">
+
+                    </Spinner>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="8dp"
+                    android:text="Type"
+                    android:textSize="14sp" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroupStudentTpe"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButtonMorningOnly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Morning Only" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonEveningOnly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Evening Only" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonBoth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="Both" />
+                </RadioGroup>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="95dp"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="5dp"
+                    android:text="Pickup Location      :"
+                    android:textSize="14sp"
+                    android:layout_marginRight="10dp" />
+
+                <TextView
+                    android:id="@+id/txtLocationPick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.85"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/imageButtonStuPickLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.07"
+                    android:background="@drawable/ic_place"
+                    android:layout_marginLeft="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_height="41dp"
+                    android:paddingLeft="5dp"
+                    android:text="Drop Location       :"
+                    android:textSize="14sp"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="95dp" />
+
+                <TextView
+                    android:id="@+id/txtLocationDrop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.85"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/imageButtonStuDropLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.07"
+                    android:background="@drawable/ic_place"
+                    android:layout_marginLeft="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_height="41dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="10dp"
+                    android:text="Pickup Time :"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="0.05" />
+
+                <TextView
+                    android:id="@+id/txtPickuptime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.80"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/imageButtonStuPickupTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.07"
+                    android:background="@drawable/ic_time"
+                    android:layout_marginLeft="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/spinnerScool"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="25dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="114dp"
+                        android:layout_height="41dp"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="10dp"
+                        android:text="School"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="229dp"
+                        android:layout_height="match_parent"
+                        android:background="#d0d0d0"
+                        android:orientation="vertical"
+                        android:layout_weight="0.56"
+                        android:weightSum="1">
 
                         <Spinner
-                            android:layout_width="268dp"
+                            android:id="@+id/spinnerStuSchool"
+                            android:layout_width="match_parent"
                             android:layout_height="36dp"
-                            android:id="@+id/spinnerStuSchool" />
+                            android:layout_weight="0.71" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -296,13 +346,13 @@
             </LinearLayout>
 
             <Button
-                android:text="Submit"
+                android:id="@+id/btnSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnSubmit"
-                android:textColor="@android:color/background_light"
+                android:layout_marginTop="10dp"
                 android:background="#387EF5"
-                android:layout_marginTop="10dp" />
+                android:text="Submit"
+                android:textColor="@android:color/background_light" />
         </LinearLayout>
     </ScrollView>
 
