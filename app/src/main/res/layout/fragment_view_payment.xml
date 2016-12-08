@@ -3,67 +3,148 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.kusha.schoolbus.fragments.driver.ViewPaymentFragment">
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:weightSum="1">
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginTop="25dp"
-        android:weightSum="1">
-        <TextView
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:textSize="19dp"
-            android:layout_marginLeft="6dp"
-            android:text="Year"
-            android:layout_weight="0.03" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="19dp"
-            android:text="Month"/>
-    </LinearLayout>
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:weightSum="1"
-        android:background="@android:color/darker_gray">
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinnerYear"
-            android:layout_marginLeft="6dp"
-            android:entries="@array/years">
-
-        </Spinner>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:id="@+id/spinnerMonth"
-            android:entries="@array/months"
-            android:layout_weight="0.10">
-
-        </Spinner>
-    </LinearLayout>
-        <Button
-            android:text="Search"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnSearch"
-            android:textColor="@android:color/background_light"
-            android:background="#387EF5"
-            android:layout_marginTop="10dp"/>
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:weightSum="1">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="2dp"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_weight="0.43">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Year"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#d0d0d0"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/spinnerYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/years">
+
+                    </Spinner>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:weightSum="1"
+                android:layout_weight="0.49">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Month"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="5dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#d0d0d0">
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinnerMonth"
+                        android:entries="@array/months">
+
+                    </Spinner>
+                </LinearLayout>
+
+            </LinearLayout>
+            <ImageButton
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_search"
+                android:id="@+id/btnSearchPayment"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:weightSum="1">
+            <TextView
+                android:layout_width="193dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Paid"
+                android:textSize="14sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Not Paid"
+                android:textSize="14sp" />
+        </LinearLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:background="#d0d0d0" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="192dp"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/rcvPaidStudents" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/rcvNotPaidStudents" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 </FrameLayout>

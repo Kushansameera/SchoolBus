@@ -35,11 +35,6 @@
             android:name=".activities.driver.DriverActivity"
             android:label="@string/title_activity_driver"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.driver.PaymentActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.kusha.schoolbus.activities.driver.DriverActivity" />
-        </activity>
         <activity android:name=".activities.driver.RouteSettingActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

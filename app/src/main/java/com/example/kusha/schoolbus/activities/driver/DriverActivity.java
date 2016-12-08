@@ -24,6 +24,7 @@ import com.example.kusha.schoolbus.activities.LoginActivity;
 import com.example.kusha.schoolbus.application.DriverGPS;
 import com.example.kusha.schoolbus.fragments.driver.ManageParentsFragment;
 import com.example.kusha.schoolbus.fragments.driver.MessageFragment;
+import com.example.kusha.schoolbus.fragments.driver.PaymentDriverFragment;
 import com.example.kusha.schoolbus.fragments.driver.RouteFragment;
 import com.example.kusha.schoolbus.fragments.driver.SettingFragment;
 import com.example.kusha.schoolbus.fragments.driver.ViewStudentFragment;
@@ -215,8 +216,10 @@ public class DriverActivity extends AppCompatActivity
 
     public void changeFragmentPayment() {
         try {
-            Intent intent = new Intent(DriverActivity.this, PaymentActivity.class);
-            startActivity(intent);
+            getSupportActionBar().setTitle("Payment");
+            fragment = new PaymentDriverFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
         } catch (Exception e) {
             Log.d("Payment", e.getMessage());
         }

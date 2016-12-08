@@ -7,87 +7,191 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:weightSum="1">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1">
+            android:layout_height="54dp"
+            android:weightSum="1"
+            android:layout_marginTop="10dp">
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_search_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_alignParentStart="true">
+                android:layout_alignParentStart="true"
+                android:layout_weight="1.01"
+                android:weightSum="1">
                 <EditText
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:ems="10"
                     android:id="@+id/txtSearchId"
-                    android:hint="Student ID" />
+                    android:hint="Student ID"
+                    android:textSize="14sp"
+                    android:inputType="numberSigned"
+                    android:layout_weight="1.39" />
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="25dp"
-                android:id="@+id/btnSearchForRe"
-                android:text="Search receivables"
-                android:textColor="@android:color/background_light"
-                android:background="#387EF5" />
+            <ImageButton
+                android:layout_height="41dp"
+                android:background="@drawable/ic_search"
+                android:id="@+id/btnSearchStudent"
+                android:layout_width="41dp" />
 
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:text="Student Name : "
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView11" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtStudentName"
+                android:layout_weight="1"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:text="Monthly Fee     : Rs."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtStudentMonthleFee"
+                android:layout_weight="1"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:text="Receivables     : Rs."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView13" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtStudentReceivables"
+                android:layout_weight="1"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:weightSum="1">
-            <TextView
-                android:layout_width="157dp"
-                android:layout_height="wrap_content"
-                android:textSize="19dp"
-                android:layout_marginLeft="6dp"
-                android:text="Year"
-                android:layout_weight="0.03" />
-            <TextView
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="163dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="14sp"
+                    android:text="Year"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="10dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#d0d0d0"
+                    android:layout_weight="1.20">
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinnerYear"
+                        android:entries="@array/years">
+
+                    </Spinner>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="19dp"
-                android:text="Month"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.91"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Month"
+                    android:paddingLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="10dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#d0d0d0">
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinnerMonth"
+                        android:entries="@array/months">
+
+                    </Spinner>
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:weightSum="1"
-            android:background="@android:color/darker_gray">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
 
-            <Spinner
+            <TextView
+                android:text="Date                  : "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinnerYear"
-                android:layout_marginLeft="6dp"
-                android:entries="@array/years">
+                android:id="@+id/textView15" />
 
-            </Spinner>
-
-            <Spinner
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="100dp"
-                android:id="@+id/spinnerMonth"
-                android:entries="@array/months"
-                android:layout_weight="0.10">
-
-            </Spinner>
+                android:id="@+id/txtPaymentdate"
+                android:layout_weight="1"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,30 +200,31 @@
             android:layout_height="wrap_content"
             android:weightSum="1">
 
-            <TextView
-                android:text="Amount : Rs. "
-                android:textSize="19dp"
-                android:layout_width="99dp"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_search_amount"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView37"
-                android:layout_weight="0.23" />
-
-            <EditText
-                android:text=""
-                android:layout_width="157dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtPayment"
-                android:textSize="15dp"/>
+                android:layout_alignParentStart="true"
+                android:weightSum="1">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:id="@+id/txtStudentFee"
+                    android:hint="Amount Rs."
+                    android:textSize="14sp"
+                    android:inputType="numberSigned" />
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
         <Button
-            android:text="Submit"
+            android:text="Add Payment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnSubmit"
+            android:id="@+id/btnSubmitPayment"
             android:textColor="@android:color/background_light"
             android:background="#387EF5"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="20dp"/>
 
     </LinearLayout>
 </FrameLayout>
