@@ -139,7 +139,7 @@ public class ViewStudentFragment extends Fragment {
     }
 
     private void getStudentData() {
-        ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(currentStudentId).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(currentStudentId).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 student = dataSnapshot.getValue(Student.class);
@@ -185,7 +185,7 @@ public class ViewStudentFragment extends Fragment {
         student.setStuGrade(txtCurrentStuGrade.getText().toString());
         student.setStuClass(txtCurrentStuClass.getText().toString());
 
-        ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(currentStudentId).setValue(student);
+        ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(currentStudentId).child("info").setValue(student);
         Toast.makeText(getActivity(), "Student's Data Edited", Toast.LENGTH_SHORT).show();
 
         txtCurrentStuClass.setEnabled(false);
@@ -197,6 +197,9 @@ public class ViewStudentFragment extends Fragment {
 
     private void deleteStudentData() {
         ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(currentStudentId).removeValue();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.current_student_frame_container, new CurrentStudentsFragment());
+        ft.commit();
     }
 
     private void getParentId(){

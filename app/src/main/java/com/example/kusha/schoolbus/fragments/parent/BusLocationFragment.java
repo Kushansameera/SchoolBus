@@ -139,7 +139,7 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
 
     private void createMarker(DriverLocation location){
         this.busMap.clear();
-        MarkerOptions marker = new MarkerOptions().position(new LatLng(location.getDriverLatitude(), location.getDriverLongitude())).title("Your Location");
+        MarkerOptions marker = new MarkerOptions().position(new LatLng(location.getDriverLatitude(), location.getDriverLongitude()));
         marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_map));
         marker.title("School Bus");
 //        marker.icon(BitmapDescriptorFactory

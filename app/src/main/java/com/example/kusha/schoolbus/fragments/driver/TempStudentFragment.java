@@ -25,6 +25,7 @@ import com.example.kusha.schoolbus.models.RouteFees;
 import com.example.kusha.schoolbus.models.RouteLocations;
 import com.example.kusha.schoolbus.models.Schools;
 import com.example.kusha.schoolbus.models.Student;
+import com.example.kusha.schoolbus.models.StudentPayment;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -34,6 +35,7 @@ import com.firebase.client.Transaction;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -59,7 +61,8 @@ public class TempStudentFragment extends Fragment {
     String stuType;
     String morningUrl = "", eveningUrl = "";
     Double morningDis = 0.0, eveningDis = 0.0;
-    int newMorningDis,newEveningDis;
+    int newMorningDis, newEveningDis;
+    String[] monthArray;
 
     public TempStudentFragment() {
     }
@@ -83,6 +86,7 @@ public class TempStudentFragment extends Fragment {
         btnReject = (Button) stuRequestFragment.findViewById(R.id.btnReject);
         btnMonthlyFee = (Button) stuRequestFragment.findViewById(R.id.btnMonthlyFee);
         mProgressDialog = new ProgressDialog(getActivity());
+        monthArray = getResources().getStringArray(R.array.months);
         getTempStudentData();
         getSchoolDetails();
         getPricePerKm();
@@ -105,10 +109,12 @@ public class TempStudentFragment extends Fragment {
                             ref.child("Drivers").child(driverId).child("permanent").child("studentCounter").setValue(1);
                             addStudent();
                             saveStudentWithParent();
+                            addStudentToPayments();
                             flag = false;
                         } else {
                             addStudent();
                             saveStudentWithParent();
+                            addStudentToPayments();
                             flag = false;
                         }
                     }
@@ -151,6 +157,27 @@ public class TempStudentFragment extends Fragment {
     }
 
 
+    private void addStudentToPayments() {
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH) - 1;
+        int year = calendar.get(Calendar.YEAR);
+        StudentPayment studentPayment = new StudentPayment();
+        studentPayment.setStuId(student.getStuID());
+        studentPayment.setStuName(student.getStuName());
+        studentPayment.setStuMonthlyFee(student.getStuMonthlyFee());
+        studentPayment.setStuLastPaidMonth("");
+        studentPayment.setStuReceivables("");
+        ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(latestStudentID).child("paymentInfo").setValue(studentPayment);
+//        ref.child("Drivers").child(driverId).child("payments").child("students").child(latestStudentID).child("monthlyFee").setValue(student.getStuMonthlyFee());
+//        ref.child("Drivers").child(driverId).child("payments").child("students").child(latestStudentID).child("stuName").setValue(student.getStuName());
+//        ref.child("Drivers").child(driverId).child("payments").child("students").child(latestStudentID).child("lastPaidMonth").setValue("");
+//        ref.child("Drivers").child(driverId).child("payments").child("students").child(latestStudentID).child("receivables").setValue("");
+        for (int i = 11; i >= month; i--) {
+            ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(latestStudentID).child("payments").child(String.valueOf(year)).child(monthArray[i]).child("status").setValue("Not Paid");
+        }
+
+    }
+
     private void getTempStudentData() {
         ref.child("Drivers").child(driverId).child("temp").child("tempStudent").child(tempStudentId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -188,12 +215,12 @@ public class TempStudentFragment extends Fragment {
         if (!stuType.equals("Evening Only")) {
             morningUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + student.getStuPickLatitude() + "," + student.getStuPickLongitude() + "&destinations=" + school.getSchoolLatitude() + "," + school.getSchoolLongitude() + "&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw";
             new GeoDistance(stuRequestFragment.getContext()).execute(morningUrl);
-            Log.d("========<>","eveningOnlyFalse");
+            Log.d("========<>", "eveningOnlyFalse");
         }
         if (!stuType.equals("Morning Only")) {
             eveningUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + school.getSchoolLatitude() + "," + school.getSchoolLongitude() + "&destinations=" + student.getStuDropLatitude() + "," + student.getStuDropLongitude() + "&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw";
             new GeoDistance(stuRequestFragment.getContext()).execute(eveningUrl);
-            Log.d("========<>","MorningOnlyFalse");
+            Log.d("========<>", "MorningOnlyFalse");
         }
         final Handler key = new Handler();
         key.postDelayed(new Runnable() {
@@ -202,16 +229,16 @@ public class TempStudentFragment extends Fragment {
                 if (!stuType.equals("Evening Only")) {
                     morningDis = Double.valueOf(studistance) / 1000;
                     newMorningDis = (int) Math.round(morningDis);
-                    Log.d("========<>","EveningOnlyFalse  "+String.valueOf(newMorningDis));
+                    Log.d("========<>", "EveningOnlyFalse  " + String.valueOf(newMorningDis));
                 }
                 if (!stuType.equals("Morning Only")) {
                     eveningDis = Double.valueOf(studistance) / 1000;
                     newEveningDis = (int) Math.round(eveningDis);
-                    Log.d("========<>","MorningOnlyFalse  "+String.valueOf(newEveningDis));
+                    Log.d("========<>", "MorningOnlyFalse  " + String.valueOf(newEveningDis));
                 }
 
-                int monthlyFee = (newMorningDis+newEveningDis) * ((int) Math.round(pricePerKm));
-                Log.d("========<>","MorningOnlyFalse  "+String.valueOf(monthlyFee));
+                int monthlyFee = (newMorningDis + newEveningDis) * ((int) Math.round(pricePerKm));
+                Log.d("========<>", "MorningOnlyFalse  " + String.valueOf(monthlyFee));
                 txtTempStuMonthlyFee.setText(String.valueOf(monthlyFee));
                 student.setStuMonthlyFee(String.valueOf(monthlyFee));
                 mProgressDialog.dismiss();
@@ -266,7 +293,7 @@ public class TempStudentFragment extends Fragment {
 
     private void addStudent() {
         student.setStuID(latestStudentID);
-        ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(latestStudentID).setValue(student, new Firebase.CompletionListener() {
+        ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(latestStudentID).child("info").setValue(student, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 if (firebaseError == null) {

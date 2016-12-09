@@ -91,17 +91,23 @@ public class CurrentStudentsFragment extends Fragment {
 
     private void showStudents() {
         Query queryRef;
-        queryRef = ref.child("Drivers").child(userId).child("permanent").orderByChild("permanentStudent");
+        queryRef = ref.child("Drivers").child(userId).child("permanent").orderByChild(("permanentStudent"));
 
         students.clear();
 
-        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        queryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                students.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    for (DataSnapshot dataSnapshot1 : data.getChildren()) {
-                        Student student = dataSnapshot1.getValue(Student.class);
-                        students.add(student);
+                    for (DataSnapshot data1 : data.getChildren()) {
+                        for (DataSnapshot data2:data1.getChildren()) {
+                            if(data2.getKey().equals("info")){
+                                Student student = data2.getValue(Student.class);
+                                students.add(student);
+                            }
+                        }
+
                     }
                 }
                 adapter.notifyDataSetChanged();

@@ -47,7 +47,7 @@
             android:layout_marginTop="10dp">
 
             <TextView
-                android:text="Student Name : "
+                android:text="Student Name    : "
                 android:layout_width="108dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView11" />
@@ -67,7 +67,7 @@
             android:layout_marginTop="10dp">
 
             <TextView
-                android:text="Monthly Fee     : Rs."
+                android:text="Monthly Fee        : Rs."
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView12" />
@@ -87,7 +87,7 @@
             android:layout_marginTop="10dp">
 
             <TextView
-                android:text="Receivables     : Rs."
+                android:text="Receivables        : Rs."
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView13" />
@@ -96,6 +96,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtStudentReceivables"
+                android:layout_weight="1"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:text="Last Paid Month : "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView16" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtStudentLastPaid"
                 android:layout_weight="1"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused" />
         </LinearLayout>
@@ -132,7 +152,7 @@
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/spinnerYear"
+                        android:id="@+id/spinnerPaymentYear"
                         android:entries="@array/years">
 
                     </Spinner>
@@ -164,7 +184,7 @@
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/spinnerMonth"
+                        android:id="@+id/spinnerPaymentMonth"
                         android:entries="@array/months">
 
                     </Spinner>
@@ -181,7 +201,7 @@
             android:layout_marginTop="20dp">
 
             <TextView
-                android:text="Date                  : "
+                android:text="Date                     : "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView15" />

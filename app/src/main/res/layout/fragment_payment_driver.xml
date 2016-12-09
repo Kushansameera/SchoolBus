@@ -35,5 +35,14 @@
             android:background="#387EF5"
             android:text="Summery"
             android:textColor="@android:color/background_light" />
+
+        <Button
+            android:id="@+id/btnUpdte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#387EF5"
+            android:text="Update"
+            android:textColor="@android:color/background_light" />
     </LinearLayout>
 </FrameLayout>

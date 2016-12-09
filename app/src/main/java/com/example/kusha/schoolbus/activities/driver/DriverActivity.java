@@ -42,7 +42,7 @@ public class DriverActivity extends AppCompatActivity
 
     public FirebaseAuth mFirebaseAuth;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
-    private static String userId;
+    public static String userId;
     private static String userEmail;
     User mUser;
     //String userName;
