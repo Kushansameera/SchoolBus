@@ -164,14 +164,14 @@ public class PaymentDriverFragment extends Fragment {
     @Subscribe
     public void update(String tag){
         for(int j=0;j<students.size();j++){
-            StudentPayment studentPayment = new StudentPayment();
-            studentPayment.setStuId(students.get(j).getStuID());
-            studentPayment.setStuName(students.get(j).getStuName());
-            studentPayment.setStuMonthlyFee(students.get(j).getStuMonthlyFee());
-            studentPayment.setStuLastPaidMonth("");
-            studentPayment.setStuReceivables("");
-
-            ref.child("Drivers").child(DriverActivity.userId).child("permanent").child("permanentStudent").child(students.get(j).getStuID()).child("paymentInfo").setValue(studentPayment);
+//            StudentPayment studentPayment = new StudentPayment();
+//            studentPayment.setStuId(students.get(j).getStuID());
+//            studentPayment.setStuName(students.get(j).getStuName());
+//            studentPayment.setStuMonthlyFee(students.get(j).getStuMonthlyFee());
+//            studentPayment.setStuLastPaidMonth("");
+//            studentPayment.setStuReceivables("");
+//
+//            ref.child("Drivers").child(DriverActivity.userId).child("permanent").child("permanentStudent").child(students.get(j).getStuID()).child("paymentInfo").setValue(studentPayment);
 //            ref.child("Drivers").child(DriverActivity.userId).child("payments").child("students").child(students.get(j).getStuID()).child("monthlyFee").setValue(students.get(j).getStuMonthlyFee());
 //            ref.child("Drivers").child(DriverActivity.userId).child("payments").child("students").child(students.get(j).getStuID()).child("stuName").setValue(students.get(j).getStuName());
 //            ref.child("Drivers").child(DriverActivity.userId).child("payments").child("students").child(students.get(j).getStuID()).child("lastPaidMonth").setValue("");

@@ -166,6 +166,7 @@ public class TempStudentFragment extends Fragment {
         studentPayment.setStuName(student.getStuName());
         studentPayment.setStuMonthlyFee(student.getStuMonthlyFee());
         studentPayment.setStuLastPaidMonth("");
+        studentPayment.setStuLastPaidYear("");
         studentPayment.setStuReceivables("");
         ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(latestStudentID).child("paymentInfo").setValue(studentPayment);
 //        ref.child("Drivers").child(driverId).child("payments").child("students").child(latestStudentID).child("monthlyFee").setValue(student.getStuMonthlyFee());

@@ -9,7 +9,16 @@ public class StudentPayment {
     private String stuName;
     private String stuMonthlyFee;
     private String stuLastPaidMonth;
+    private String stuLastPaidYear;
     private String stuReceivables;
+
+    public String getStuLastPaidYear() {
+        return stuLastPaidYear;
+    }
+
+    public void setStuLastPaidYear(String stuLastPaidYear) {
+        this.stuLastPaidYear = stuLastPaidYear;
+    }
 
     public String getStuId() {
         return stuId;
