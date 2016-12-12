@@ -19,6 +19,7 @@ import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.driver.DriverActivity;
 import com.example.kusha.schoolbus.activities.parent.ParentActivity;
 import com.example.kusha.schoolbus.application.ApplicationClass;
+import com.example.kusha.schoolbus.models.PaymentList;
 import com.example.kusha.schoolbus.models.Student;
 import com.example.kusha.schoolbus.models.StudentPayment;
 import com.firebase.client.DataSnapshot;
@@ -36,7 +37,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class PaymentDriverFragment extends Fragment {
-    Button btnAddPayment,btnViewPayment,btnSummery,btnUpdadte;
+    Button btnAddPayment, btnViewPayment, btnSummery, btnUpdadte;
     Fragment fragment;
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     List<Student> students = new ArrayList<>();
@@ -55,10 +56,10 @@ public class PaymentDriverFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_payment_driver, container, false);
-        btnAddPayment = (Button)rootView.findViewById(R.id.btnAddPayment);
-        btnViewPayment = (Button)rootView.findViewById(R.id.btnViewPayment);
-        btnSummery = (Button)rootView.findViewById(R.id.btnSummery);
-        btnUpdadte = (Button)rootView.findViewById(R.id.btnUpdte);
+        btnAddPayment = (Button) rootView.findViewById(R.id.btnAddPayment);
+        btnViewPayment = (Button) rootView.findViewById(R.id.btnViewPayment);
+        btnSummery = (Button) rootView.findViewById(R.id.btnSummery);
+        btnUpdadte = (Button) rootView.findViewById(R.id.btnUpdte);
         mProgressDialog = new ProgressDialog(getActivity());
         ApplicationClass.bus.register(this);
         monthArray = getResources().getStringArray(R.array.months);
@@ -111,7 +112,7 @@ public class PaymentDriverFragment extends Fragment {
                 int year = calendar.get(Calendar.YEAR);
                 String mYear = String.valueOf(year);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                alertDialogBuilder.setMessage("Are you Want to Update Your Payment Data For Year: "+mYear);
+                alertDialogBuilder.setMessage("Are you Want to Update Your Payment Data For Year: " + mYear);
 
                 alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -135,7 +136,8 @@ public class PaymentDriverFragment extends Fragment {
         });
         return rootView;
     }
-    private void updatePayment(){
+
+    private void updatePayment() {
         Query queryRef;
         queryRef = ref.child("Drivers").child(DriverActivity.userId).child("permanent").orderByChild("permanentStudent");
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -143,8 +145,8 @@ public class PaymentDriverFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     for (DataSnapshot data1 : data.getChildren()) {
-                        for (DataSnapshot data2:data1.getChildren()) {
-                            if(data2.getKey().equals("info")){
+                        for (DataSnapshot data2 : data1.getChildren()) {
+                            if (data2.getKey().equals("info")) {
                                 Student student = data2.getValue(Student.class);
                                 students.add(student);
                             }
@@ -161,24 +163,19 @@ public class PaymentDriverFragment extends Fragment {
             }
         });
     }
+
     @Subscribe
-    public void update(String tag){
-        for(int j=0;j<students.size();j++){
-//            StudentPayment studentPayment = new StudentPayment();
-//            studentPayment.setStuId(students.get(j).getStuID());
-//            studentPayment.setStuName(students.get(j).getStuName());
-//            studentPayment.setStuMonthlyFee(students.get(j).getStuMonthlyFee());
-//            studentPayment.setStuLastPaidMonth("");
-//            studentPayment.setStuReceivables("");
-//
-//            ref.child("Drivers").child(DriverActivity.userId).child("permanent").child("permanentStudent").child(students.get(j).getStuID()).child("paymentInfo").setValue(studentPayment);
-//            ref.child("Drivers").child(DriverActivity.userId).child("payments").child("students").child(students.get(j).getStuID()).child("monthlyFee").setValue(students.get(j).getStuMonthlyFee());
-//            ref.child("Drivers").child(DriverActivity.userId).child("payments").child("students").child(students.get(j).getStuID()).child("stuName").setValue(students.get(j).getStuName());
-//            ref.child("Drivers").child(DriverActivity.userId).child("payments").child("students").child(students.get(j).getStuID()).child("lastPaidMonth").setValue("");
-//            ref.child("Drivers").child(DriverActivity.userId).child("payments").child("students").child(students.get(j).getStuID()).child("receivables").setValue("");
-            for (int i = 11; i >=0; i--) {
+    public void update(String tag) {
+        for (int j = 0; j < students.size(); j++) {
+            PaymentList paymentList = new PaymentList();
+            paymentList.setStuID(students.get(j).getStuID());
+            paymentList.setStuName(students.get(j).getStuName());
+            for (int i = 11; i >= 0; i--) {
                 //2017 need to use as mYear
                 ref.child("Drivers").child(DriverActivity.userId).child("permanent").child("permanentStudent").child(students.get(j).getStuID()).child("payments").child("2017").child(monthArray[i]).child("status").setValue("Not Paid");
+                //ref.child("Drivers").child(DriverActivity.userId).child("budget").child("paymentList").child("2017").child(monthArray[i]).child("notPaid").child(students.get(j).getStuID()).child("StuID").setValue(students.get(j).getStuID());
+                ref.child("Drivers").child(DriverActivity.userId).child("budget").child("paymentList").child("2017").child(monthArray[i]).child("notPaid").child(students.get(j).getStuID()).setValue(paymentList);
+
             }
         }
         mProgressDialog.dismiss();

@@ -127,7 +127,7 @@
             android:layout_marginTop="10dp">
 
             <TextView
-                android:text="Total                    : "
+                android:text="Due Amount        : "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView19" />
@@ -250,7 +250,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:id="@+id/txtStudentFee"
+                    android:id="@+id/txtPayingAmount"
                     android:hint="Amount Rs."
                     android:textSize="14sp"
                     android:inputType="numberSigned" />

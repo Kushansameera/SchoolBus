@@ -21,6 +21,7 @@ import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.adapter.CustomAdapter;
 import com.example.kusha.schoolbus.application.GeoDistance;
 import com.example.kusha.schoolbus.models.Children;
+import com.example.kusha.schoolbus.models.PaymentList;
 import com.example.kusha.schoolbus.models.RouteFees;
 import com.example.kusha.schoolbus.models.RouteLocations;
 import com.example.kusha.schoolbus.models.Schools;
@@ -159,22 +160,23 @@ public class TempStudentFragment extends Fragment {
 
     private void addStudentToPayments() {
         Calendar calendar = Calendar.getInstance();
-        int month = calendar.get(Calendar.MONTH) - 1;
+        int month = calendar.get(Calendar.MONTH);
         int year = calendar.get(Calendar.YEAR);
         StudentPayment studentPayment = new StudentPayment();
+        PaymentList paymentList = new PaymentList();
         studentPayment.setStuId(student.getStuID());
         studentPayment.setStuName(student.getStuName());
         studentPayment.setStuMonthlyFee(student.getStuMonthlyFee());
         studentPayment.setStuLastPaidMonth("");
         studentPayment.setStuLastPaidYear("");
         studentPayment.setStuReceivables("");
+        paymentList.setStuID(student.getStuID());
+        paymentList.setStuName(student.getStuName());
         ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(latestStudentID).child("paymentInfo").setValue(studentPayment);
-//        ref.child("Drivers").child(driverId).child("payments").child("students").child(latestStudentID).child("monthlyFee").setValue(student.getStuMonthlyFee());
-//        ref.child("Drivers").child(driverId).child("payments").child("students").child(latestStudentID).child("stuName").setValue(student.getStuName());
-//        ref.child("Drivers").child(driverId).child("payments").child("students").child(latestStudentID).child("lastPaidMonth").setValue("");
-//        ref.child("Drivers").child(driverId).child("payments").child("students").child(latestStudentID).child("receivables").setValue("");
         for (int i = 11; i >= month; i--) {
             ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(latestStudentID).child("payments").child(String.valueOf(year)).child(monthArray[i]).child("status").setValue("Not Paid");
+            ref.child("Drivers").child(driverId).child("budget").child("paymentList").child(String.valueOf(year)).child(monthArray[i]).child("notPaid").child(latestStudentID).setValue(paymentList);
+            //ref.child("Drivers").child(driverId).child("budget").child("paymentList").child(String.valueOf(year)).child(monthArray[i]).child("notPaid").child(latestStudentID).child("StuName").setValue(student.getStuName());
         }
 
     }

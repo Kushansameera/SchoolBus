@@ -41,7 +41,7 @@ import java.util.List;
 public class ParentAccessFragment extends Fragment {
 
     private EditText txtAccessKey;
-    TextView txtCurrentChildName;
+    TextView txtCurrentChildName , txtCurrentChildId;
     private Button btnAddNewChild, btnSelectChild;
     private String actualAccessKey, enteredAccessKey;
 
@@ -62,11 +62,13 @@ public class ParentAccessFragment extends Fragment {
                              Bundle savedInstanceState) {
         parentAccessFragment = inflater.inflate(R.layout.fragment_parent_access, container, false);
         txtCurrentChildName = (TextView) parentAccessFragment.findViewById(R.id.txtCurrentChildName);
+        txtCurrentChildId = (TextView) parentAccessFragment.findViewById(R.id.txtCurrentChildID);
         txtAccessKey = new EditText(getActivity());
         btnAddNewChild = (Button) parentAccessFragment.findViewById(R.id.btnAddNewChild);
         btnSelectChild = (Button) parentAccessFragment.findViewById(R.id.btnSelectChild);
         childRadioGroup = new RadioGroup(parentAccessFragment.getContext());
         txtCurrentChildName.setText(ParentActivity.selectedChildName);
+        txtCurrentChildId.setText(ParentActivity.selectedChildId);
         getDriverID();
 
         final Handler key = new Handler();
