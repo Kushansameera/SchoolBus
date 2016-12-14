@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.LoginActivity;
@@ -37,6 +38,8 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Calendar;
+
 public class DriverActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -45,13 +48,11 @@ public class DriverActivity extends AppCompatActivity
     public static String userId;
     private static String userEmail;
     User mUser;
-    //String userName;
     Fragment fragment = null;
     TextView navName;
     TextView navEmail;
+    String[] monthArray;
 
-
-//    TextView txtUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +74,12 @@ public class DriverActivity extends AppCompatActivity
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         userId = user.getUid().toString().trim();
         userEmail = user.getEmail().toString().trim();
+        monthArray = getResources().getStringArray(R.array.months);
 
         ref.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               // for (DataSnapshot data:dataSnapshot.getChildren()) {
-                    mUser = dataSnapshot.getValue(User.class);
-               // }
+                mUser = dataSnapshot.getValue(User.class);
 
             }
 
@@ -94,14 +94,14 @@ public class DriverActivity extends AppCompatActivity
         key.postDelayed(new Runnable() {
             @Override
             public void run() {
-                navName = (TextView)view.findViewById(R.id.textDriverName);
-                navEmail = (TextView)view.findViewById(R.id.textDriverEmail);
+                navName = (TextView) view.findViewById(R.id.textDriverName);
+                navEmail = (TextView) view.findViewById(R.id.textDriverEmail);
                 navName.setText(mUser.getName());
                 navEmail.setText(userEmail);
             }
         }, 2000);
 
-
+        setPaymentSummery();
 
         try {
             getSupportActionBar().setTitle("Route");
@@ -111,11 +111,6 @@ public class DriverActivity extends AppCompatActivity
         } catch (Exception e) {
             Log.d("Route", e.getMessage());
         }
-
-//        txtUserName = (TextView)findViewById(R.id.user_name);
-//        txtUserName.setText("Sameera");
-
-
     }
 
     @Override
@@ -170,8 +165,7 @@ public class DriverActivity extends AppCompatActivity
             changeFragmentRouteSetting();
         } else if (id == R.id.nav_setting) {
             changeFragmentSettings();
-        }
-        else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_logout) {
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setMessage("Are you sure,You wanted to Sign out");
@@ -186,7 +180,7 @@ public class DriverActivity extends AppCompatActivity
                 }
             });
 
-            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
@@ -285,11 +279,11 @@ public class DriverActivity extends AppCompatActivity
         }
     }
 
-    private void updateLocation(){
+    private void updateLocation() {
         DriverGPS driverGPS = new DriverGPS(this);
         DriverLocation driverLocation = new DriverLocation();
 
-        if(driverGPS.canGetLocation()){
+        if (driverGPS.canGetLocation()) {
             driverLocation.setDriverLatitude(driverGPS.getLatitude());
             driverLocation.setDriverLongitude(driverGPS.getLongitude());
             setDriverLocation(driverLocation);
@@ -298,7 +292,55 @@ public class DriverActivity extends AppCompatActivity
 
     }
 
-    public void setDriverLocation(DriverLocation driverLocation){
+    public void setDriverLocation(DriverLocation driverLocation) {
         ref.child("Drivers").child(userId).child("myLocation").child("location").setValue(driverLocation);
+    }
+
+    private void setPaymentSummery() {
+        Calendar calendar = Calendar.getInstance();
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final String mYear = String.valueOf(year);
+        final String mMonth = String.valueOf(month);
+        ref.child("Drivers").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild("budget")) {
+                    Firebase mref = ref.child("Drivers").child(userId).child("budget").child("summery").child(String.valueOf(year)).child(monthArray[month]);
+                    mref.child("totalIncome").setValue("0");
+                    mref.child("currentIncome").setValue("0");
+                    ref.child("Drivers").child(userId).child("budget").child("total").setValue("0");
+                    ref.child("Drivers").child(userId).child("budget").child("lastMonth").setValue(String.valueOf(month));
+                    ref.child("Drivers").child(userId).child("budget").child("lastYear").setValue(String.valueOf(year));
+
+                } else {
+                    int lastMonth = 0, total = 0;
+                    String lastYear = "";
+                    lastMonth = Integer.parseInt((String) dataSnapshot.child("budget").child("lastMonth").getValue());
+                    String mTotal = dataSnapshot.child("budget").child("total").getValue().toString();
+                    total = Integer.parseInt(mTotal);
+                    lastYear = dataSnapshot.child("budget").child("lastYear").getValue().toString();
+
+                    if(dataSnapshot.child("budget").child("summery").hasChild(mYear)){
+                        if(!dataSnapshot.child("budget").child("summery").child(mYear).hasChild(monthArray[month])){
+                            ref.child("Drivers").child(userId).child("budget").child("summery").child(mYear).child(monthArray[month]).child("totalIncome").setValue(mTotal);
+                            ref.child("Drivers").child(userId).child("budget").child("summery").child(mYear).child(monthArray[month]).child("currentIncome").setValue("0");
+                            ref.child("Drivers").child(userId).child("budget").child("lastMonth").setValue(String.valueOf(month));
+                            ref.child("Drivers").child(userId).child("budget").child("lastYear").setValue(String.valueOf(year));
+                        }
+                    }else {
+                        ref.child("Drivers").child(userId).child("budget").child("summery").child(mYear).child(monthArray[month]).child("totalIncome").setValue(mTotal);
+                        ref.child("Drivers").child(userId).child("budget").child("summery").child(mYear).child(monthArray[month]).child("currentIncome").setValue("0");
+                        ref.child("Drivers").child(userId).child("budget").child("lastMonth").setValue(String.valueOf(month));
+                        ref.child("Drivers").child(userId).child("budget").child("lastYear").setValue(String.valueOf(year));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 }

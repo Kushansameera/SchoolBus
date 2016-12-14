@@ -132,6 +132,8 @@ public class MyDriversFragment extends Fragment {
                         ParentActivity.selectedDriverEmail = myDrivers.get(i).getDriverEmail();
                         ParentActivity.selectedDriverID = myDrivers.get(i).getDriverId();
                         ParentActivity.selectedDriverName = myDrivers.get(i).getDriverName();
+                        ParentActivity.selectedChildId = "";
+                        ParentActivity.selectedChildName = "";
                         Toast.makeText(getActivity(), name + " Selected", Toast.LENGTH_SHORT).show();
                         break;
                     }

@@ -37,9 +37,7 @@ public class SelectDriverActivity extends AppCompatActivity {
     private String userId;
     public FirebaseAuth mFirebaseAuth;
     private RadioGroup driverRadioGroup;
-    private RadioGroup childRadioGroup;
     List<ManageDrivers> manageDrivers = new ArrayList<>();
-    List<Children> childrens = new ArrayList<>();
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -52,12 +50,10 @@ public class SelectDriverActivity extends AppCompatActivity {
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         userId = user.getUid().toString().trim();
         mProgressDialog = new ProgressDialog(SelectDriverActivity.this);
-        showDrivers();
-
         select = (Button) findViewById(R.id.btnDone);
         driverRadioGroup = (RadioGroup) findViewById(R.id.radioGroupDrivers);
-        childRadioGroup = new RadioGroup(SelectDriverActivity.this);
 
+        showDrivers();
 
         select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,62 +62,65 @@ public class SelectDriverActivity extends AppCompatActivity {
                 mProgressDialog.show();
                 mProgressDialog.setCancelable(false);
                 int selectedRadioId = driverRadioGroup.getCheckedRadioButtonId();
-                //RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioId);
-//                ParentActivity.selectedDriverEmail = manageDrivers.get(selectedRadioId - 1).getDriverEmail().toString().trim();
-//                ParentActivity.selectedDriverID = manageDrivers.get(selectedRadioId - 1).getDriverId().toString().trim();
                 RadioButton selectedRadioButton = (RadioButton)findViewById(selectedRadioId);
-                String name = selectedRadioButton.getText().toString();
-                for(int i=0;i<manageDrivers.size();i++){
-                    if(name.equals(manageDrivers.get(i).getDriverName())){
-                        ParentActivity.selectedDriverEmail = manageDrivers.get(i).getDriverEmail();
-                        ParentActivity.selectedDriverID = manageDrivers.get(i).getDriverId();
-                        ParentActivity.selectedDriverName = manageDrivers.get(i).getDriverName();
-                        break;
-                    }
+                if(selectedRadioId==0){
+                    Toast.makeText(SelectDriverActivity.this, "Please Select a Driver", Toast.LENGTH_SHORT).show();
                 }
-                ref.child("Parents").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChild("children")) {
-                            ref.child("Parents").child(userId).child("children").addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.hasChild(ParentActivity.selectedDriverID)){
-                                        getChildData();
-                                    }
-                                    else{
-                                        ParentActivity.selectedChildId = "";
-                                        ParentActivity.selectedChildName = "";
-                                        mProgressDialog.dismiss();
-                                        Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
-                                        startActivity(intent);
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(FirebaseError firebaseError) {
-
-                                }
-                            });
-
-
-                        } else {
-                            ParentActivity.selectedChildId = "";
-                            ParentActivity.selectedChildName = "";
-                            mProgressDialog.dismiss();
-                            Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
-                            startActivity(intent);
-
+                else {
+                    String name = selectedRadioButton.getText().toString();
+                    for(int i=0;i<manageDrivers.size();i++){
+                        if(name.equals(manageDrivers.get(i).getDriverName())){
+                            ParentActivity.selectedDriverEmail = manageDrivers.get(i).getDriverEmail();
+                            ParentActivity.selectedDriverID = manageDrivers.get(i).getDriverId();
+                            ParentActivity.selectedDriverName = manageDrivers.get(i).getDriverName();
+                            break;
                         }
                     }
+                    ref.child("Parents").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.hasChild("children")) {
+                                ref.child("Parents").child(userId).child("children").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.hasChild(ParentActivity.selectedDriverID)){
+                                            mProgressDialog.dismiss();
+                                            Intent intent = new Intent(SelectDriverActivity.this, SelectChildActivity.class);
+                                            startActivity(intent);
+                                        }
+                                        else{
+                                            ParentActivity.selectedChildId = "";
+                                            ParentActivity.selectedChildName = "";
+                                            mProgressDialog.dismiss();
+                                            Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    }
 
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                    }
-                });
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
 
-//                Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
-//                startActivity(intent);
+                                    }
+                                });
+
+
+                            } else {
+                                ParentActivity.selectedChildId = "";
+                                ParentActivity.selectedChildName = "";
+                                mProgressDialog.dismiss();
+                                Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
+                                startActivity(intent);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                        }
+                    });
+                }
+
+
             }
         });
     }
@@ -153,57 +152,6 @@ public class SelectDriverActivity extends AppCompatActivity {
         });
     }
 
-    private void getChildData() {
-        childrens.clear();
-        Query queryRef;
-        queryRef = ref.child("Parents").child(userId).child("children").child(ParentActivity.selectedDriverID);
-
-        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                childrens.clear();
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    Children c = data.getValue(Children.class);
-                    childrens.add(c);
-                }
-                showChildren();
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-    }
-
-    private void showChildren() {
-        mProgressDialog.dismiss();
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Select Your Child");
-
-        for (int i = 0; i < childrens.size(); i++) {
-            RadioButton childRadioButton = new RadioButton(SelectDriverActivity.this);
-            childRadioButton.setText(childrens.get(i).getStuName());
-            childRadioButton.setTextSize(15);
-            childRadioGroup.addView(childRadioButton);
-        }
-
-        alertDialogBuilder.setView(childRadioGroup);
-
-        alertDialogBuilder.setPositiveButton("Select", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                int selectedRadioId = childRadioGroup.getCheckedRadioButtonId()-childrens.size();
-                ParentActivity.selectedChildId = childrens.get(selectedRadioId-1).getStuId().toString().trim();
-                ParentActivity.selectedChildName = childrens.get(selectedRadioId-1).getStuName().toString().trim();
-                Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
-                startActivity(intent);
-                //Toast.makeText(SelectDriverActivity.this, "id= "+ParentActivity.selectedChildId+"\n Name= "+ParentActivity.selectedChildName, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        alertDialogBuilder.show();
-    }
 
 
 }

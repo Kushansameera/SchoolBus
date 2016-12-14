@@ -132,6 +132,7 @@ public class AddNewPaymentFragment extends Fragment {
                 studentPayments = dataSnapshot.getValue(StudentPayment.class);
                 //ApplicationClass.bus.post(1);
                 showPaymentData();
+                ApplicationClass.bus.unregister(this);
             }
 
             @Override

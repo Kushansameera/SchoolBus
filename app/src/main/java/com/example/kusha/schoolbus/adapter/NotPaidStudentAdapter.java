@@ -68,8 +68,8 @@ public class NotPaidStudentAdapter extends RecyclerView.Adapter<NotPaidStudentAd
         public NotPaidStudentViewHolder(final View itemView) {
             super(itemView);
 
-            studentName = (TextView) itemView.findViewById(R.id.txtNotPayStuId);
-            studentId = (TextView) itemView.findViewById(R.id.txtNotPayStuName);
+            studentId = (TextView) itemView.findViewById(R.id.txtNotPayStuId);
+            studentName = (TextView) itemView.findViewById(R.id.txtNotPayStuName);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

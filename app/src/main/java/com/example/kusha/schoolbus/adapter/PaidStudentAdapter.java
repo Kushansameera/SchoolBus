@@ -69,8 +69,8 @@ public class PaidStudentAdapter extends RecyclerView.Adapter<PaidStudentAdapter.
         public PaidStudentViewHolder(final View itemView) {
             super(itemView);
 
-            studentName = (TextView) itemView.findViewById(R.id.txtPayStuId);
-            studentId = (TextView) itemView.findViewById(R.id.txtPayStuName);
+            studentId = (TextView) itemView.findViewById(R.id.txtPayStuId);
+            studentName = (TextView) itemView.findViewById(R.id.txtPayStuName);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

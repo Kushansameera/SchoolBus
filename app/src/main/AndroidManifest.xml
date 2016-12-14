@@ -45,7 +45,6 @@
             android:name=".activities.parent.ParentActivity"
             android:label="@string/title_activity_parent"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity android:name=".activities.driver.StudentActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -56,9 +55,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.kusha.schoolbus.activities.parent.ParentActivity" />
         </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value=" AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw " />
+
+        <activity android:name=".activities.parent.SelectChildActivity"></activity>
     </application>
 
 </manifest>

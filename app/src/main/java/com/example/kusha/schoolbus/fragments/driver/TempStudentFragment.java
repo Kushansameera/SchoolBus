@@ -160,9 +160,9 @@ public class TempStudentFragment extends Fragment {
 
     private void addStudentToPayments() {
         Calendar calendar = Calendar.getInstance();
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-        StudentPayment studentPayment = new StudentPayment();
+        final int month = calendar.get(Calendar.MONTH);
+        final int year = calendar.get(Calendar.YEAR);
+        final StudentPayment studentPayment = new StudentPayment();
         PaymentList paymentList = new PaymentList();
         studentPayment.setStuId(student.getStuID());
         studentPayment.setStuName(student.getStuName());
@@ -178,6 +178,25 @@ public class TempStudentFragment extends Fragment {
             ref.child("Drivers").child(driverId).child("budget").child("paymentList").child(String.valueOf(year)).child(monthArray[i]).child("notPaid").child(latestStudentID).setValue(paymentList);
             //ref.child("Drivers").child(driverId).child("budget").child("paymentList").child(String.valueOf(year)).child(monthArray[i]).child("notPaid").child(latestStudentID).child("StuName").setValue(student.getStuName());
         }
+
+        ref.child("Drivers").child(driverId).child("budget").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int totalIncome = Integer.parseInt((String) dataSnapshot.child("summery").child(String.valueOf(year)).child(monthArray[month]).child("totalIncome").getValue());
+                int total = Integer.parseInt(dataSnapshot.child("total").getValue().toString());
+
+                int mTotalIncome = totalIncome + Integer.parseInt(studentPayment.getStuMonthlyFee());
+                int mTotal = total + Integer.parseInt(studentPayment.getStuMonthlyFee());
+
+                ref.child("Drivers").child(driverId).child("budget").child("summery").child(String.valueOf(year)).child(monthArray[month]).child("totalIncome").setValue(String.valueOf(mTotalIncome));
+                ref.child("Drivers").child(driverId).child("budget").child("total").setValue(String.valueOf(mTotal));
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
     }
 

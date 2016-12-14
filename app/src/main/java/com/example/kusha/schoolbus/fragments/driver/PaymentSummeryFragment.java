@@ -6,6 +6,9 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.kusha.schoolbus.R;
 
@@ -14,17 +17,35 @@ import com.example.kusha.schoolbus.R;
  */
 public class PaymentSummeryFragment extends Fragment {
 
+    View paymentSummeryFragment;
+    Spinner spinnerYear, spinnerMonth;
+    TextView txtTargetIncome, txtCurrentIncome, txtReceivables;
+    ImageButton btnSearch;
 
     public PaymentSummeryFragment() {
-        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_payment_summery, container, false);
+        paymentSummeryFragment = inflater.inflate(R.layout.fragment_payment_summery, container, false);
+
+        spinnerYear = (Spinner) paymentSummeryFragment.findViewById(R.id.spinnerYear);
+        spinnerMonth = (Spinner) paymentSummeryFragment.findViewById(R.id.spinnerMonth);
+        txtCurrentIncome = (TextView) paymentSummeryFragment.findViewById(R.id.txtCurrentIncome);
+        txtTargetIncome = (TextView) paymentSummeryFragment.findViewById(R.id.txtTargetIncome);
+        txtReceivables = (TextView) paymentSummeryFragment.findViewById(R.id.txtReceivables);
+        btnSearch = (ImageButton) paymentSummeryFragment.findViewById(R.id.btnSearchSummery);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        return paymentSummeryFragment;
     }
 
 }
