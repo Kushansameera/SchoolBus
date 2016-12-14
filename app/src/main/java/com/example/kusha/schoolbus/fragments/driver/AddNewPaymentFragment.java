@@ -18,12 +18,15 @@ import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.driver.DriverActivity;
+import com.example.kusha.schoolbus.activities.parent.ParentActivity;
 import com.example.kusha.schoolbus.application.ApplicationClass;
 import com.example.kusha.schoolbus.models.PaymentList;
 import com.example.kusha.schoolbus.models.StudentPayment;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.MutableData;
+import com.firebase.client.Transaction;
 import com.firebase.client.ValueEventListener;
 import com.squareup.otto.Subscribe;
 
@@ -235,19 +238,61 @@ public class AddNewPaymentFragment extends Fragment {
         PaymentList payment = new PaymentList();
         payment.setStuID(txtSearchId.getText().toString());
         payment.setStuName(studentPayments.getStuName());
+        final String sYear = spinnerYear.getSelectedItem().toString();
+        final String sMonth = spinnerMonth.getSelectedItem().toString();
 
         Firebase newRef = ref.child("Drivers").child(DriverActivity.userId).child("permanent").child("permanentStudent").child(txtSearchId.getText().toString());
-        newRef.child("paymentInfo").child("stuLastPaidMonth").setValue(spinnerMonth.getSelectedItem().toString());
-        newRef.child("paymentInfo").child("stuLastPaidYear").setValue(spinnerYear.getSelectedItem().toString());
+        newRef.child("paymentInfo").child("stuLastPaidMonth").setValue(sMonth);
+        newRef.child("paymentInfo").child("stuLastPaidYear").setValue(sYear);
         newRef.child("paymentInfo").child("stuReceivables").setValue(String.valueOf(newReceivable));
-        newRef.child("payments").child(spinnerYear.getSelectedItem().toString()).child(spinnerMonth.getSelectedItem().toString()).child("status").setValue("Paid");
-        ref.child("Drivers").child(DriverActivity.userId).child("budget").child("paymentList").child(spinnerYear.getSelectedItem().toString()).child(spinnerMonth.getSelectedItem().toString()).child("paid").child(txtSearchId.getText().toString()).setValue(payment);
-        //ref.child("Drivers").child(DriverActivity.userId).child("budget").child("paymentList").child(spinnerYear.getSelectedItem().toString()).child(spinnerMonth.getSelectedItem().toString()).child("paid").child(txtSearchId.getText().toString()).child("StuName").setValue(studentPayments.getStuName());
-        ref.child("Drivers").child(DriverActivity.userId).child("budget").child("paymentList").child(spinnerYear.getSelectedItem().toString()).child(spinnerMonth.getSelectedItem().toString()).child("notPaid").child(txtSearchId.getText().toString()).removeValue();
+        newRef.child("payments").child(sYear).child(sMonth).child("status").setValue("Paid");
+        ref.child("Drivers").child(DriverActivity.userId).child("budget").child("paymentList").child(sYear).child(sMonth).child("paid").child(txtSearchId.getText().toString()).setValue(payment);
+        ref.child("Drivers").child(DriverActivity.userId).child("budget").child("paymentList").child(sYear).child(sMonth).child("notPaid").child(txtSearchId.getText().toString()).removeValue();
 
+//        ref.child("Drivers").child(DriverActivity.userId).child("budget").child("summery").child(mYear).child(mMonth).child("currentIncome").runTransaction(new Transaction.Handler() {
+//            @Override
+//            public Transaction.Result doTransaction(MutableData mutableData) {
+//                Integer currentValue = mutableData.getValue(Integer.class);
+//                mutableData.setValue(currentValue+Integer.parseInt(txtPayingAmount.getText().toString()));
+//                return Transaction.success(mutableData);
+//            }
+//
+//            @Override
+//            public void onComplete(FirebaseError firebaseError, boolean b, DataSnapshot dataSnapshot) {
+//                mProgressDialog.dismiss();
+//                Toast.makeText(getActivity(), "Payment Successfully Added", Toast.LENGTH_SHORT).show();
+//
+//                try {
+//                    Fragment fragment = new PaymentDriverFragment();
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+//                } catch (Exception e) {
+//                    Log.d("Payment", e.getMessage());
+//                }
+//            }
+//        });
+
+        ref.child("Drivers").child(DriverActivity.userId).child("budget").child("summery").child(sYear).child(sMonth).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int currentIncome = Integer.parseInt(dataSnapshot.child("currentIncome").getValue().toString());
+                setSummery(currentIncome, sYear, sMonth);
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void setSummery(int currentIncome, String sYear, String sMonth) {
+        int newIncome = currentIncome + Integer.parseInt(txtPayingAmount.getText().toString());
+        ref.child("Drivers").child(DriverActivity.userId).child("budget").child("summery").child(sYear).child(sMonth).child("currentIncome").setValue(String.valueOf(newIncome));
         mProgressDialog.dismiss();
-        Toast.makeText(getActivity(), "Payment Successfully Added", Toast.LENGTH_SHORT).show();
-
         try {
             Fragment fragment = new PaymentDriverFragment();
             FragmentManager fragmentManager = getFragmentManager();
@@ -255,7 +300,6 @@ public class AddNewPaymentFragment extends Fragment {
         } catch (Exception e) {
             Log.d("Payment", e.getMessage());
         }
-
     }
 
 }
