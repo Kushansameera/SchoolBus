@@ -17,19 +17,22 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:weightSum="1">
 
             <EditText
-                android:layout_width="262dp"
+                android:layout_width="224dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtFilterName" />
+                android:id="@+id/txtFilterName"
+                android:layout_weight="0.53" />
 
-            <Button
-                android:text="Search"
+            <ImageButton
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_search"
+                android:id="@+id/btnSearchPayment"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnSearch"
-                android:layout_weight="1" />
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.17" />
 
         </LinearLayout>
 

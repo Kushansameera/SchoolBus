@@ -170,15 +170,17 @@
                         android:id="@+id/radioButtonMorningOnly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Morning Only" />
+                        android:text="Morning Only"
+                        android:textSize="12sp"
+                        android:layout_weight="0.16" />
 
                     <RadioButton
                         android:id="@+id/radioButtonEveningOnly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Evening Only" />
+                        android:text="Evening Only"
+                        android:textSize="12sp"
+                        android:layout_weight="0.19" />
 
                     <RadioButton
                         android:id="@+id/radioButtonBoth"
@@ -186,7 +188,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:text="Both" />
+                        android:text="Both"
+                        android:textSize="12sp" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -198,33 +201,47 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="95dp"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="5dp"
-                    android:text="Pickup Location      :"
-                    android:textSize="14sp"
-                    android:layout_marginRight="10dp" />
-
-                <TextView
-                    android:id="@+id/txtLocationPick"
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0.85"
-                    android:paddingTop="10dp"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:textSize="12sp" />
+                    android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/imageButtonStuPickLocation"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="5dp"
+                        android:text="Pickup Location : "
+                        android:textSize="14sp"
+                        android:paddingTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="205dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.07"
-                    android:background="@drawable/ic_place"
-                    android:layout_marginLeft="10dp" />
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/txtLocationPick"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textSize="14sp"
+                        android:paddingTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <ImageButton
+                        android:id="@+id/imageButtonStuPickLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_place" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -235,33 +252,47 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_height="41dp"
-                    android:paddingLeft="5dp"
-                    android:text="Drop Location       :"
-                    android:textSize="14sp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="95dp" />
-
-                <TextView
-                    android:id="@+id/txtLocationDrop"
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0.85"
-                    android:paddingTop="10dp"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:textSize="12sp" />
+                    android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/imageButtonStuDropLocation"
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="5dp"
+                        android:text="Drop Location    : "
+                        android:textSize="14sp"
+                        android:layout_width="match_parent"
+                        android:paddingTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="205dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.03">
+
+                    <TextView
+                        android:id="@+id/txtLocationDrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textSize="14sp"
+                        android:paddingTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.07"
-                    android:background="@drawable/ic_place"
-                    android:layout_marginLeft="10dp" />
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:id="@+id/imageButtonStuDropLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_place" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -272,37 +303,99 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_height="41dp"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="10dp"
-                    android:text="Pickup Time :"
-                    android:textSize="14sp"
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_weight="0.05" />
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/txtPickuptime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0.80"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="5dp"
+                        android:text="Pickup Time       : "
+                        android:textSize="14sp"
+                        android:layout_width="match_parent"
+                        android:paddingTop="2dp" />
+                </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/imageButtonStuPickupTime"
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="205dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.03">
+
+                    <TextView
+                        android:id="@+id/txtPickuptime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textSize="14sp"
+                        android:paddingTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.07"
-                    android:background="@drawable/ic_time"
-                    android:layout_marginLeft="10dp" />
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:id="@+id/imageButtonStuPickupTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_time" />
+                </LinearLayout>
 
             </LinearLayout>
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="25dp"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:weightSum="1"-->
+                <!--android:layout_weight="0.23">-->
+
+                <!--<LinearLayout-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent">-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/textView4"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:paddingLeft="5dp"-->
+                        <!--android:text="Pickup Time       : "-->
+                        <!--android:textSize="14sp"-->
+                        <!--android:layout_width="wrap_content" />-->
+                <!--</LinearLayout>-->
+
+                <!--<LinearLayout-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_width="243dp">-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/txtPickuptime"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:textColor="@color/common_google_signin_btn_text_dark_focused"-->
+                        <!--android:textSize="14sp" />-->
+                <!--</LinearLayout>-->
+
+                <!--<LinearLayout-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1">-->
+
+                    <!--<ImageButton-->
+                        <!--android:id="@+id/imageButtonStuPickupTime"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:background="@drawable/ic_place" />-->
+                <!--</LinearLayout>-->
+
+            <!--</LinearLayout>-->
 
             <LinearLayout
                 android:id="@+id/spinnerScool"

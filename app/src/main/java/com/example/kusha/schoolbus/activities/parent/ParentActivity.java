@@ -18,17 +18,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.LoginActivity;
-import com.example.kusha.schoolbus.fragments.parent.AddNewChildFragment;
 import com.example.kusha.schoolbus.fragments.parent.AttendanceFragment;
 import com.example.kusha.schoolbus.fragments.parent.BusLocationFragment;
-import com.example.kusha.schoolbus.fragments.parent.DriveMangeFragment;
 import com.example.kusha.schoolbus.fragments.parent.MessageFragment;
 import com.example.kusha.schoolbus.fragments.parent.ParentAccessFragment;
-import com.example.kusha.schoolbus.fragments.parent.ParentPaymentragment;
+import com.example.kusha.schoolbus.fragments.parent.ParentPaymentFragment;
 import com.example.kusha.schoolbus.fragments.parent.SettingsParentFragment;
 import com.example.kusha.schoolbus.models.User;
 import com.firebase.client.DataSnapshot;
@@ -263,7 +260,7 @@ public class ParentActivity extends AppCompatActivity
     public void changeFragmentPayments() {
         try {
             getSupportActionBar().setTitle("Payments");
-            fragment = new ParentPaymentragment();
+            fragment = new ParentPaymentFragment();
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_frame_container_parent, fragment).commit();
         } catch (Exception e) {
