@@ -87,6 +87,7 @@
         <item>December</item>
     </string-array>
     <string name="title_activity_parent">ParentActivity</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>

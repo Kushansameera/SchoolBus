@@ -29,6 +29,11 @@ import com.firebase.client.MutableData;
 import com.firebase.client.Query;
 import com.firebase.client.Transaction;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -78,6 +83,7 @@ public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback
         rcvSchools = (RecyclerView) routeSchoolFragment.findViewById(R.id.rcvSchools);
         txtRouteSchoolName = (EditText) routeSchoolFragment.findViewById(R.id.txtRouteSchoolName);
         btnAddRouteSchool = (ImageButton) routeSchoolFragment.findViewById(R.id.btnAddRouteSchool);
+        SupportPlaceAutocompleteFragment placeAutocompleteFragment = (SupportPlaceAutocompleteFragment) this.getChildFragmentManager().findFragmentById(R.id.school_autocomplete_fragment);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
@@ -131,6 +137,28 @@ public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.edit_delete, popup.getMenu());
                 popup.show();
+            }
+        });
+        placeAutocompleteFragment.setHint("Search School");
+
+        placeAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                googleMap.clear();
+                txtRouteSchoolName.setText(place.getName());
+                LatLng schoolLatlng = place.getLatLng();
+                schoolLatitiude = String.valueOf(schoolLatlng.latitude);
+                schoolLongitude = String.valueOf(schoolLatlng.longitude);
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(schoolLatlng);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(schoolLatlng, 15));
+                markerOptions.draggable(true);
+                googleMap.addMarker(markerOptions);
+            }
+
+            @Override
+            public void onError(Status status) {
+
             }
         });
 

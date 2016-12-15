@@ -58,7 +58,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value=" AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw " />
+            android:value="AIzaSyAy9yU17A4vqRXktLzhRAPzh_KAcupXvAM" />
 
         <activity android:name=".activities.parent.SelectChildActivity"></activity>
     </application>

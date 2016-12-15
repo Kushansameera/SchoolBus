@@ -8,60 +8,70 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.kusha.schoolbus.fragments.driver.RouteLocationFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="227dp">
-            <fragment
-                android:id="@+id/school_autocomplete_fragment"
-                android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <fragment
-                android:id="@+id/mapSchool"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="359dp"
-                android:layout_weight="0.96" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_add_location"
-            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical" >
 
-            <EditText
-                android:id="@+id/txtRouteSchoolName"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:hint="School Name"
-                android:inputType="textPersonName"
-                android:lines="1"
-                android:singleLine="true" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="261dp">
+                <fragment
+                    android:id="@+id/school_autocomplete_fragment"
+                    android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-            <ImageButton
-                android:id="@+id/btnAddRouteSchool"
-                android:layout_width="wrap_content"
+                <fragment
+                    android:id="@+id/mapSchool"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="359dp"
+                    android:layout_weight="0.96" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_add_location"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_add" />
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/txtRouteSchoolName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="School Name"
+                    android:inputType="textPersonName"
+                    android:lines="1"
+                    android:singleLine="true" />
+
+                <ImageButton
+                    android:id="@+id/btnAddRouteSchool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_add" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rcvSchools"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
 
         </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rcvSchools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-    </LinearLayout>
+    </ScrollView>
 
 
 </FrameLayout>

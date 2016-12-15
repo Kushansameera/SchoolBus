@@ -46,15 +46,12 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
     public static String buttonIdentifier = "";
 
 
-    public ChildLocationFragment() {
-        // Required empty public constructor
-    }
+    public ChildLocationFragment() {}
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View stuLocFragment = inflater.inflate(R.layout.fragment_student_location, container, false);
         PlaceAutocompleteFragment placeAutocompleteFragment = (PlaceAutocompleteFragment) this.getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
@@ -87,7 +84,16 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
         placeAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-
+                googleMap.clear();
+                stuLoc = place.getName().toString();
+                LatLng childLatlng = place.getLatLng();
+                stuLati = childLatlng.latitude;
+                stuLongi = childLatlng.longitude;
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(childLatlng);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(childLatlng, 15));
+                markerOptions.draggable(true);
+                googleMap.addMarker(markerOptions);
             }
 
             @Override
@@ -96,11 +102,11 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
             }
         });
 
-        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
-                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
-                .build();
-        placeAutocompleteFragment.setFilter(typeFilter);
-
+//        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+//                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE)
+//                .build();
+//        placeAutocompleteFragment.setFilter(typeFilter);
+//
         MapFragment mapFragment = (MapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -163,7 +169,6 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
     }
 
     private void setCurrentLocation() {
-
         GPSTracker gps = new GPSTracker(getActivity());
         final Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
         this.googleMap.clear();
