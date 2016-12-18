@@ -38,6 +38,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -150,6 +151,7 @@ public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback
                 schoolLatitiude = String.valueOf(schoolLatlng.latitude);
                 schoolLongitude = String.valueOf(schoolLatlng.longitude);
                 MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.school_on_map));
                 markerOptions.position(schoolLatlng);
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(schoolLatlng, 15));
                 markerOptions.draggable(true);
@@ -361,6 +363,7 @@ public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback
                 googleMap.clear();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 markerOptions.draggable(true);
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.school_on_map));
                 googleMap.addMarker(markerOptions);
                 schoolLatitiude = String.valueOf(latLng.latitude);
                 schoolLongitude = String.valueOf(latLng.longitude);

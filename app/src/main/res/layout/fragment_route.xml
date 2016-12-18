@@ -1,13 +1,57 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.kusha.schoolbus.fragments.driver.RouteFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <fragment
+        android:id="@+id/driverRouteMap"
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="route_setting_fragment" />
+        android:layout_weight="0.96" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="53dp"
+        android:layout_height="match_parent"
+        android:weightSum="1">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="412dp">
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_sunset"
+                android:id="@+id/floatingActionButtonEvening"
+                android:foregroundGravity="bottom"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="bottom">
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="match_parent"
+                android:clickable="true"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_sunrise"
+                android:id="@+id/floatingActionButtonMorning"
+                android:layout_weight="0.08"
+                android:layout_height="57dp"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

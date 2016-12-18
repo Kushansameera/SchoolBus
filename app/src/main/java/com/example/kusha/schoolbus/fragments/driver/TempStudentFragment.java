@@ -18,9 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
+import com.example.kusha.schoolbus.activities.driver.DriverActivity;
 import com.example.kusha.schoolbus.adapter.CustomAdapter;
 import com.example.kusha.schoolbus.application.GeoDistance;
 import com.example.kusha.schoolbus.models.Children;
+import com.example.kusha.schoolbus.models.DriverRoute;
 import com.example.kusha.schoolbus.models.PaymentList;
 import com.example.kusha.schoolbus.models.RouteFees;
 import com.example.kusha.schoolbus.models.RouteLocations;
@@ -89,7 +91,6 @@ public class TempStudentFragment extends Fragment {
         mProgressDialog = new ProgressDialog(getActivity());
         monthArray = getResources().getStringArray(R.array.months);
         getTempStudentData();
-        getSchoolDetails();
         getPricePerKm();
 
         btnMonthlyFee.setOnClickListener(new View.OnClickListener() {
@@ -111,11 +112,13 @@ public class TempStudentFragment extends Fragment {
                             addStudent();
                             saveStudentWithParent();
                             addStudentToPayments();
+                            addStuPickLocation();
                             flag = false;
                         } else {
                             addStudent();
                             saveStudentWithParent();
                             addStudentToPayments();
+                            addStuPickLocation();
                             flag = false;
                         }
                     }
@@ -220,6 +223,7 @@ public class TempStudentFragment extends Fragment {
                     txtTempStuDrop.setText("-");
                 }
                 txtTempStuPickupTime.setText(student.getStuPickTime());
+                getSchoolDetails();
             }
 
             @Override
@@ -235,12 +239,12 @@ public class TempStudentFragment extends Fragment {
         mProgressDialog.setCancelable(false);
 
         if (!stuType.equals("Evening Only")) {
-            morningUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + student.getStuPickLatitude() + "," + student.getStuPickLongitude() + "&destinations=" + school.getSchoolLatitude() + "," + school.getSchoolLongitude() + "&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw";
+            morningUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + student.getStuPickLatitude() + "," + student.getStuPickLongitude() + "&destinations=" + school.getSchoolLatitude() + "," + school.getSchoolLongitude() + "&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyDb5C2cX_fb7XLzq0AjaD2TjXzULYYmEsc";
             new GeoDistance(stuRequestFragment.getContext()).execute(morningUrl);
             Log.d("========<>", "eveningOnlyFalse");
         }
         if (!stuType.equals("Morning Only")) {
-            eveningUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + school.getSchoolLatitude() + "," + school.getSchoolLongitude() + "&destinations=" + student.getStuDropLatitude() + "," + student.getStuDropLongitude() + "&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyBEU7F7R6nHIehl_GcoTYpFJjlLLl8bEAw";
+            eveningUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + school.getSchoolLatitude() + "," + school.getSchoolLongitude() + "&destinations=" + student.getStuDropLatitude() + "," + student.getStuDropLongitude() + "&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyDb5C2cX_fb7XLzq0AjaD2TjXzULYYmEsc";
             new GeoDistance(stuRequestFragment.getContext()).execute(eveningUrl);
             Log.d("========<>", "MorningOnlyFalse");
         }
@@ -349,17 +353,17 @@ public class TempStudentFragment extends Fragment {
 
     private void getSchoolDetails() {
         Query queryRef;
-        queryRef = ref.child("Drivers").child(driverId).child("schools").orderByChild("routeSchools");
+        queryRef = ref.child("Drivers").child(driverId).child("schools").child("routeSchools");
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    for (DataSnapshot d : data.getChildren()) {
-                        school = d.getValue(Schools.class);
+                    //for (DataSnapshot d : data.getChildren()) {
+                        school = data.getValue(Schools.class);
                         if (school.getSchoolName().equals(student.getStuSchool())) {
                             break;
                         }
-                    }
+                    //}
 
                 }
             }
@@ -383,6 +387,51 @@ public class TempStudentFragment extends Fragment {
 
             }
         });
+    }
+
+    private void addStuPickLocation(){
+        DriverRoute morningDriverRoute = new DriverRoute();
+        DriverRoute eveningDriverRoute = new DriverRoute();
+        if(student.getStuType().equals("Morning Only")){
+            morningDriverRoute.setStuID(latestStudentID);
+            morningDriverRoute.setPlaceLatitude(student.getStuPickLatitude());
+            morningDriverRoute.setPlaceLongitude(student.getStuPickLongitude());
+            morningDriverRoute.setPlaceName(student.getStuName());
+            morningDriverRoute.setAttend("yes");
+        }
+        else if(student.getStuType().equals("Evening Only")){
+            eveningDriverRoute.setStuID(latestStudentID);
+            eveningDriverRoute.setPlaceLatitude(student.getStuDropLatitude());
+            eveningDriverRoute.setPlaceLongitude(student.getStuDropLongitude());
+            eveningDriverRoute.setPlaceName(student.getStuName());
+            eveningDriverRoute.setAttend("yes");
+        }
+        else if(student.getStuType().equals("Both")){
+            morningDriverRoute.setStuID(latestStudentID);
+            morningDriverRoute.setPlaceLatitude(student.getStuPickLatitude());
+            morningDriverRoute.setPlaceLongitude(student.getStuPickLongitude());
+            morningDriverRoute.setPlaceName(student.getStuName());
+            morningDriverRoute.setAttend("yes");
+
+            eveningDriverRoute.setStuID(latestStudentID);
+            eveningDriverRoute.setPlaceLatitude(student.getStuDropLatitude());
+            eveningDriverRoute.setPlaceLongitude(student.getStuDropLongitude());
+            eveningDriverRoute.setPlaceName(student.getStuName());
+            eveningDriverRoute.setAttend("yes");
+        }
+
+        if(student.getStuType().equals("Morning Only")){
+            ref.child("Drivers").child(DriverActivity.userId).child("route").child("morningRoute").child(student.getStuID()).setValue(morningDriverRoute);
+        }
+        else if(student.getStuType().equals("Evening Only")){
+            ref.child("Drivers").child(DriverActivity.userId).child("route").child("eveningRoute").child(student.getStuID()).setValue(eveningDriverRoute);
+        }
+        else if(student.getStuType().equals("Both")){
+            ref.child("Drivers").child(DriverActivity.userId).child("route").child("morningRoute").child(student.getStuID()).setValue(morningDriverRoute);
+            ref.child("Drivers").child(DriverActivity.userId).child("route").child("eveningRoute").child(student.getStuID()).setValue(eveningDriverRoute);
+        }
+
+
     }
 
 

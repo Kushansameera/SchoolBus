@@ -3,6 +3,7 @@ package com.example.kusha.schoolbus.fragments.parent;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransportMode;
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.parent.ManageDriversActivity;
 import com.example.kusha.schoolbus.activities.parent.ParentActivity;
@@ -29,6 +32,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -43,6 +48,7 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
     private String userId;
     private String driverID;
     TextView txtCurrentDriverName;
+
 
     public BusLocationFragment() {
     }
@@ -98,6 +104,7 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
         LatLng SriLanka = new LatLng(7, 81);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SriLanka, 7));
     }
+
 
     private void getDriverID() {
         Query queryRef;

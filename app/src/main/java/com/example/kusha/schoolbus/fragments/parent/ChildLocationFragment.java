@@ -25,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -91,6 +92,7 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
                 stuLongi = childLatlng.longitude;
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(childLatlng);
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.child_on_map));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(childLatlng, 15));
                 markerOptions.draggable(true);
                 googleMap.addMarker(markerOptions);
@@ -130,6 +132,7 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
             public void onMapClick(LatLng latLng) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.child_on_map));
                 googleMap.clear();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 markerOptions.draggable(true);
@@ -176,6 +179,7 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
             stuLati = gps.getLatitude();
             stuLongi= gps.getLongitude();
             MarkerOptions marker = new MarkerOptions().position(new LatLng(stuLati, stuLongi)).title("Your Location");
+            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.child_on_map));
             this.googleMap.addMarker(marker);
             this.googleMap.animateCamera((CameraUpdateFactory.newLatLngZoom(new LatLng(stuLati, stuLongi),15)));
             try {
