@@ -1,4 +1,4 @@
-package com.example.kusha.schoolbus.application;
+package com.example.kusha.schoolbus.services;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -17,14 +17,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-import com.example.kusha.schoolbus.activities.driver.DriverActivity;
-import com.example.kusha.schoolbus.models.DriverLocation;
-
 /**
- * Created by kusha on 11/25/2016.
+ * Created by kusha on 11/24/2016.
  */
 
-public class DriverGPS extends Service implements LocationListener {
+public class GPSTracker extends Service implements LocationListener {
     private final Context mContext;
     boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
@@ -35,11 +32,11 @@ public class DriverGPS extends Service implements LocationListener {
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
 
-    private static final long MIN_TIME_BW_UPDATES = 10000; // 10 seconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
     protected LocationManager locationManager;
 
-    public DriverGPS(Context context) {
+    public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
 
@@ -122,7 +119,7 @@ public class DriverGPS extends Service implements LocationListener {
     public void stopUsingGPS() {
         if (locationManager != null) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                locationManager.removeUpdates(DriverGPS.this);
+                locationManager.removeUpdates(GPSTracker.this);
             }
         }
     }
@@ -161,12 +158,6 @@ public class DriverGPS extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        DriverActivity driverActivity = new DriverActivity();
-        DriverLocation driverLocation = new DriverLocation();
-
-        driverLocation.setDriverLatitude(location.getLatitude());
-        driverLocation.setDriverLongitude(location.getLongitude());
-        driverActivity.setDriverLocation(driverLocation);
 
     }
 

@@ -11,6 +11,24 @@ public class StudentPayment {
     private String stuLastPaidMonth;
     private String stuLastPaidYear;
     private String stuReceivables;
+    private String stuRegMonth;
+    private String stuRegYear;
+
+    public String getStuRegMonth() {
+        return stuRegMonth;
+    }
+
+    public void setStuRegMonth(String stuRegMonth) {
+        this.stuRegMonth = stuRegMonth;
+    }
+
+    public String getStuRegYear() {
+        return stuRegYear;
+    }
+
+    public void setStuRegYear(String stuRegYear) {
+        this.stuRegYear = stuRegYear;
+    }
 
     public String getStuLastPaidYear() {
         return stuLastPaidYear;

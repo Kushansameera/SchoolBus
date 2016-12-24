@@ -18,17 +18,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.LoginActivity;
-import com.example.kusha.schoolbus.application.DriverGPS;
+import com.example.kusha.schoolbus.services.DriverGPS;
 import com.example.kusha.schoolbus.fragments.driver.ManageParentsFragment;
 import com.example.kusha.schoolbus.fragments.driver.MessageFragment;
 import com.example.kusha.schoolbus.fragments.driver.PaymentDriverFragment;
 import com.example.kusha.schoolbus.fragments.driver.RouteFragment;
 import com.example.kusha.schoolbus.fragments.driver.SettingFragment;
-import com.example.kusha.schoolbus.fragments.driver.ViewStudentFragment;
 import com.example.kusha.schoolbus.models.DriverLocation;
 import com.example.kusha.schoolbus.models.User;
 import com.firebase.client.DataSnapshot;

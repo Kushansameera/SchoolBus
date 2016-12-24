@@ -90,6 +90,7 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
             });
 
             AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.setCancelable(false);
             alertDialog.show();
         }
 

@@ -3,6 +3,7 @@ package com.example.kusha.schoolbus.application;
 import android.app.Application;
 
 import com.firebase.client.Firebase;
+import com.parse.Parse;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -17,5 +18,7 @@ public class ApplicationClass extends Application {
         super.onCreate();
         Firebase.setAndroidContext(this);
         bus = new Bus(ThreadEnforcer.MAIN);
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this);
     }
 }

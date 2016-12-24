@@ -47,7 +47,7 @@ public class AddNewPaymentFragment extends Fragment {
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     StudentPayment studentPayments = new StudentPayment();
     String[] monthArray;
-    int year, date, month, lastPaidMonth = 0, receivables = 0, monthlyPayment = 0;
+    int year, date, month, lastPaidMonth = 0, receivables = 0, monthlyPayment = 0,regYear,regMonth;
     ProgressDialog mProgressDialog;
 
     public AddNewPaymentFragment() {
@@ -175,6 +175,8 @@ public class AddNewPaymentFragment extends Fragment {
             txtStudentReceivables.setText("Rs. " + String.valueOf(monthlyPayment * monthRange + receivables));
             txtTotalPayment.setText("Rs. " + String.valueOf(monthlyPayment * monthRange + receivables + monthlyPayment));
         }
+        regMonth = Integer.parseInt(studentPayments.getStuRegMonth());
+//        regYear = Integer.parseInt(studentPayments.getStuRegYear());
         btnAddPayment.setEnabled(true);
     }
 
@@ -203,8 +205,17 @@ public class AddNewPaymentFragment extends Fragment {
         } else {
             //String amount = txtPayingAmount.getText().toString();
             //int mAmount = Integer.parseInt(amount);
-            if (lastPaidYear.length() == 0) {
-                savePayment();
+            if (lastPaidYear.length() == 0 ) {
+                if(!payingYear.equals(studentPayments.getStuRegYear())){
+                    Toast.makeText(getActivity(), "Pleas Pay For "+studentPayments.getStuRegYear()+"-"+monthArray[regMonth], Toast.LENGTH_SHORT).show();
+                }else {
+                    if(!mPayingMonth.equals(monthArray[regMonth])){
+                        Toast.makeText(getActivity(), "Pleas Pay For "+studentPayments.getStuRegYear()+"-"+monthArray[regMonth], Toast.LENGTH_SHORT).show();
+                    }else {
+                        savePayment();
+                    }
+                }
+
             } else {
                 if (lastPaidYear.equals(payingYear) && lastPaidMonth != payingMonth - 1) {
                     if (lastPaidMonth >= payingMonth) {
@@ -294,6 +305,7 @@ public class AddNewPaymentFragment extends Fragment {
         ref.child("Drivers").child(DriverActivity.userId).child("budget").child("summery").child(sYear).child(sMonth).child("currentIncome").setValue(String.valueOf(newIncome));
         mProgressDialog.dismiss();
         try {
+            Toast.makeText(getActivity(), "Payment Successfully Added", Toast.LENGTH_SHORT).show();
             Fragment fragment = new PaymentDriverFragment();
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();

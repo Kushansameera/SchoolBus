@@ -34,16 +34,20 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
 
 public class ParentActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Fragment fragment = null;
-    public static String selectedDriverID="";
+    public static String selectedDriverID = "";
     public static String selectedDriverEmail = "";
     public static String selectedDriverName = "";
     public static String selectedChildId = "";
     public static String selectedChildName = "";
+    public static String parentName="";
 
     public FirebaseAuth mFirebaseAuth;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
@@ -103,13 +107,14 @@ public class ParentActivity extends AppCompatActivity
         key.postDelayed(new Runnable() {
             @Override
             public void run() {
-                navName = (TextView)view.findViewById(R.id.textParentName);
-                navEmail = (TextView)view.findViewById(R.id.textParentEmail);
+                navName = (TextView) view.findViewById(R.id.textParentName);
+                navEmail = (TextView) view.findViewById(R.id.textParentEmail);
                 navName.setText(mUser.getName());
                 navEmail.setText(userEmail);
+                parentName = mUser.getName();
             }
         }, 2000);
-        Log.d("=======>Child Name: ",selectedChildName);
+        Log.d("=======>Child Name: ", selectedChildName);
 
         try {
             getSupportActionBar().setTitle("Bus Location");
@@ -164,6 +169,7 @@ public class ParentActivity extends AppCompatActivity
         } else if (id == R.id.nav_attendance) {
             changeFragmentAttendance();
         } else if (id == R.id.nav_message) {
+            //sendPush("kushan@gmail.com");
             changeFragmentMessage();
         } else if (id == R.id.nav_children) {
             changeFragmentChildren();
@@ -183,6 +189,11 @@ public class ParentActivity extends AppCompatActivity
                 public void onClick(DialogInterface arg0, int arg1) {
                     LoginActivity loginActivity = new LoginActivity();
                     loginActivity.mFirebaseAuth.getInstance().signOut();
+                    ParentActivity.selectedChildId = "";
+                    ParentActivity.selectedChildName = "";
+                    ParentActivity.selectedDriverEmail = "";
+                    ParentActivity.selectedDriverName = "";
+                    ParentActivity.selectedDriverID = "";
                     Intent intent = new Intent(ParentActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
@@ -277,6 +288,18 @@ public class ParentActivity extends AppCompatActivity
         } catch (Exception e) {
             Log.d("Settings", e.getMessage());
         }
+    }
+
+    private void sendPush(String to){
+        ParseQuery pushQuery = ParseInstallation.getQuery();
+        pushQuery.whereEqualTo("email", to);
+
+        // Send push notification to query
+        ParsePush push = new ParsePush();
+        push.setQuery(pushQuery); // Set our Installation query
+        push.setMessage("You got new message from "+ userEmail);
+        push.sendInBackground();
+        Log.d("PUSH MESSAGE", "SENT "+to);
     }
 
 }

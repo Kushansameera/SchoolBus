@@ -13,33 +13,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.driver.DriverActivity;
-import com.example.kusha.schoolbus.adapter.CustomAdapter;
-import com.example.kusha.schoolbus.application.GeoDistance;
+import com.example.kusha.schoolbus.services.GeoDistance;
 import com.example.kusha.schoolbus.models.Children;
 import com.example.kusha.schoolbus.models.DriverRoute;
 import com.example.kusha.schoolbus.models.PaymentList;
-import com.example.kusha.schoolbus.models.RouteFees;
-import com.example.kusha.schoolbus.models.RouteLocations;
 import com.example.kusha.schoolbus.models.Schools;
 import com.example.kusha.schoolbus.models.Student;
 import com.example.kusha.schoolbus.models.StudentPayment;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.MutableData;
 import com.firebase.client.Query;
-import com.firebase.client.Transaction;
 import com.firebase.client.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -173,6 +165,8 @@ public class TempStudentFragment extends Fragment {
         studentPayment.setStuLastPaidMonth("");
         studentPayment.setStuLastPaidYear("");
         studentPayment.setStuReceivables("");
+        studentPayment.setStuRegMonth(String.valueOf(month));
+        studentPayment.setStuRegYear(String.valueOf(year));
         paymentList.setStuID(student.getStuID());
         paymentList.setStuName(student.getStuName());
         ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(latestStudentID).child("paymentInfo").setValue(studentPayment);
@@ -397,27 +391,27 @@ public class TempStudentFragment extends Fragment {
             morningDriverRoute.setPlaceLatitude(student.getStuPickLatitude());
             morningDriverRoute.setPlaceLongitude(student.getStuPickLongitude());
             morningDriverRoute.setPlaceName(student.getStuName());
-            morningDriverRoute.setAttend("yes");
+            morningDriverRoute.setAttend("Yes");
         }
         else if(student.getStuType().equals("Evening Only")){
             eveningDriverRoute.setStuID(latestStudentID);
             eveningDriverRoute.setPlaceLatitude(student.getStuDropLatitude());
             eveningDriverRoute.setPlaceLongitude(student.getStuDropLongitude());
             eveningDriverRoute.setPlaceName(student.getStuName());
-            eveningDriverRoute.setAttend("yes");
+            eveningDriverRoute.setAttend("Yes");
         }
         else if(student.getStuType().equals("Both")){
             morningDriverRoute.setStuID(latestStudentID);
             morningDriverRoute.setPlaceLatitude(student.getStuPickLatitude());
             morningDriverRoute.setPlaceLongitude(student.getStuPickLongitude());
             morningDriverRoute.setPlaceName(student.getStuName());
-            morningDriverRoute.setAttend("yes");
+            morningDriverRoute.setAttend("Yes");
 
             eveningDriverRoute.setStuID(latestStudentID);
             eveningDriverRoute.setPlaceLatitude(student.getStuDropLatitude());
             eveningDriverRoute.setPlaceLongitude(student.getStuDropLongitude());
             eveningDriverRoute.setPlaceName(student.getStuName());
-            eveningDriverRoute.setAttend("yes");
+            eveningDriverRoute.setAttend("Yes");
         }
 
         if(student.getStuType().equals("Morning Only")){

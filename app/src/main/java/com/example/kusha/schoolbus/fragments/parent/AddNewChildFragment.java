@@ -43,6 +43,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -185,9 +188,11 @@ public class AddNewChildFragment extends Fragment {
                         if (latestTempStudentID.equals("1")) {
                             ref.child("Drivers").child(driverID).child("temp").child("tempStudentCounter").setValue(1);
                             addTempStudent();
+                            sendPush(ParentActivity.selectedDriverEmail);
                             flag = false;
                         } else {
                             addTempStudent();
+                            sendPush(ParentActivity.selectedDriverEmail);
                             flag = false;
                         }
 
@@ -421,6 +426,16 @@ public class AddNewChildFragment extends Fragment {
             }
         });
     }
+    private void sendPush(String to){
+        ParseQuery pushQuery = ParseInstallation.getQuery();
+        pushQuery.whereEqualTo("email", to);
 
+        // Send push notification to query
+        ParsePush push = new ParsePush();
+        push.setQuery(pushQuery); // Set our Installation query
+        push.setMessage("You Got New Student Request From "+ParentActivity.parentName);
+        push.sendInBackground();
+        Log.d("PUSH MESSAGE", "SENT "+to);
+    }
 
 }

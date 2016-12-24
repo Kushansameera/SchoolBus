@@ -211,7 +211,7 @@ public class ParentAccessFragment extends Fragment {
                 }
             }
         });
-
+        alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.show();
     }
 

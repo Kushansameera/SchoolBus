@@ -163,7 +163,7 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
                 driverMorningRoute.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     DriverRoute dr = data.getValue(DriverRoute.class);
-                    if(dr.getAttend().equals("yes")){
+                    if(dr.getAttend().equals("Yes")){
                         driverMorningRoute.add(dr);
                     }
                 }
@@ -190,7 +190,7 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
                 driverEveningRoute.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     DriverRoute dr = data.getValue(DriverRoute.class);
-                    if(dr.getAttend().equals("yes")){
+                    if(dr.getAttend().equals("Yes")){
                         driverEveningRoute.add(dr);
                     }
 

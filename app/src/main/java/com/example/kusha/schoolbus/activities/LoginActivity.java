@@ -25,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.parse.ParseInstallation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,6 +64,10 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("=====>","Log");
                     // User is signed in
                     String userId = user.getUid().toString().trim();
+                    String userEmail = user.getEmail().toString().trim();
+                    ParseInstallation p = ParseInstallation.getCurrentInstallation();
+                    p.put("email", userEmail);
+                    p.saveInBackground();
                     selectUserType(userId);
                 } else {
                     mProgressDialog.dismiss();
@@ -101,6 +106,9 @@ public class LoginActivity extends AppCompatActivity {
                     mProgressDialog.setMessage("Processing...");
                     mProgressDialog.show();
                     login(email, password);
+                    ParseInstallation p = ParseInstallation.getCurrentInstallation();
+                    p.put("email", email);
+                    p.saveInBackground();
                 }
 
             }
