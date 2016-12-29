@@ -1,17 +1,19 @@
 package com.example.kusha.schoolbus.fragments.parent;
 
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +31,6 @@ import android.widget.Toast;
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.parent.ParentActivity;
 import com.example.kusha.schoolbus.adapter.CustomAdapter;
-import com.example.kusha.schoolbus.application.ApplicationClass;
 import com.example.kusha.schoolbus.models.Schools;
 import com.example.kusha.schoolbus.models.Student;
 import com.firebase.client.DataSnapshot;
@@ -48,9 +49,13 @@ import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.squareup.otto.Subscribe;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,15 +64,15 @@ public class AddNewChildFragment extends Fragment {
 
     private View addNewStudentFragment;
     private ImageButton btnStuPickLocation, btnStuDropLocation, btnStuPickTime;
-    private ImageView stuImage;
+    private ImageView stuImageView;
     private TextView txtPickLocation, txtDropLocation;
     public static TextView txtPickTime;
-    private Button btnSubmit;
+    private Button btnSubmit,btnBrowse;
     private EditText txtStuName;
     private Spinner spinnerStuGrade, spinnerStuClass, spinnerStuFrom, spinnerStuSchool;
     private RadioGroup genderRadioGroup, stuTypeRadioGroup;
     private RadioButton genderRadioButton;
-    private String stuId, stuName, stuSchool, stuGrade, stuClass, stuGender, stuPickupTime;
+    private String stuImage, stuName, stuSchool, stuGrade, stuClass, stuGender;
     public static double stuPickLatitude, stuPickLongitude, stuDropLatitude, stuDropLongitude;
     public static String stuPickLoc, stuDropLoc, stuPickTime;
     public static int selectedSchool = 0, selectedLocation = 0;
@@ -86,10 +91,11 @@ public class AddNewChildFragment extends Fragment {
     private String driverID;
     private String latestTempStudentID;
     boolean set = true;
-
+    private int PICK_IMAGE_REQUEST = 1;
+    public static Bitmap stuBitmap;
+    public static String stuImageEncoded;
 
     public AddNewChildFragment() {
-        // Required empty public constructor
     }
 
 
@@ -97,7 +103,6 @@ public class AddNewChildFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         addNewStudentFragment = inflater.inflate(R.layout.fragment_add_new_child, container, false);
-//        ApplicationClass.bus.register(this);
         progressDialog = new ProgressDialog(getActivity());
 
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -106,15 +111,13 @@ public class AddNewChildFragment extends Fragment {
         userId = user.getUid().toString().trim();
         userEmail = user.getEmail();
 
-        stuImage = (ImageView) addNewStudentFragment.findViewById(R.id.imageButtonStu);
-        //txtStuID = (TextView) addNewStudentFragment.findViewById(R.id.txtStuID);
+        stuImageView = (ImageView) addNewStudentFragment.findViewById(R.id.imageButtonStu);
         txtStuName = (EditText) addNewStudentFragment.findViewById(R.id.txtStudentName);
         genderRadioGroup = (RadioGroup) addNewStudentFragment.findViewById(R.id.radioGroupGender);
         stuTypeRadioGroup = (RadioGroup) addNewStudentFragment.findViewById(R.id.radioGroupStudentTpe);
         spinnerStuSchool = (Spinner) addNewStudentFragment.findViewById(R.id.spinnerStuSchool);
         spinnerStuGrade = (Spinner) addNewStudentFragment.findViewById(R.id.spinnerGrade);
         spinnerStuClass = (Spinner) addNewStudentFragment.findViewById(R.id.spinnerClass);
-        //spinnerStuFrom = (Spinner) addNewStudentFragment.findViewById(R.id.spinnerFrom);
         txtPickLocation = (TextView) addNewStudentFragment.findViewById(R.id.txtLocationPick);
         txtDropLocation = (TextView) addNewStudentFragment.findViewById(R.id.txtLocationDrop);
         txtPickTime = (TextView) addNewStudentFragment.findViewById(R.id.txtPickuptime);
@@ -122,13 +125,14 @@ public class AddNewChildFragment extends Fragment {
         btnStuDropLocation = (ImageButton) addNewStudentFragment.findViewById(R.id.imageButtonStuDropLocation);
         btnStuPickTime = (ImageButton) addNewStudentFragment.findViewById(R.id.imageButtonStuPickupTime);
         btnSubmit = (Button) addNewStudentFragment.findViewById(R.id.btnSubmit);
-
+        btnBrowse = (Button) addNewStudentFragment.findViewById(R.id.btnBrowse);
 
         txtPickLocation.setText(stuPickLoc);
         txtDropLocation.setText(stuDropLoc);
+        stuImageView.setImageBitmap(stuBitmap);
 
-
-        getDriverID();
+        //getDriverID();
+        setSpinnerValues();
         final Handler key = new Handler();
         key.postDelayed(new Runnable() {
             @Override
@@ -138,13 +142,13 @@ public class AddNewChildFragment extends Fragment {
         }, 2000);
 
 
-        stuImage.setOnClickListener(new View.OnClickListener() {
+        btnBrowse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
+                Intent intent = new Intent();
                 intent.setType("image/*");
-                //intent.setAction(Intent.ACTION_GET_CONTENT);//
-                startActivityForResult(intent, 1);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
             }
         });
 
@@ -154,6 +158,8 @@ public class AddNewChildFragment extends Fragment {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.main_frame_container_parent, new ChildLocationFragment());
                 ChildLocationFragment.buttonIdentifier = "pick";
+                ChildLocationFragment.mStuBitmap = stuBitmap;
+                ChildLocationFragment.mStuImageEncoded = stuImageEncoded;
                 ft.addToBackStack(null);
                 ft.commit();
             }
@@ -165,6 +171,8 @@ public class AddNewChildFragment extends Fragment {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.main_frame_container_parent, new ChildLocationFragment());
                 ChildLocationFragment.buttonIdentifier = "drop";
+                ChildLocationFragment.mStuBitmap = stuBitmap;
+                ChildLocationFragment.mStuImageEncoded = stuImageEncoded;
                 ft.addToBackStack(null);
                 ft.commit();
             }
@@ -181,9 +189,7 @@ public class AddNewChildFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (checkFields()) {
-                    //Toast.makeText(getActivity(), "Good to go", Toast.LENGTH_SHORT).show();
                     if (flag) {
                         if (latestTempStudentID.equals("1")) {
                             ref.child("Drivers").child(driverID).child("temp").child("tempStudentCounter").setValue(1);
@@ -197,13 +203,13 @@ public class AddNewChildFragment extends Fragment {
                         }
 
                     }
-                    final Handler key = new Handler();
-                    key.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            changeFragment();
-                        }
-                    }, 2000);
+//                    final Handler key = new Handler();
+//                    key.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            changeFragment();
+//                        }
+//                    }, 2000);
                 }
 
             }
@@ -234,10 +240,26 @@ public class AddNewChildFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Activity.RESULT_OK && data != null) {
-            Uri imageUri = data.getData();
-            stuImage.setImageURI(imageUri);
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+
+            try {
+                stuBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+                stuImageView.setImageBitmap(stuBitmap);
+                encodeBitmap(stuBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    private void encodeBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        stuImageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
     }
 
     private void getDriverID() {
@@ -263,7 +285,7 @@ public class AddNewChildFragment extends Fragment {
 
     private void setSpinnerValues() {
         Query queryRef;
-        queryRef = ref.child("Drivers").child(driverID).child("schools").orderByChild("routeSchools");
+        queryRef = ref.child("Drivers").child(ParentActivity.selectedDriverID).child("schools").orderByChild("routeSchools");
         pickupLoc.clear();
         locSchools.clear();
         locSchools.add("Select School");
@@ -322,7 +344,7 @@ public class AddNewChildFragment extends Fragment {
     }
 
     private void getLatestTempStuID() {
-        ref.child("Drivers").child(driverID).child("temp").child("tempStudentCounter").runTransaction(new Transaction.Handler() {
+        ref.child("Drivers").child(ParentActivity.selectedDriverID).child("temp").child("tempStudentCounter").runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
                 Integer currentValue = mutableData.getValue(Integer.class) + 1;
@@ -340,7 +362,7 @@ public class AddNewChildFragment extends Fragment {
 
     @Subscribe
     private void checkTempStuId() {
-        ref.child("Drivers").child(driverID).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child("Drivers").child(ParentActivity.selectedDriverID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild("temp")) {
@@ -359,18 +381,20 @@ public class AddNewChildFragment extends Fragment {
     }
 
     private void addTempStudent() {
-
+        progressDialog.setMessage("Submitting...");
+        progressDialog.show();
         student.setStuID(latestTempStudentID);
         student.setStuName(stuName);
         student.setStuSchool(stuSchool);
         student.setStuGrade(stuGrade);
         student.setStuClass(stuClass);
-        if(!studentType.equals("Evening Only")){
+        student.setStuImage(stuImageEncoded);
+        if (!studentType.equals("Evening Only")) {
             student.setStuPickLatitude(Double.toString(stuPickLatitude));
             student.setStuPickLongitude(Double.toString(stuPickLongitude));
             student.setStuPickLocation(stuPickLoc);
         }
-        if(!studentType.equals("Morning Only")){
+        if (!studentType.equals("Morning Only")) {
             student.setStuDropLatitude(Double.toString(stuDropLatitude));
             student.setStuDropLongitude(Double.toString(stuDropLongitude));
             student.setStuDropLocation(stuDropLoc);
@@ -381,7 +405,7 @@ public class AddNewChildFragment extends Fragment {
         student.setParentID(userId);
         student.setStuType(studentType);
 
-        ref.child("Drivers").child(driverID).child("temp").child("tempStudent").child(latestTempStudentID).setValue(student, new Firebase.CompletionListener() {
+        ref.child("Drivers").child(ParentActivity.selectedDriverID).child("temp").child("tempStudent").child(latestTempStudentID).setValue(student, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 if (firebaseError == null) {
@@ -399,9 +423,9 @@ public class AddNewChildFragment extends Fragment {
                     spinnerStuSchool.setSelection(0);
                     spinnerStuGrade.setSelection(0);
                     spinnerStuClass.setSelection(0);
-
+                    progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Add Student Complete", Toast.LENGTH_SHORT).show();
-
+                    changeFragment();
                 } else {
                     Toast.makeText(getActivity(), "Cannot Add Student", Toast.LENGTH_SHORT).show();
                 }
@@ -413,7 +437,7 @@ public class AddNewChildFragment extends Fragment {
     }
 
     private void changeFragment() {
-        ref.child("Drivers").child(driverID).child("accessKey").setValue("0", new Firebase.CompletionListener() {
+        ref.child("Drivers").child(ParentActivity.selectedDriverID).child("accessKey").setValue("0", new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 try {
@@ -426,16 +450,17 @@ public class AddNewChildFragment extends Fragment {
             }
         });
     }
-    private void sendPush(String to){
+
+    private void sendPush(String to) {
         ParseQuery pushQuery = ParseInstallation.getQuery();
         pushQuery.whereEqualTo("email", to);
 
         // Send push notification to query
         ParsePush push = new ParsePush();
         push.setQuery(pushQuery); // Set our Installation query
-        push.setMessage("You Got New Student Request From "+ParentActivity.parentName);
+        push.setMessage("You Got New Student Request From " + ParentActivity.parentName);
         push.sendInBackground();
-        Log.d("PUSH MESSAGE", "SENT "+to);
+        Log.d("PUSH MESSAGE", "SENT " + to);
     }
 
 }

@@ -18,6 +18,7 @@ import com.akexorcist.googledirection.util.DirectionConverter;
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.driver.DriverActivity;
 import com.example.kusha.schoolbus.models.CustomLatLng;
+import com.example.kusha.schoolbus.models.DriverLocation;
 import com.example.kusha.schoolbus.models.DriverRoute;
 import com.example.kusha.schoolbus.models.Schools;
 import com.firebase.client.DataSnapshot;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -48,6 +50,9 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
     private List<DriverRoute> driverMorningRoute = new ArrayList<>();
     private ArrayList<CustomLatLng> myPlaces = new ArrayList<>();
     private int flag = 0;
+    MarkerOptions busMarker;
+    Marker myMarker;
+    int i = 0;
 
     public RouteFragment() {
     }
@@ -61,6 +66,7 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
         eveningButton = (FloatingActionButton) routeFragment.findViewById(R.id.floatingActionButtonEvening);
         morningButton = (FloatingActionButton) routeFragment.findViewById(R.id.floatingActionButtonMorning);
         getSchoolData();
+        busMarker = new MarkerOptions();
         mapFragment.getMapAsync(this);
         //schools.clear();
         driverEveningRoute.clear();
@@ -71,17 +77,15 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
                 flag = 1;
                 driverMap.clear();
                 getMorningRouteData();
-
             }
         });
 
         eveningButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flag=2;
+                flag = 2;
                 driverMap.clear();
                 getEveningRouteData();
-
             }
         });
 
@@ -95,8 +99,41 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
         this.driverMap.getUiSettings().setZoomControlsEnabled(true);
         this.driverMap.getUiSettings().setZoomGesturesEnabled(true);
         LatLng SriLanka = new LatLng(7, 81);
-        //LatLng SriLanka = new LatLng(6.975210, 79.920622);
+        // LatLng SriLanka1 = new LatLng(6.975210, 79.920622);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SriLanka, 7));
+        updateBusLocation();
+
+    }
+
+    private void updateBusLocation() {
+        ref.child("Drivers").child(DriverActivity.userId).child("myLocation").child("location").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (i != 0){
+                    myMarker.remove();
+                }
+                i++;
+                DriverLocation driverLocation = new DriverLocation();
+                driverLocation = dataSnapshot.getValue(DriverLocation.class);
+                createMarker(driverLocation);
+
+                //Toast.makeText(getActivity(),String.valueOf(driverLocation.getDriverLatitude()),Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    public void createMarker(DriverLocation location) {
+        busMarker.position(new LatLng(location.getDriverLatitude(), location.getDriverLongitude()));
+        busMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.my_bus));
+        busMarker.title("School Bus");
+        busMarker.getSnippet();
+        myMarker = this.driverMap.addMarker(busMarker);
+        this.driverMap.animateCamera((CameraUpdateFactory.newLatLngZoom(new LatLng(location.getDriverLatitude(), location.getDriverLongitude()), 15)));
     }
 
     public void requestDirection(LatLng origin, LatLng destination) {
@@ -131,6 +168,7 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
         Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
+
     private void getSchoolData() {
         Query query;
         query = ref.child("Drivers").child(DriverActivity.userId).child("schools").orderByChild("routeSchools");
@@ -163,11 +201,11 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
                 driverMorningRoute.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     DriverRoute dr = data.getValue(DriverRoute.class);
-                    if(dr.getAttend().equals("Yes")){
+                    if (dr.getAttend().equals("Yes")) {
                         driverMorningRoute.add(dr);
                     }
                 }
-                if(flag==1){
+                if (flag == 1) {
                     driverMap.clear();
                     setMorningRoute();
                 }
@@ -180,7 +218,6 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
         });
     }
 
-
     private void getEveningRouteData() {
         Query query;
         query = ref.child("Drivers").child(DriverActivity.userId).child("route").child("eveningRoute");
@@ -190,12 +227,12 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
                 driverEveningRoute.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     DriverRoute dr = data.getValue(DriverRoute.class);
-                    if(dr.getAttend().equals("Yes")){
+                    if (dr.getAttend().equals("Yes")) {
                         driverEveningRoute.add(dr);
                     }
 
                 }
-                if(flag==2){
+                if (flag == 2) {
                     driverMap.clear();
                     setEveningRoute();
                 }
@@ -235,6 +272,7 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
         for (int i = 0; i < myPlaces.size() - 1; i++) {
             requestDirection(myPlaces.get(i).getLatLng(), myPlaces.get(i + 1).getLatLng());
         }
+        updateBusLocation();
     }
 
     private void setEveningRoute() {
@@ -264,5 +302,6 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
         for (int i = 0; i < myPlaces.size() - 1; i++) {
             requestDirection(myPlaces.get(i).getLatLng(), myPlaces.get(i + 1).getLatLng());
         }
+        updateBusLocation();
     }
 }

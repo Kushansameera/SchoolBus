@@ -68,15 +68,15 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
         mapFragment.getMapAsync(this);
 
         if (!ParentActivity.selectedDriverEmail.equals("")) {
-            getDriverID();
-            final Handler lco = new Handler();
-            lco.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    updateBusLocation();
-                }
-            }, 2000);
-
+//            getDriverID();
+//            final Handler lco = new Handler();
+//            lco.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    updateBusLocation();
+//                }
+//            }, 2000);
+            updateBusLocation();
         } else {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
             alertDialogBuilder.setMessage("Please Select a Driver");
@@ -128,7 +128,7 @@ public class BusLocationFragment extends Fragment implements OnMapReadyCallback 
     }
 
     private void updateBusLocation() {
-        ref.child("Drivers").child(driverID).child("myLocation").child("location").addValueEventListener(new ValueEventListener() {
+        ref.child("Drivers").child(ParentActivity.selectedDriverID).child("myLocation").child("location").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DriverLocation driverLocation = new DriverLocation();

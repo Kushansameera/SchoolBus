@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         mProgressDialog = new ProgressDialog(this);
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        mProgressDialog.setMessage("Connecting...");
+        mProgressDialog.setMessage("Login...");
         mProgressDialog.show();
         mProgressDialog.setCancelable(false);
 
@@ -61,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Log.d("=====>","Log");
                     // User is signed in
                     String userId = user.getUid().toString().trim();
                     String userEmail = user.getEmail().toString().trim();

@@ -23,7 +23,7 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_stu_photo"
-                android:id="@+id/imageButton" />
+                android:id="@+id/currentStuImageButton" />
 
             <LinearLayout
                 android:orientation="horizontal"

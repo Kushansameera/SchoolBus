@@ -69,7 +69,7 @@ public class ParentAccessFragment extends Fragment {
         childRadioGroup = new RadioGroup(parentAccessFragment.getContext());
         txtCurrentChildName.setText(ParentActivity.selectedChildName);
         txtCurrentChildId.setText(ParentActivity.selectedChildId);
-        getDriverID();
+        //getDriverID();
 
         final Handler key = new Handler();
         key.postDelayed(new Runnable() {
@@ -216,7 +216,7 @@ public class ParentAccessFragment extends Fragment {
     }
 
     private void checkAccessKeyExists() {
-        ref.child("Drivers").child(driverID).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child("Drivers").child(ParentActivity.selectedDriverID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild("accessKey")) {
@@ -236,8 +236,7 @@ public class ParentAccessFragment extends Fragment {
     }
 
     private void getCurrentAccessKey() {
-
-        ref.child("Drivers").child(driverID).child("accessKey").addValueEventListener(new ValueEventListener() {
+        ref.child("Drivers").child(ParentActivity.selectedDriverID).child("accessKey").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 actualAccessKey = dataSnapshot.getValue().toString();

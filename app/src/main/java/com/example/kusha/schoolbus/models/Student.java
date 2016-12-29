@@ -24,6 +24,15 @@ public class Student {
     private String stuMonthlyFee;
     private String parentID;
     private String stuType;
+    private String stuImage;
+
+    public String getStuImage() {
+        return stuImage;
+    }
+
+    public void setStuImage(String stuImage) {
+        this.stuImage = stuImage;
+    }
 
     public String getStuType() {
         return stuType;

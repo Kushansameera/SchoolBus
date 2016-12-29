@@ -169,7 +169,6 @@ public class ParentActivity extends AppCompatActivity
         } else if (id == R.id.nav_attendance) {
             changeFragmentAttendance();
         } else if (id == R.id.nav_message) {
-            //sendPush("kushan@gmail.com");
             changeFragmentMessage();
         } else if (id == R.id.nav_children) {
             changeFragmentChildren();
@@ -290,16 +289,5 @@ public class ParentActivity extends AppCompatActivity
         }
     }
 
-    private void sendPush(String to){
-        ParseQuery pushQuery = ParseInstallation.getQuery();
-        pushQuery.whereEqualTo("email", to);
-
-        // Send push notification to query
-        ParsePush push = new ParsePush();
-        push.setQuery(pushQuery); // Set our Installation query
-        push.setMessage("You got new message from "+ userEmail);
-        push.sendInBackground();
-        Log.d("PUSH MESSAGE", "SENT "+to);
-    }
 
 }

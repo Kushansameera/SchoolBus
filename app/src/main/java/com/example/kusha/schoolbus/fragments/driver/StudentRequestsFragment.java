@@ -2,6 +2,7 @@ package com.example.kusha.schoolbus.fragments.driver;
 
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -41,7 +42,7 @@ public class StudentRequestsFragment extends Fragment {
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     public FirebaseAuth mFirebaseAuth;
     private String userId;
-
+    private ProgressDialog progressDialog;
     public StudentRequestsFragment() {
     }
 
@@ -51,6 +52,7 @@ public class StudentRequestsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View studentRequestFragment = inflater.inflate(R.layout.fragment_student_requests, container, false);
         rcvTempStudents = (RecyclerView) studentRequestFragment.findViewById(R.id.rcvTempStudents);
+        progressDialog = new ProgressDialog(getActivity());
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         userId = user.getUid().toString().trim();
@@ -91,6 +93,8 @@ public class StudentRequestsFragment extends Fragment {
     }
 
     private void showTempStudents() {
+        progressDialog.setMessage("Loading Data...");
+        progressDialog.show();
         Query queryRef;
         queryRef = ref.child("Drivers").child(userId).child("temp").orderByChild("tempStudent");
 
@@ -105,6 +109,7 @@ public class StudentRequestsFragment extends Fragment {
                         students.add(student);
                     }
                 }
+                progressDialog.dismiss();
                 adapter.notifyDataSetChanged();
             }
 

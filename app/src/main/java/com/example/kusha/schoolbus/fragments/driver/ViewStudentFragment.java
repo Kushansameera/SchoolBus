@@ -4,11 +4,14 @@ package com.example.kusha.schoolbus.fragments.driver;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,13 +44,13 @@ public class ViewStudentFragment extends Fragment {
     public static String driverId = "";
     private TextView txtCurrentStuName, txtCurrentStuSchool, txtCurrentStuGender, txtCurrentStuGrade, txtCurrentStuClass, txtCurrentStuPickup, txtCurrentStuDrop, txtCurrentStuPickupTime, txtCurrentStuMonthlyFee;
     private Button btnPerStuEdit, btnPerStuSave, btnPerStuDelete;
-    ImageButton btnParentInfo;
+    ImageButton btnParentInfo,currentStuImageButton;
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     private Student student;
     private User user;
     private static String latestStudentID;
     boolean flag = false;
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog progressDialog;
 
 
     public ViewStudentFragment() {
@@ -58,6 +61,7 @@ public class ViewStudentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View viewStudentFragment = inflater.inflate(R.layout.fragment_view_student, container, false);
+        progressDialog = new ProgressDialog(getActivity());
 
         txtCurrentStuName = (EditText) viewStudentFragment.findViewById(R.id.txtPerStuName);
         txtCurrentStuSchool = (EditText) viewStudentFragment.findViewById(R.id.txtPerStuSchool);
@@ -72,6 +76,7 @@ public class ViewStudentFragment extends Fragment {
         btnPerStuSave = (Button) viewStudentFragment.findViewById(R.id.btnPerStuSave);
         btnPerStuDelete = (Button) viewStudentFragment.findViewById(R.id.btnPerStuDelete);
         btnParentInfo = (ImageButton) viewStudentFragment.findViewById(R.id.btnParentInfo);
+        currentStuImageButton = (ImageButton) viewStudentFragment.findViewById(R.id.currentStuImageButton);
 
         disableFields();
         getStudentData();
@@ -139,6 +144,8 @@ public class ViewStudentFragment extends Fragment {
     }
 
     private void getStudentData() {
+        progressDialog.setMessage("Loading Data...");
+        progressDialog.show();
         ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(currentStudentId).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -152,6 +159,7 @@ public class ViewStudentFragment extends Fragment {
                 txtCurrentStuDrop.setText(student.getStuDropLocation());
                 txtCurrentStuPickupTime.setText(student.getStuPickTime());
                 txtCurrentStuMonthlyFee.setText(student.getStuMonthlyFee());
+                getImage(student.getStuImage());
             }
 
             @Override
@@ -159,6 +167,17 @@ public class ViewStudentFragment extends Fragment {
 
             }
         });
+    }
+
+    private void getImage(String url){
+        try {
+            byte [] encodeByte= Base64.decode(url,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            currentStuImageButton.setImageBitmap(bitmap);
+            progressDialog.dismiss();
+        } catch(Exception e) {
+            e.getMessage();
+        }
     }
 
     private void disableFields() {

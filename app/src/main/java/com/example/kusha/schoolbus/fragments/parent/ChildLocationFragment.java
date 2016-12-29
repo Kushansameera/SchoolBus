@@ -1,6 +1,7 @@
 package com.example.kusha.schoolbus.fragments.parent;
 
 
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -42,7 +43,8 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
     private String stuLoc;
     List<Address> address = null;
     public static String buttonIdentifier = "";
-
+    public static Bitmap mStuBitmap;
+    public static String mStuImageEncoded;
 
     public ChildLocationFragment() {}
 
@@ -65,11 +67,15 @@ public class ChildLocationFragment extends Fragment implements OnMapReadyCallbac
                         AddNewChildFragment.stuPickLongitude = stuLongi;
                         AddNewChildFragment.stuPickLoc = stuLoc;
                         buttonIdentifier = "";
+                        AddNewChildFragment.stuBitmap = mStuBitmap;
+                        AddNewChildFragment.stuImageEncoded = mStuImageEncoded;
                     }
                     else if(buttonIdentifier.equals("drop")){
                         AddNewChildFragment.stuDropLatitude = stuLati;
                         AddNewChildFragment.stuDropLongitude = stuLongi;
                         AddNewChildFragment.stuDropLoc = stuLoc;
+                        AddNewChildFragment.stuBitmap = mStuBitmap;
+                        AddNewChildFragment.stuImageEncoded = mStuImageEncoded;
                         buttonIdentifier = "";
                     }
                     getFragmentManager().popBackStack();

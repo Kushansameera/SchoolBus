@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.example.kusha.schoolbus.activities.driver.DriverActivity;
+import com.example.kusha.schoolbus.fragments.driver.RouteFragment;
 import com.example.kusha.schoolbus.models.DriverLocation;
 
 /**
@@ -163,10 +164,12 @@ public class DriverGPS extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         DriverActivity driverActivity = new DriverActivity();
         DriverLocation driverLocation = new DriverLocation();
+        RouteFragment routeFragment = new RouteFragment();
 
         driverLocation.setDriverLatitude(location.getLatitude());
         driverLocation.setDriverLongitude(location.getLongitude());
         driverActivity.setDriverLocation(driverLocation);
+//        routeFragment.createMarker(driverLocation);
 
     }
 

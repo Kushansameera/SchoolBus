@@ -3,16 +3,20 @@ package com.example.kusha.schoolbus.fragments.driver;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,12 +34,12 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
 
 import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class TempStudentFragment extends Fragment {
     public static String tempStudentId = "";
     public static String driverId = "";
@@ -44,9 +48,9 @@ public class TempStudentFragment extends Fragment {
 
     private TextView txtTempStuType, txtTempStuName, txtTempStuSchool, txtTempStuGrade, txtTempStuClass, txtTempStuPickup, txtTempStuDrop, txtTempStuPickupTime, txtTempStuMonthlyFee;
     private Button btnAccept, btnReject, btnMonthlyFee;
-
+    private ImageButton tempStuImageButton;
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
-
+    private ProgressDialog progressDialog;
     private Student student;
     private Schools school;
     private Double pricePerKm;
@@ -67,7 +71,7 @@ public class TempStudentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         stuRequestFragment = inflater.inflate(R.layout.fragment_temp_student, container, false);
-
+        progressDialog = new ProgressDialog(getActivity());
         txtTempStuName = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuName);
         txtTempStuSchool = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuSchool);
         txtTempStuGrade = (TextView) stuRequestFragment.findViewById(R.id.txtTempStuGrade);
@@ -80,6 +84,7 @@ public class TempStudentFragment extends Fragment {
         btnAccept = (Button) stuRequestFragment.findViewById(R.id.btnAccept);
         btnReject = (Button) stuRequestFragment.findViewById(R.id.btnReject);
         btnMonthlyFee = (Button) stuRequestFragment.findViewById(R.id.btnMonthlyFee);
+        tempStuImageButton = (ImageButton) stuRequestFragment.findViewById(R.id.tempStuImageButton);
         mProgressDialog = new ProgressDialog(getActivity());
         monthArray = getResources().getStringArray(R.array.months);
         getTempStudentData();
@@ -105,12 +110,14 @@ public class TempStudentFragment extends Fragment {
                             saveStudentWithParent();
                             addStudentToPayments();
                             addStuPickLocation();
+                            sendAcceptPush(student.getParentEmail());
                             flag = false;
                         } else {
                             addStudent();
                             saveStudentWithParent();
                             addStudentToPayments();
                             addStuPickLocation();
+                            sendAcceptPush(student.getParentEmail());
                             flag = false;
                         }
                     }
@@ -130,6 +137,7 @@ public class TempStudentFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         deleteData();
+                        sendRejectPush(student.getParentEmail());
                         Toast.makeText(getActivity(), "Rejected", Toast.LENGTH_SHORT).show();
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.temp_student_frame_container, new StudentRequestsFragment());
@@ -198,6 +206,8 @@ public class TempStudentFragment extends Fragment {
     }
 
     private void getTempStudentData() {
+        progressDialog.setMessage("Loading Data...");
+        progressDialog.show();
         ref.child("Drivers").child(driverId).child("temp").child("tempStudent").child(tempStudentId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -218,6 +228,7 @@ public class TempStudentFragment extends Fragment {
                 }
                 txtTempStuPickupTime.setText(student.getStuPickTime());
                 getSchoolDetails();
+                getImage(student.getStuImage());
             }
 
             @Override
@@ -225,6 +236,16 @@ public class TempStudentFragment extends Fragment {
 
             }
         });
+    }
+    private void getImage(String url){
+        try {
+            byte [] encodeByte= Base64.decode(url,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            tempStuImageButton.setImageBitmap(bitmap);
+            progressDialog.dismiss();
+        } catch(Exception e) {
+            e.getMessage();
+        }
     }
 
     private void calculateMonthlyFee() {
@@ -312,18 +333,22 @@ public class TempStudentFragment extends Fragment {
     }
 
     private void addStudent() {
+        progressDialog.setMessage("Saving Data...");
+        progressDialog.show();
         student.setStuID(latestStudentID);
         ref.child("Drivers").child(driverId).child("permanent").child("permanentStudent").child(latestStudentID).child("info").setValue(student, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 if (firebaseError == null) {
                     deleteData();
+                    progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Student Accepted", Toast.LENGTH_SHORT).show();
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.temp_student_frame_container, new StudentRequestsFragment());
                     ft.commit();
 
                 } else {
+                    progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Cannot Accept Student", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -428,6 +453,29 @@ public class TempStudentFragment extends Fragment {
 
     }
 
+    private void sendAcceptPush(String to){
+        ParseQuery pushQuery = ParseInstallation.getQuery();
+        pushQuery.whereEqualTo("email", to);
+
+        // Send push notification to query
+        ParsePush push = new ParsePush();
+        push.setQuery(pushQuery); // Set our Installation query
+        push.setMessage("Your Child Request About "+student.getStuName()+" Accepted");
+        push.sendInBackground();
+        Log.d("PUSH MESSAGE", "SENT "+to);
+    }
+
+    private void sendRejectPush(String to){
+        ParseQuery pushQuery = ParseInstallation.getQuery();
+        pushQuery.whereEqualTo("email", to);
+
+        // Send push notification to query
+        ParsePush push = new ParsePush();
+        push.setQuery(pushQuery); // Set our Installation query
+        push.setMessage("Your Child Request About "+student.getStuName()+" Rejected");
+        push.sendInBackground();
+        Log.d("PUSH MESSAGE", "SENT "+to);
+    }
 
 }
 
