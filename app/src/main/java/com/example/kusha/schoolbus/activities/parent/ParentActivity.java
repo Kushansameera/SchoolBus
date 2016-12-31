@@ -23,7 +23,7 @@ import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.LoginActivity;
 import com.example.kusha.schoolbus.fragments.parent.AttendanceFragment;
 import com.example.kusha.schoolbus.fragments.parent.BusLocationFragment;
-import com.example.kusha.schoolbus.fragments.parent.MessageFragment;
+import com.example.kusha.schoolbus.fragments.parent.ParentMessageFragment;
 import com.example.kusha.schoolbus.fragments.parent.ParentAccessFragment;
 import com.example.kusha.schoolbus.fragments.parent.ParentPaymentFragment;
 import com.example.kusha.schoolbus.fragments.parent.SettingsParentFragment;
@@ -34,9 +34,6 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.parse.ParseInstallation;
-import com.parse.ParsePush;
-import com.parse.ParseQuery;
 
 public class ParentActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -259,7 +256,7 @@ public class ParentActivity extends AppCompatActivity
     public void changeFragmentMessage() {
         try {
             getSupportActionBar().setTitle("Messages");
-            fragment = new MessageFragment();
+            fragment = new ParentMessageFragment();
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_frame_container_parent, fragment).commit();
         } catch (Exception e) {

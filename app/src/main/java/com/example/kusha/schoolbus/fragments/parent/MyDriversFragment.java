@@ -66,64 +66,12 @@ public class MyDriversFragment extends Fragment {
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         userId = user.getUid().toString().trim();
         myDrivers.clear();
-//        rcvMyeDrivers.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        adapter = new MyDriversAdapter(getActivity(), myDrivers);
         showDrivers();
-//        rcvMyeDrivers.setAdapter(adapter);
-//
-//        adapter.setOnItemClickListener(new MyDriversAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View itemView, int position) {
-//                final String driverEmail = myDrivers.get(position).getDriverEmail();
-//                final PopupMenu popup = new PopupMenu(getActivity(), itemView);
-//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        switch (item.getItemId()) {
-//                            case R.id.view_driver:
-//                                getDriverId(driverEmail);
-//                                return true;
-//                            case R.id.select_driver:
-//                                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-//                                alertDialogBuilder.setMessage("Are you sure,You wanted to Reject This Student ");
-//
-//                                alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface arg0, int arg1) {
-//
-//                                    }
-//                                });
-//
-//                                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.cancel();
-//                                    }
-//                                });
-//                                AlertDialog alertDialog = alertDialogBuilder.create();
-//
-//                                alertDialog.show();
-//                                return true;
-//                            default:
-//                                return false;
-//                        }
-//                    }
-//                });
-//                MenuInflater inflater = popup.getMenuInflater();
-//                inflater.inflate(R.menu.select_view, popup.getMenu());
-//                popup.show();
-//            }
-//        });
-
-
         driverRadioGroup = (RadioGroup) myDriverFragment.findViewById(R.id.radioGroupMyDrivers);
 
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //int selectedRadioId = driverRadioGroup.getCheckedRadioButtonId()-myDrivers.size();
-                //RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioId);
-                //ParentActivity.selectedDriverEmail = myDrivers.get(selectedRadioId-1).getDriverEmail().toString().trim();
                 int selectedRadioId = driverRadioGroup.getCheckedRadioButtonId();
                 RadioButton selectedRadioButton = (RadioButton) myDriverFragment.findViewById(selectedRadioId);
                 String name = selectedRadioButton.getText().toString();

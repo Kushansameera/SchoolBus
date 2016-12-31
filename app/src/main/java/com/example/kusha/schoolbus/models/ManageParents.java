@@ -9,6 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ManageParents {
     private String parentName;
     private String parentEmail;
+    private String parentId;
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
     public String getParentName() {
         return parentName;

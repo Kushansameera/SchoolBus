@@ -48,18 +48,25 @@ public class ParentPaymentFragment extends Fragment {
         btnSearch = (ImageButton) parentPaymentFragment.findViewById(R.id.btnSearchPayment);
         txtChildName.setText(ParentActivity.selectedChildName);
         mProgressDialog = new ProgressDialog(getActivity());
-        ref.child("Drivers").child(ParentActivity.selectedDriverID).child("permanent").child("permanentStudent").child(ParentActivity.selectedChildId).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Student mStudent = dataSnapshot.getValue(Student.class);
-                txtChildMonthlyPayment.setText("Rs."+mStudent.getStuMonthlyFee());
-            }
+        if(ParentActivity.selectedChildId.length()==0){
+            Toast.makeText(getActivity(), "Please Select a Child", Toast.LENGTH_SHORT).show();
+            btnSearch.setEnabled(false);
+        }
+        if(ParentActivity.selectedChildId.length()!=0){
+            ref.child("Drivers").child(ParentActivity.selectedDriverID).child("permanent").child("permanentStudent").child(ParentActivity.selectedChildId).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Student mStudent = dataSnapshot.getValue(Student.class);
+                    txtChildMonthlyPayment.setText("Rs."+mStudent.getStuMonthlyFee());
+                }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            }
-        });
+                }
+            });
+        }
+
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

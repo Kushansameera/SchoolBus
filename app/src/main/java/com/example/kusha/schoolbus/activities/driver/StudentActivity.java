@@ -11,12 +11,6 @@ import android.view.MenuItem;
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.adapter.ViewPagerAdapter;
 import com.example.kusha.schoolbus.fragments.driver.CurrentStudentHolderFragment;
-import com.example.kusha.schoolbus.fragments.driver.CurrentStudentsFragment;
-import com.example.kusha.schoolbus.fragments.driver.RouteFeesFragment;
-import com.example.kusha.schoolbus.fragments.driver.RouteLocationFragment;
-import com.example.kusha.schoolbus.fragments.driver.RouteSchoolsFragment;
-import com.example.kusha.schoolbus.fragments.driver.StudentRequestsFragment;
-import com.example.kusha.schoolbus.fragments.driver.TempStudentFragment;
 import com.example.kusha.schoolbus.fragments.driver.TempStudentHolderFragment;
 
 public class StudentActivity extends AppCompatActivity {

@@ -2,12 +2,56 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kusha.schoolbus.fragments.driver.MessageFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.kusha.schoolbus.fragments.driver.DriverMessageFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="message" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="451dp"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/btnSentMessages"
+                android:layout_height="40dp"
+                android:background="#387EF5"
+                android:text="Sent"
+                android:layout_gravity="center"
+                android:textColor="@android:color/background_light"
+                android:layout_width="match_parent"
+                android:layout_marginTop="150dp" />
+            <Button
+                android:id="@+id/btnReceivedMessages"
+                android:layout_height="40dp"
+                android:background="#387EF5"
+                android:text="Received"
+                android:layout_gravity="center"
+                android:textColor="@android:color/background_light"
+                android:layout_width="match_parent"
+                android:layout_marginTop="25dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_add"
+                android:id="@+id/floatingBtnNewMessage"
+                android:layout_gravity="right" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

@@ -23,7 +23,7 @@ import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.LoginActivity;
 import com.example.kusha.schoolbus.services.DriverGPS;
 import com.example.kusha.schoolbus.fragments.driver.ManageParentsFragment;
-import com.example.kusha.schoolbus.fragments.driver.MessageFragment;
+import com.example.kusha.schoolbus.fragments.driver.DriverMessageFragment;
 import com.example.kusha.schoolbus.fragments.driver.PaymentDriverFragment;
 import com.example.kusha.schoolbus.fragments.driver.RouteFragment;
 import com.example.kusha.schoolbus.fragments.driver.SettingFragment;
@@ -45,6 +45,7 @@ public class DriverActivity extends AppCompatActivity
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     public static String userId;
     private static String userEmail;
+    public static String driverName="";
     User mUser;
     Fragment fragment = null;
     TextView navName;
@@ -96,6 +97,7 @@ public class DriverActivity extends AppCompatActivity
                 navEmail = (TextView) view.findViewById(R.id.textDriverEmail);
                 navName.setText(mUser.getName());
                 navEmail.setText(userEmail);
+                driverName = mUser.getName();
             }
         }, 2000);
 
@@ -249,7 +251,7 @@ public class DriverActivity extends AppCompatActivity
     public void changeFragmentMessage() {
         try {
             getSupportActionBar().setTitle("Message");
-            fragment = new MessageFragment();
+            fragment = new DriverMessageFragment();
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
         } catch (Exception e) {

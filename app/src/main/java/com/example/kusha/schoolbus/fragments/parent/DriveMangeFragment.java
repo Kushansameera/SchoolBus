@@ -100,9 +100,6 @@ public class DriveMangeFragment extends Fragment {
             }
         });
 
-
-//
-
         return rootView;
     }
 
@@ -200,6 +197,7 @@ public class DriveMangeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 manageParents.setParentEmail(dataSnapshot.child("Users").child(userId).child("email").getValue().toString().trim());
                 manageParents.setParentName(dataSnapshot.child("Users").child(userId).child("name").getValue().toString().trim());
+                manageParents.setParentId(userId);
                 ref.child("Drivers").child(driverID).child("parent").child("regParents").child(userId).setValue(manageParents);
             }
 
