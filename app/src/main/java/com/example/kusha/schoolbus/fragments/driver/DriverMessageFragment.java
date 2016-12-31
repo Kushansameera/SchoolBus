@@ -3,6 +3,7 @@ package com.example.kusha.schoolbus.fragments.driver;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
@@ -34,7 +34,6 @@ import com.firebase.client.ValueEventListener;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
-import com.squareup.otto.Subscribe;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -79,20 +78,26 @@ public class DriverMessageFragment extends Fragment {
         btnSentMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                try {
-//                    fragment = new ParentSentContactsFragment();
-//                    FragmentManager fragmentManager = getFragmentManager();
-//                    fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
-//                } catch (Exception e) {
-//                    Log.d("Sent Contacts", e.getMessage());
-//                }
+                try {
+                    fragment = new DriverSentContactsFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
+                } catch (Exception e) {
+                    Log.d("Sent Contacts", e.getMessage());
+                }
             }
         });
 
         btnReceivedMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    fragment = new DriverReceivedContactsFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
+                } catch (Exception e) {
+                    Log.d("Sent Contacts", e.getMessage());
+                }
             }
         });
 

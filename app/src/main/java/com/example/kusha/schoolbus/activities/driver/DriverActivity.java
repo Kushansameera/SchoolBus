@@ -107,7 +107,7 @@ public class DriverActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Route");
             fragment = new RouteFragment();
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
         } catch (Exception e) {
             Log.d("Route", e.getMessage());
         }
@@ -202,7 +202,7 @@ public class DriverActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Route");
             fragment = new RouteFragment();
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
         } catch (Exception e) {
             Log.d("Route", e.getMessage());
         }
@@ -213,7 +213,7 @@ public class DriverActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Payment");
             fragment = new PaymentDriverFragment();
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
         } catch (Exception e) {
             Log.d("Payment", e.getMessage());
         }
@@ -242,7 +242,7 @@ public class DriverActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Manage Parents");
             fragment = new ManageParentsFragment();
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
         } catch (Exception e) {
             Log.d("Message", e.getMessage());
         }
@@ -253,7 +253,7 @@ public class DriverActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Message");
             fragment = new DriverMessageFragment();
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
         } catch (Exception e) {
             Log.d("Message", e.getMessage());
         }
@@ -273,7 +273,7 @@ public class DriverActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Settings");
             fragment = new SettingFragment();
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
         } catch (Exception e) {
             Log.d("Settings", e.getMessage());
         }

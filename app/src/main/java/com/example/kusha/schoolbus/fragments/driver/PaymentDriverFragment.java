@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.driver.DriverActivity;
-import com.example.kusha.schoolbus.activities.parent.ParentActivity;
 import com.example.kusha.schoolbus.application.ApplicationClass;
 import com.example.kusha.schoolbus.models.PaymentList;
 import com.example.kusha.schoolbus.models.Student;
@@ -73,7 +71,7 @@ public class PaymentDriverFragment extends Fragment {
                 try {
                     fragment = new AddNewPaymentFragment();
                     FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
                 } catch (Exception e) {
                     Log.d("Payment", e.getMessage());
                 }
@@ -86,7 +84,7 @@ public class PaymentDriverFragment extends Fragment {
                 try {
                     fragment = new ViewPaymentFragment();
                     FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
                 } catch (Exception e) {
                     Log.d("Payment", e.getMessage());
                 }
@@ -99,7 +97,7 @@ public class PaymentDriverFragment extends Fragment {
                 try {
                     fragment = new PaymentSummeryFragment();
                     FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
                 } catch (Exception e) {
                     Log.d("Payment", e.getMessage());
                 }

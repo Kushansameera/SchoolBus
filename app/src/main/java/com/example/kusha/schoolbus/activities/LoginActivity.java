@@ -99,15 +99,13 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if (checkFields()) {
-                    mProgressDialog.setMessage("Processing...");
+                    mProgressDialog.setMessage("Login...");
                     mProgressDialog.show();
-                    login(email, password);
                     ParseInstallation p = ParseInstallation.getCurrentInstallation();
                     p.put("email", email);
                     p.saveInBackground();
+                    login(email, password);
                 }
 
             }
@@ -155,7 +153,6 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
                         if (!task.isSuccessful()) {
                             mProgressDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
@@ -164,14 +161,14 @@ public class LoginActivity extends AppCompatActivity {
                             if (user != null) {
                                 String userId = user.getUid().toString().trim();
                                 selectUserType(userId);
-                                mProgressDialog.dismiss();
+                                //mProgressDialog.dismiss();
                             } else {
                                 // User is signed out
                                 Toast.makeText(LoginActivity.this, "Please Login / Register", Toast.LENGTH_SHORT).show();
                             }
                         }
 
-                        mProgressDialog.hide();
+                        //mProgressDialog.hide();
                     }
                 });
     }
@@ -183,6 +180,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String userType = dataSnapshot.child("Users").child(userId).child("type").getValue().toString();
                 if (userType.equals("Driver")) {
+                    mProgressDialog.dismiss();
                     Intent intent = new Intent(LoginActivity.this, DriverActivity.class);
                     startActivity(intent);
                 } else {
@@ -190,10 +188,12 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(dataSnapshot.hasChild("driver")){
+                                mProgressDialog.dismiss();
                                 Intent intent = new Intent(LoginActivity.this, SelectDriverActivity.class);
                                 startActivity(intent);
                             }
                             else {
+                                mProgressDialog.dismiss();
                                 Intent intent = new Intent(LoginActivity.this, ParentActivity.class);
                                 startActivity(intent);
                             }

@@ -18,20 +18,16 @@ import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.driver.DriverActivity;
-import com.example.kusha.schoolbus.activities.parent.ParentActivity;
 import com.example.kusha.schoolbus.application.ApplicationClass;
 import com.example.kusha.schoolbus.models.PaymentList;
 import com.example.kusha.schoolbus.models.StudentPayment;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.MutableData;
-import com.firebase.client.Transaction;
 import com.firebase.client.ValueEventListener;
 import com.squareup.otto.Subscribe;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -308,7 +304,7 @@ public class AddNewPaymentFragment extends Fragment {
             Toast.makeText(getActivity(), "Payment Successfully Added", Toast.LENGTH_SHORT).show();
             Fragment fragment = new PaymentDriverFragment();
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
         } catch (Exception e) {
             Log.d("Payment", e.getMessage());
         }

@@ -1,4 +1,4 @@
-package com.example.kusha.schoolbus.fragments.parent;
+package com.example.kusha.schoolbus.fragments.driver;
 
 
 import android.app.FragmentManager;
@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kusha.schoolbus.R;
-import com.example.kusha.schoolbus.activities.parent.ParentActivity;
-import com.example.kusha.schoolbus.adapter.ContactsOfParentsAdapter;
-import com.example.kusha.schoolbus.models.ManageDrivers;
+import com.example.kusha.schoolbus.activities.driver.DriverActivity;
+import com.example.kusha.schoolbus.adapter.ContactsOfDriverAdapter;
+import com.example.kusha.schoolbus.models.ManageParents;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -24,60 +24,62 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ParentSentContactsFragment extends Fragment {
-
-    View parentSentMessageFragment;
-    List<ManageDrivers> drivers = new ArrayList<>();
-    ContactsOfParentsAdapter adapter;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class DriverSentContactsFragment extends Fragment {
+    View driverSentContactsFragment;
+    List<ManageParents> parents = new ArrayList<>();
+    ContactsOfDriverAdapter adapter;
     RecyclerView rcvContacts;
     Fragment fragment;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
 
-    public ParentSentContactsFragment() {}
+    public DriverSentContactsFragment() {}
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        parentSentMessageFragment = inflater.inflate(R.layout.fragment_parent_sent_contacts, container, false);
-        getActivity().setTitle("Sent Contacts");
-        rcvContacts = (RecyclerView)parentSentMessageFragment.findViewById(R.id.rcvParentContacts);
+        driverSentContactsFragment = inflater.inflate(R.layout.fragment_driver_sent_contacts, container, false);
+
+        rcvContacts = (RecyclerView)driverSentContactsFragment.findViewById(R.id.rcvDriverContacts);
         rcvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ContactsOfParentsAdapter(getActivity(), drivers);
-        showDrivers();
+        adapter = new ContactsOfDriverAdapter(getActivity(), parents);
+        showParents();
         rcvContacts.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new ContactsOfParentsAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new ContactsOfDriverAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                ParentSentMessagesFragment.msgDriverId = drivers.get(position).getDriverId();
-                ParentSentMessagesFragment.msgDriverName = drivers.get(position).getDriverName();
+                DriverSentMessageFragment.msgParentId = parents.get(position).getParentId();
+                DriverSentMessageFragment.msgParentName = parents.get(position).getParentName();
                 try {
-                    fragment = new ParentSentMessagesFragment();
+                    fragment = new DriverSentMessageFragment();
                     FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_parent, fragment).commit();
+                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
                 } catch (Exception e) {
                     Log.d("Sent Messages", e.getMessage());
                 }
             }
         });
-        return parentSentMessageFragment;
+
+        return driverSentContactsFragment;
     }
 
-    private void showDrivers() {
+    private void showParents() {
         Query queryRef;
-        queryRef = ref.child("Parents").child(ParentActivity.userId).child("driver").orderByChild("regDrivers");
+        queryRef = ref.child("Drivers").child(DriverActivity.userId).child("parent").orderByChild("regParents");
 
-        drivers.clear();
+        parents.clear();
 
         queryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     for (DataSnapshot d : data.getChildren()) {
-                        ManageDrivers m = d.getValue(ManageDrivers.class);
-                        drivers.add(m);
+                        ManageParents m = d.getValue(ManageParents.class);
+                        parents.add(m);
                     }
                 }
                 adapter.notifyDataSetChanged();
