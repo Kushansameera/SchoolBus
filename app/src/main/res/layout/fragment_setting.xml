@@ -12,15 +12,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"><![CDATA[>
-
-
-
-            ]]>
-
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="247dp"
+                android:layout_height="197dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -35,30 +30,6 @@
                         android:gravity="center"
                         android:text="Change Password"
                         android:textSize="16sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_currentpw"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:layout_weight="0.81">
-
-                        <EditText
-                            android:id="@+id/txtCurrentPw"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:ems="10"
-                            android:hint="Current Password"
-                            android:inputType="textPassword"
-                            android:textSize="14sp" />
-
-                    </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout

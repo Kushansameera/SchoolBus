@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
@@ -37,12 +38,13 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     public FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private FirebaseDatabase mDatabase;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
 
     private Button btnSignup, btnLogin;
     EditText txtEmail, txtPassword;
     String email, password;
+    TextView txtLoginForgetPassword;
+    public static FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
                     String userId = user.getUid().toString().trim();
@@ -83,10 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         txtEmail = (EditText) findViewById(R.id.txtEmail);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
-
-
-
-
+        txtLoginForgetPassword = (TextView)findViewById(R.id.txtLoginForgetPassword);
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +109,24 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+//        txtLoginForgetPassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FirebaseAuth auth = FirebaseAuth.getInstance();
+//                String emailAddress = "kushansamee92@gmail.com";
+//
+//                auth.sendPasswordResetEmail(emailAddress)
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    Toast.makeText(LoginActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        });
+//            }
+//        });
     }
 
     @Override
