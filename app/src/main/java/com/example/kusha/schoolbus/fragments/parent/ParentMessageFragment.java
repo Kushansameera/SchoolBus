@@ -144,10 +144,12 @@ public class ParentMessageFragment extends Fragment {
         String sentMyMessageID = String.valueOf(sentMessageId);
         int receivedMessageId = Integer.parseInt(latestReceivedId)+1;
         String receivedMyMessageID = String.valueOf(receivedMessageId);
-
+        newMessage.setMsgID(sentMyMessageID);
 
         ref.child("Parents").child(ParentActivity.userId).child("messages").child("sent").child(ParentActivity.selectedDriverID).child("myMessages").child(sentMyMessageID).setValue(newMessage);
         ref.child("Parents").child(ParentActivity.userId).child("messages").child("sent").child(ParentActivity.selectedDriverID).child("messageCounter").setValue(sentMyMessageID);
+
+        newMessage.setMsgID(receivedMyMessageID);
         ref.child("Drivers").child(ParentActivity.selectedDriverID).child("messages").child("received").child(ParentActivity.userId).child("myMessages").child(receivedMyMessageID).setValue(newMessage);
         ref.child("Drivers").child(ParentActivity.selectedDriverID).child("messages").child("received").child(ParentActivity.userId).child("messageCounter").setValue(receivedMyMessageID);
         sendPush(ParentActivity.selectedDriverEmail);

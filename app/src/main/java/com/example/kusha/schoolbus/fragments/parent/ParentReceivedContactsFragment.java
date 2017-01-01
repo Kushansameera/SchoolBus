@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.parent.ParentActivity;
 import com.example.kusha.schoolbus.adapter.ContactsOfParentsAdapter;
+import com.example.kusha.schoolbus.fragments.driver.DriverMessageFragment;
 import com.example.kusha.schoolbus.models.ManageDrivers;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -33,6 +35,7 @@ public class ParentReceivedContactsFragment extends Fragment {
     ContactsOfParentsAdapter adapter;
     RecyclerView rcvContacts;
     Fragment fragment;
+    ImageButton btnBack;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
 
     public ParentReceivedContactsFragment() {}
@@ -45,6 +48,7 @@ public class ParentReceivedContactsFragment extends Fragment {
         rcvContacts = (RecyclerView)parentReceivedMessageFragment.findViewById(R.id.rcvParentContacts);
         rcvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ContactsOfParentsAdapter(getActivity(), drivers);
+        btnBack = (ImageButton)parentReceivedMessageFragment.findViewById(R.id.imageButtonBack);
         showDrivers();
         rcvContacts.setAdapter(adapter);
 
@@ -62,6 +66,20 @@ public class ParentReceivedContactsFragment extends Fragment {
                 }
             }
         });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    fragment = new ParentMessageFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_parent, fragment).commit();
+                } catch (Exception e) {
+                    Log.d("Sent Contacts", e.getMessage());
+                }
+            }
+        });
+
         return parentReceivedMessageFragment;
     }
 

@@ -251,6 +251,7 @@ public class DriverMessageFragment extends Fragment {
                     }
                     int receivedMessageId = Integer.parseInt(latestReceivedId) + 1;
                     String receivedMyMessageID = String.valueOf(receivedMessageId);
+                    newMessage.setMsgID(receivedMyMessageID);
                     ref.child("Parents").child(selectedParents.get(finalI).getParentId()).child("messages").child("received").child(DriverActivity.userId).child("myMessages").child(receivedMyMessageID).setValue(newMessage);
                     ref.child("Parents").child(selectedParents.get(finalI).getParentId()).child("messages").child("received").child(DriverActivity.userId).child("messageCounter").setValue(receivedMyMessageID);
                     sendPush(selectedParents.get(finalI).getParentEmail());
@@ -276,6 +277,7 @@ public class DriverMessageFragment extends Fragment {
                     }
                     int sentMessageId = Integer.parseInt(latestSentId) + 1;
                     String sentMyMessageID = String.valueOf(sentMessageId);
+                    newMessage.setMsgID(sentMyMessageID);
                     ref.child("Drivers").child(DriverActivity.userId).child("messages").child("sent").child(selectedParents.get(finalI).getParentId()).child("myMessages").child(sentMyMessageID).setValue(newMessage);
                     ref.child("Drivers").child(DriverActivity.userId).child("messages").child("sent").child(selectedParents.get(finalI).getParentId()).child("messageCounter").setValue(sentMyMessageID);
                     mProgressDialog.dismiss();

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.driver.DriverActivity;
@@ -33,6 +34,7 @@ public class DriverSentContactsFragment extends Fragment {
     ContactsOfDriverAdapter adapter;
     RecyclerView rcvContacts;
     Fragment fragment;
+    ImageButton btnBack;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
 
     public DriverSentContactsFragment() {}
@@ -44,6 +46,7 @@ public class DriverSentContactsFragment extends Fragment {
         driverSentContactsFragment = inflater.inflate(R.layout.fragment_driver_sent_contacts, container, false);
 
         rcvContacts = (RecyclerView)driverSentContactsFragment.findViewById(R.id.rcvDriverContacts);
+        btnBack = (ImageButton)driverSentContactsFragment.findViewById(R.id.imageButtonBack);
         rcvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ContactsOfDriverAdapter(getActivity(), parents);
         showParents();
@@ -60,6 +63,19 @@ public class DriverSentContactsFragment extends Fragment {
                     fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
                 } catch (Exception e) {
                     Log.d("Sent Messages", e.getMessage());
+                }
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    fragment = new DriverMessageFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
+                } catch (Exception e) {
+                    Log.d("Sent Contacts", e.getMessage());
                 }
             }
         });

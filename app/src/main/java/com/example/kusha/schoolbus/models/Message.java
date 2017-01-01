@@ -11,6 +11,17 @@ public class Message {
     private String msgDate;
     private String msgTime;
     private String childName;
+    private String msgID;
+
+    public String getMsgID() {
+        return msgID;
+    }
+
+    public void setMsgID(String msgID) {
+        this.msgID = msgID;
+    }
+
+
 
     public String getChildName() {
         return childName;

@@ -50,13 +50,13 @@ public class ParentReceivedMessageAdapter extends RecyclerView.Adapter<ParentRec
         return myMessages.get(position);
     }
 
-    private OnItemClickListener listener;
+    private OnItemLongClickListener listener;
 
-    public interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View itemView, int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         this.listener = listener;
     }
 
@@ -70,15 +70,16 @@ public class ParentReceivedMessageAdapter extends RecyclerView.Adapter<ParentRec
             msgBody = (TextView) itemView.findViewById(R.id.txtMsgBody);
             msgDate = (TextView) itemView.findViewById(R.id.txtMsgDate);
             msgTime = (TextView) itemView.findViewById(R.id.txtMsgTime);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
+                public boolean onLongClick(View v) {
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(itemView, position);
+                            listener.onItemLongClick(itemView, position);
                         }
                     }
+                    return true;
                 }
             });
 

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.parent.ParentActivity;
@@ -32,6 +33,7 @@ public class ParentSentContactsFragment extends Fragment {
     ContactsOfParentsAdapter adapter;
     RecyclerView rcvContacts;
     Fragment fragment;
+    ImageButton btnBack;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
 
     public ParentSentContactsFragment() {}
@@ -43,6 +45,7 @@ public class ParentSentContactsFragment extends Fragment {
         parentSentMessageFragment = inflater.inflate(R.layout.fragment_parent_sent_contacts, container, false);
         getActivity().setTitle("Sent Contacts");
         rcvContacts = (RecyclerView)parentSentMessageFragment.findViewById(R.id.rcvParentContacts);
+        btnBack = (ImageButton)parentSentMessageFragment.findViewById(R.id.imageButtonBack);
         rcvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ContactsOfParentsAdapter(getActivity(), drivers);
         showDrivers();
@@ -62,6 +65,20 @@ public class ParentSentContactsFragment extends Fragment {
                 }
             }
         });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    fragment = new ParentMessageFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.main_frame_container_parent, fragment).commit();
+                } catch (Exception e) {
+                    Log.d("Sent Contacts", e.getMessage());
+                }
+            }
+        });
+
         return parentSentMessageFragment;
     }
 

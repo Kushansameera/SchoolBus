@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.kusha.schoolbus.R;
@@ -51,13 +52,14 @@ public class ParentSentMessageAdapter extends RecyclerView.Adapter<ParentSentMes
     public Message getItem(int position){
         return myMessages.get(position);
     }
-    private OnItemClickListener listener;
 
-    public interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
+    private OnItemLongClickListener listener;
+
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View itemView, int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         this.listener = listener;
     }
 
@@ -72,15 +74,28 @@ public class ParentSentMessageAdapter extends RecyclerView.Adapter<ParentSentMes
             msgBody = (TextView) itemView.findViewById(R.id.txtMsgBody);
             msgDate = (TextView) itemView.findViewById(R.id.txtMsgDate);
             msgTime = (TextView) itemView.findViewById(R.id.txtMsgTime);
-            itemView.setOnClickListener(new View.OnClickListener() {
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (listener != null) {
+//                        int position = getAdapterPosition();
+//                        if (position != RecyclerView.NO_POSITION) {
+//                            listener.onItemClick(itemView, position);
+//                        }
+//                    }
+//                }
+//            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
+                public boolean onLongClick(View v) {
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(itemView, position);
+                            listener.onItemLongClick(itemView, position);
                         }
                     }
+                    return true;
                 }
             });
 

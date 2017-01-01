@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.kusha.schoolbus.fragments.driver.DriverSentMessageFragment">
 
     <LinearLayout
@@ -9,13 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtMsgTo"
-            android:textSize="16sp"
-            android:textColor="@color/cast_expanded_controller_background_color"
-            android:gravity="center" />
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_arrow_back_black"
+                android:id="@+id/imageButtonBack"
+                android:background="@android:drawable/screen_background_light_transparent" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtMsgTo"
+                android:textSize="16sp"
+                android:textColor="@color/cast_expanded_controller_background_color"
+                android:gravity="center"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
