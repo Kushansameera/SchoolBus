@@ -106,16 +106,19 @@ public class RouteFragment extends Fragment implements OnMapReadyCallback, Direc
     }
 
     private void updateBusLocation() {
-        ref.child("Drivers").child(DriverActivity.userId).child("myLocation").child("location").addValueEventListener(new ValueEventListener() {
+        ref.child("Drivers").child(DriverActivity.userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (i != 0){
-                    myMarker.remove();
+                if(dataSnapshot.hasChild("myLocation")){
+                    if (i != 0){
+                        myMarker.remove();
+                    }
+                    i++;
+                    DriverLocation driverLocation = new DriverLocation();
+                    driverLocation = dataSnapshot.child("myLocation").child("location").getValue(DriverLocation.class);
+                    createMarker(driverLocation);
                 }
-                i++;
-                DriverLocation driverLocation = new DriverLocation();
-                driverLocation = dataSnapshot.getValue(DriverLocation.class);
-                createMarker(driverLocation);
+
 
                 //Toast.makeText(getActivity(),String.valueOf(driverLocation.getDriverLatitude()),Toast.LENGTH_SHORT);
             }

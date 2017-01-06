@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,14 +39,11 @@ import com.firebase.client.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class DriveMangeFragment extends Fragment {
 
     private ProgressDialog mProgressDialog;
     public FirebaseAuth mFirebaseAuth;
-    private FirebaseDatabase mDatabase;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     private String userId;
     private String driverId;
@@ -73,7 +72,7 @@ public class DriveMangeFragment extends Fragment {
         adapter = new AllDriversAdapter(getActivity(), drivers);
         showDrivers();
         rcvManageDrivers.setAdapter(adapter);
-
+        searchDrivers();
         adapter.setOnItemClickListener(new AllDriversAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
@@ -103,30 +102,61 @@ public class DriveMangeFragment extends Fragment {
         return rootView;
     }
 
-//    private void showDrivers() {
-//        Query queryRef;
-//        queryRef = ref.child("Parents").child(userId).child("driver").orderByChild("regDrivers");
-//
-//        drivers.clear();
-//
-//        queryRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot data : dataSnapshot.getChildren()) {
-//                    for (DataSnapshot d : data.getChildren()) {
-//                        ManageDrivers m = d.getValue(ManageDrivers.class);
-//                        drivers.add(m);
-//                    }
-//                }
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//        });
-//    }
+    private void searchDrivers(){
+        txtFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                s=s.toString().toLowerCase();
+                final List<User> filterdDrivers = new ArrayList<>();
+                for(int i=0;i<drivers.size();i++){
+                    final String text = drivers.get(i).getName().toLowerCase();
+                    if(text.contains(s)){
+                        filterdDrivers.add(drivers.get(i));
+                    }
+                }
+                rcvManageDrivers.setLayoutManager(new LinearLayoutManager(getActivity()));
+                adapter = new AllDriversAdapter(getActivity(), filterdDrivers);
+                rcvManageDrivers.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+                adapter.setOnItemClickListener(new AllDriversAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View itemView, int position) {
+                        final String driverEmail = filterdDrivers.get(position).getEmail();
+                        final PopupMenu popup = new PopupMenu(getActivity(), itemView);
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.view_item:
+                                        getDriverId(driverEmail);
+                                        return true;
+                                    case R.id.add_item:
+                                        addDriver(driverEmail);
+                                        return true;
+                                    default:
+                                        return false;
+                                }
+                            }
+                        });
+                        MenuInflater inflater = popup.getMenuInflater();
+                        inflater.inflate(R.menu.add_view, popup.getMenu());
+                        popup.show();
+                    }
+                });
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
 
     private void showDrivers() {
         Query queryRef;
@@ -259,7 +289,7 @@ public class DriveMangeFragment extends Fragment {
         final TextView phone = new TextView(getActivity());
 
         name.setText("\t\t\t\t\t\tName  : "+user.getName());
-        email.setText("\t\t\t\t\t\tEmail  : "+user.getEmail());
+        email.setText("\t\t\t\t\t\tEmail   : "+user.getEmail());
         phone.setText("\t\t\t\t\t\tPhone : "+user.getPhoneNumber());
 
         layout.addView(name);
@@ -287,7 +317,7 @@ public class DriveMangeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data:dataSnapshot.getChildren()) {
                     driverID = data.getKey();
-                    getDrverDetails(driverID);
+                    getDriverDetails(driverID);
                 }
 
             }
@@ -299,7 +329,7 @@ public class DriveMangeFragment extends Fragment {
         });
     }
 
-    private void getDrverDetails(String driverID){
+    private void getDriverDetails(String driverID){
         ref.child("Users").child(driverID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -314,27 +344,7 @@ public class DriveMangeFragment extends Fragment {
         });
     }
 
-//    private boolean confirmAlert(){
-//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-//        alertDialogBuilder.setMessage("Are you sure,You wanted to Sign out");
-//
-//        alertDialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface arg0, int arg1) {
-//
-//            }
-//        });
-//
-//        alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//            }
-//        });
-//
-//        AlertDialog alertDialog = alertDialogBuilder.create();
-//        alertDialog.show();
-//    }
+
 
 
 }

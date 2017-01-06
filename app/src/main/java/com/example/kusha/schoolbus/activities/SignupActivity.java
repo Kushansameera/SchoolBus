@@ -126,7 +126,6 @@ public class SignupActivity extends AppCompatActivity {
         return matcher.find();
     }
 
-
     private void registerUser() {
         progressDialog.setMessage("Registering User...");
         progressDialog.show();

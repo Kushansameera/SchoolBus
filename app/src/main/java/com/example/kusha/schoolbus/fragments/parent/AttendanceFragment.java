@@ -91,7 +91,7 @@ public class AttendanceFragment extends Fragment {
                         radioGroupMorning.getChildAt(i).setEnabled(false);
                     }
                     ref.child("Drivers").child(ParentActivity.selectedDriverID).child("route").child("morningRoute").child(myChild.getStuID()).child("attend").setValue(responseMorning);
-                }else if(myChild.getStuType().equals("Evening Only")){
+                }else if(myChild.getStuType().equals("Afternoon Only")){
                     int selectedId = radioGroupEvening.getCheckedRadioButtonId();
                     RadioButton eveningRadioButton = (RadioButton)radioGroupEvening.findViewById(selectedId);
                     responseEvening = eveningRadioButton.getText().toString();
@@ -142,7 +142,7 @@ public class AttendanceFragment extends Fragment {
             for (int i = 0; i < radioGroupEvening.getChildCount(); i++) {
                 radioGroupEvening.getChildAt(i).setEnabled(false);
             }
-        }else if(myChild.getStuType().equals("Evening Only")){
+        }else if(myChild.getStuType().equals("Afternoon Only")){
             for (int i = 0; i < radioGroupMorning.getChildCount(); i++) {
                 radioGroupMorning.getChildAt(i).setEnabled(false);
             }

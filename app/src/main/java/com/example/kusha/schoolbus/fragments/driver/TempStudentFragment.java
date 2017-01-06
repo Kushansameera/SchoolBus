@@ -62,6 +62,7 @@ public class TempStudentFragment extends Fragment {
     Double morningDis = 0.0, eveningDis = 0.0;
     int newMorningDis, newEveningDis;
     String[] monthArray;
+    int fullSeats=0, reservedSeatsMorning =0,reservedSeatsAfternoon=0;
 
     public TempStudentFragment() {
     }
@@ -89,6 +90,7 @@ public class TempStudentFragment extends Fragment {
         monthArray = getResources().getStringArray(R.array.months);
         getTempStudentData();
         getPricePerKm();
+        getSeatData();
 
         btnMonthlyFee.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,22 +106,29 @@ public class TempStudentFragment extends Fragment {
             public void onClick(View v) {
                 if (!txtTempStuMonthlyFee.getText().equals("")) {
                     if (flag) {
-                        if (latestStudentID.equals("1")) {
-                            ref.child("Drivers").child(driverId).child("permanent").child("studentCounter").setValue(1);
-                            addStudent();
-                            saveStudentWithParent();
-                            addStudentToPayments();
-                            addStuPickLocation();
-                            sendAcceptPush(student.getParentEmail());
-                            flag = false;
-                        } else {
-                            addStudent();
-                            saveStudentWithParent();
-                            addStudentToPayments();
-                            addStuPickLocation();
-                            sendAcceptPush(student.getParentEmail());
-                            flag = false;
+                        if(checkSeats()){
+                            if (latestStudentID.equals("1")) {
+                                ref.child("Drivers").child(driverId).child("permanent").child("studentCounter").setValue(1);
+                                setSeatData();
+                                addStudent();
+                                saveStudentWithParent();
+                                addStudentToPayments();
+                                addStuPickLocation();
+                                sendAcceptPush(student.getParentEmail());
+                                flag = false;
+                            } else {
+                                setSeatData();
+                                addStudent();
+                                saveStudentWithParent();
+                                addStudentToPayments();
+                                addStuPickLocation();
+                                sendAcceptPush(student.getParentEmail());
+                                flag = false;
+                            }
+                        }else {
+                            Toast.makeText(getActivity(), "Your Vehicle Don't Have Enough Seats", Toast.LENGTH_SHORT).show();
                         }
+
                     }
                 } else {
                     Toast.makeText(getActivity(), "Please Add Monthly Fee", Toast.LENGTH_SHORT).show();
@@ -160,6 +169,88 @@ public class TempStudentFragment extends Fragment {
         return stuRequestFragment;
     }
 
+    private boolean checkSeats(){
+        if(student.getStuType().equals("Morning Only")){
+            if(fullSeats>reservedSeatsMorning){
+                return true;
+            }else {
+                return false;
+            }
+        }else if(student.getStuType().equals("Afternoon Only")){
+            if(fullSeats>reservedSeatsAfternoon){
+                return true;
+            }else {
+                return false;
+            }
+
+        }else if(student.getStuType().equals("Both")){
+            if(fullSeats>reservedSeatsAfternoon && fullSeats>reservedSeatsMorning){
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
+
+    private void setSeatData(){
+        if(student.getStuType().equals("Morning Only")){
+            ref.child("Drivers").child(driverId).child("reservedSeatsMorning").setValue(String.valueOf(reservedSeatsMorning +1));
+        }else if(student.getStuType().equals("Afternoon Only")){
+            ref.child("Drivers").child(driverId).child("reservedSeatsAfternoon").setValue(String.valueOf(reservedSeatsAfternoon +1));
+        }else if(student.getStuType().equals("Both")){
+            ref.child("Drivers").child(driverId).child("reservedSeatsMorning").setValue(String.valueOf(reservedSeatsMorning +1));
+            ref.child("Drivers").child(driverId).child("reservedSeatsAfternoon").setValue(String.valueOf(reservedSeatsAfternoon +1));
+        }
+
+    }
+
+    private void getSeatData() {
+        ref.child("Drivers").child(driverId).child("allSeats").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                fullSeats = Integer.parseInt(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        ref.child("Drivers").child(driverId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild("reservedSeatsMorning")){
+                    reservedSeatsMorning = Integer.parseInt(dataSnapshot.child("reservedSeatsMorning").getValue().toString());
+                }else {
+                    reservedSeatsMorning = 0;
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        ref.child("Drivers").child(driverId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild("reservedSeatsAfternoon")){
+                    reservedSeatsAfternoon = Integer.parseInt(dataSnapshot.child("reservedSeatsAfternoon").getValue().toString());
+                }else {
+                    reservedSeatsAfternoon = 0;
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
 
     private void addStudentToPayments() {
         Calendar calendar = Calendar.getInstance();
@@ -222,7 +313,7 @@ public class TempStudentFragment extends Fragment {
                     txtTempStuDrop.setText(student.getStuDropLocation());
                     txtTempStuPickup.setText("-");
                 }
-                if (!stuType.equals("Evening Only")) {
+                if (!stuType.equals("Afternoon Only")) {
                     txtTempStuPickup.setText(student.getStuPickLocation());
                     txtTempStuDrop.setText("-");
                 }
@@ -237,6 +328,7 @@ public class TempStudentFragment extends Fragment {
             }
         });
     }
+
     private void getImage(String url){
         try {
             byte [] encodeByte= Base64.decode(url,Base64.DEFAULT);
@@ -253,7 +345,7 @@ public class TempStudentFragment extends Fragment {
         mProgressDialog.show();
         mProgressDialog.setCancelable(false);
 
-        if (!stuType.equals("Evening Only")) {
+            if (!stuType.equals("Afternoon Only")) {
             morningUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + student.getStuPickLatitude() + "," + student.getStuPickLongitude() + "&destinations=" + school.getSchoolLatitude() + "," + school.getSchoolLongitude() + "&mode=driving&language=fr-FR&avoid=tolls&key=AIzaSyDb5C2cX_fb7XLzq0AjaD2TjXzULYYmEsc";
             new GeoDistance(stuRequestFragment.getContext()).execute(morningUrl);
             Log.d("========<>", "eveningOnlyFalse");
@@ -267,7 +359,7 @@ public class TempStudentFragment extends Fragment {
         key.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!stuType.equals("Evening Only")) {
+                if (!stuType.equals("Afternoon Only")) {
                     morningDis = Double.valueOf(studistance) / 1000;
                     newMorningDis = (int) Math.round(morningDis);
                     Log.d("========<>", "EveningOnlyFalse  " + String.valueOf(newMorningDis));
@@ -418,7 +510,7 @@ public class TempStudentFragment extends Fragment {
             morningDriverRoute.setPlaceName(student.getStuName());
             morningDriverRoute.setAttend("Yes");
         }
-        else if(student.getStuType().equals("Evening Only")){
+        else if(student.getStuType().equals("Afternoon Only")){
             eveningDriverRoute.setStuID(latestStudentID);
             eveningDriverRoute.setPlaceLatitude(student.getStuDropLatitude());
             eveningDriverRoute.setPlaceLongitude(student.getStuDropLongitude());
@@ -442,7 +534,7 @@ public class TempStudentFragment extends Fragment {
         if(student.getStuType().equals("Morning Only")){
             ref.child("Drivers").child(DriverActivity.userId).child("route").child("morningRoute").child(student.getStuID()).setValue(morningDriverRoute);
         }
-        else if(student.getStuType().equals("Evening Only")){
+        else if(student.getStuType().equals("Afternoon Only")){
             ref.child("Drivers").child(DriverActivity.userId).child("route").child("eveningRoute").child(student.getStuID()).setValue(eveningDriverRoute);
         }
         else if(student.getStuType().equals("Both")){

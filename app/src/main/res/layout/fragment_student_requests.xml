@@ -7,9 +7,24 @@
     android:paddingTop="20dp"
     tools:context="com.example.kusha.schoolbus.fragments.driver.StudentRequestsFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcvTempStudents"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <!--<Button-->
+            <!--android:text="Find Best"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/btnfindBest"-->
+            <!--android:textColor="@android:color/background_light"-->
+            <!--android:background="#387EF5" />-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcvTempStudents"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
 
 </FrameLayout>

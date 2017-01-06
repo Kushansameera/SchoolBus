@@ -1,8 +1,8 @@
 package com.example.kusha.schoolbus.fragments.driver;
 
 
-
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,9 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.PopupMenu;
 
 import com.example.kusha.schoolbus.R;
+import com.example.kusha.schoolbus.activities.driver.RequestSortActivity;
 import com.example.kusha.schoolbus.adapter.StudentAdapter;
 import com.example.kusha.schoolbus.fragments.parent.ChildLocationFragment;
 import com.example.kusha.schoolbus.models.Student;
@@ -42,7 +44,9 @@ public class StudentRequestsFragment extends Fragment {
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     public FirebaseAuth mFirebaseAuth;
     private String userId;
+    //private Button btnFindBest;
     private ProgressDialog progressDialog;
+
     public StudentRequestsFragment() {
     }
 
@@ -52,6 +56,7 @@ public class StudentRequestsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View studentRequestFragment = inflater.inflate(R.layout.fragment_student_requests, container, false);
         rcvTempStudents = (RecyclerView) studentRequestFragment.findViewById(R.id.rcvTempStudents);
+        //btnFindBest = (Button) studentRequestFragment.findViewById(R.id.btnfindBest);
         progressDialog = new ProgressDialog(getActivity());
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
@@ -61,6 +66,15 @@ public class StudentRequestsFragment extends Fragment {
         adapter = new StudentAdapter(getActivity(), students);
         showTempStudents();
         rcvTempStudents.setAdapter(adapter);
+
+//        btnFindBest.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                RequestSortActivity.myStudents = students;
+//                Intent intent = new Intent(getActivity(), RequestSortActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         adapter.setOnItemClickListener(new StudentAdapter.OnItemClickListener() {
             @Override
@@ -94,6 +108,7 @@ public class StudentRequestsFragment extends Fragment {
 
     private void showTempStudents() {
         progressDialog.setMessage("Loading Data...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         Query queryRef;
         queryRef = ref.child("Drivers").child(userId).child("temp").orderByChild("tempStudent");

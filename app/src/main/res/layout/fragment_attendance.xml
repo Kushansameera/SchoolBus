@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="Morning : "
+                    android:text="Morning     : "
                     android:layout_width="wrap_content"
                     android:layout_height="29dp"
                     android:id="@+id/textView8"
@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="Evening  : "
+                    android:text="Afternoon  : "
                     android:layout_width="wrap_content"
                     android:layout_height="29dp"
                     android:id="@+id/textView6"

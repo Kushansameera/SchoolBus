@@ -103,14 +103,7 @@ public class DriverActivity extends AppCompatActivity
 
         setPaymentSummery();
 
-        try {
-            getSupportActionBar().setTitle("Route");
-            fragment = new RouteFragment();
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
-        } catch (Exception e) {
-            Log.d("Route", e.getMessage());
-        }
+
     }
 
     @Override
@@ -294,6 +287,15 @@ public class DriverActivity extends AppCompatActivity
 
     public void setDriverLocation(DriverLocation driverLocation) {
         ref.child("Drivers").child(userId).child("myLocation").child("location").setValue(driverLocation);
+        try {
+            getSupportActionBar().setTitle("Route");
+            fragment = new RouteFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.main_frame_container_driver, fragment).commit();
+        } catch (Exception e) {
+            Log.d("Route", e.getMessage());
+        }
+
     }
 
     private void setPaymentSummery() {

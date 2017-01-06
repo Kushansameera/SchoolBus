@@ -7,62 +7,264 @@
     tools:context="com.example.kusha.schoolbus.fragments.driver.RouteLocationFragment">
 
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="1">
+        android:clipToPadding="false"
+        android:fillViewport="false">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginTop="30dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Current Price Per Km: Rs. "
-                android:textSize="15dp"
-                android:gravity="right" />
-
-            <TextView
-                android:id="@+id/txtCurrentFee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:gravity="left"
-                android:paddingLeft="5dp"
-                android:textColor="@android:color/black" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_add_location"
-            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
+            android:orientation="vertical" >
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_newPrice"
-                android:layout_width="284dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="388dp"
+                android:layout_height="match_parent">
 
-                <EditText
-                    android:id="@+id/txtNewFee"
-                    android:layout_width="374dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="New Price Per Km"
-                    android:inputType="number" />
-            </android.support.design.widget.TextInputLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
 
-            <ImageButton
-                android:id="@+id/button_fee"
-                android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Current Price Per Km               "
+                        android:textSize="15dp"
+                        android:gravity="left" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Full Capacity Of The Vehicle   "
+                        android:textSize="15dp"
+                        android:gravity="left"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Reserved For Morning             "
+                        android:textSize="15dp"
+                        android:gravity="left"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:text="Available Morning                    "
+                        android:gravity="left"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Reserved For Afternoon          "
+                        android:textSize="15dp"
+                        android:gravity="left"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:text="Available Afternoon                 "
+                        android:gravity="left"
+                        android:layout_marginTop="10dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:text=":"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView36"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:text=":"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView34"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:text=":"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView30"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:text=":"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView29"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:text=":"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView28"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:text=":"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView27"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/txtCurrentFee"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:gravity="left"
+                        android:paddingLeft="5dp"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/txtFullCapacity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:gravity="left"
+                        android:paddingLeft="5dp"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:id="@+id/txtReservedSeatsMorning"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:gravity="left"
+                        android:paddingLeft="5dp"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:id="@+id/txtFreeSeatsMorning"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:gravity="left"
+                        android:paddingLeft="5dp"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:id="@+id/txtReservedSeatsAfternoon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:gravity="left"
+                        android:paddingLeft="5dp"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:id="@+id/txtFreeSeatsAfternoon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:gravity="left"
+                        android:paddingLeft="5dp"
+                        android:textColor="@android:color/black"
+                        android:layout_marginTop="10dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_add_location"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_add" />
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_newPrice"
+                    android:layout_width="284dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true">
+
+                    <EditText
+                        android:id="@+id/txtNewFee"
+                        android:layout_width="374dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="New Price Per Km"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/button_fee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_add" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_newSeats"
+                    android:layout_width="284dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true">
+
+                    <EditText
+                        android:id="@+id/txtNumberOfSeats"
+                        android:layout_width="374dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Number Of Seats In The Vehicle "
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/button_seats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_add" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="258dp"></LinearLayout>
 
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
+
 </FrameLayout>

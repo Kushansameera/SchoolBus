@@ -106,11 +106,11 @@ public class ParentActivity extends AppCompatActivity
             public void run() {
                 navName = (TextView) view.findViewById(R.id.textParentName);
                 navEmail = (TextView) view.findViewById(R.id.textParentEmail);
-                navName.setText(mUser.getName());
+//                navName.setText(mUser.getName());
                 navEmail.setText(userEmail);
                 parentName = mUser.getName();
             }
-        }, 2000);
+        }, 4000);
         Log.d("=======>Child Name: ", selectedChildName);
 
         try {

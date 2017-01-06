@@ -191,7 +191,7 @@ public class AddNewChildFragment extends Fragment {
                 if (checkFields()) {
                     if (flag) {
                         if (latestTempStudentID.equals("1")) {
-                            ref.child("Drivers").child(driverID).child("temp").child("tempStudentCounter").setValue(1);
+                            ref.child("Drivers").child(ParentActivity.selectedDriverID).child("temp").child("tempStudentCounter").setValue(1);
                             addTempStudent();
                             sendPush(ParentActivity.selectedDriverEmail);
                             flag = false;
@@ -224,7 +224,7 @@ public class AddNewChildFragment extends Fragment {
                     btnStuPickLocation.setEnabled(true);
                     txtDropLocation.setText("");
 
-                } else if (studentType.equals("Evening Only")) {
+                } else if (studentType.equals("Afternoon Only")) {
                     btnStuDropLocation.setEnabled(true);
                     btnStuPickLocation.setEnabled(false);
                     txtPickLocation.setText("");
@@ -316,7 +316,7 @@ public class AddNewChildFragment extends Fragment {
         if (txtStuName.getText().toString().trim().length() == 0) {
             Toast.makeText(getActivity(), "Enter Student Name", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (txtPickLocation.getText().toString().trim().length() == 0 && !studentType.equals("Evening Only")) {
+        } else if (txtPickLocation.getText().toString().trim().length() == 0 && !studentType.equals("Afternoon Only")) {
             Toast.makeText(getActivity(), "Please Select Pick Location", Toast.LENGTH_SHORT).show();
             return false;
         } else if (txtDropLocation.getText().toString().trim().length() == 0 && !studentType.equals("Morning Only")) {
@@ -388,7 +388,7 @@ public class AddNewChildFragment extends Fragment {
         student.setStuGrade(stuGrade);
         student.setStuClass(stuClass);
         student.setStuImage(stuImageEncoded);
-        if (!studentType.equals("Evening Only")) {
+        if (!studentType.equals("Afternoon Only")) {
             student.setStuPickLatitude(Double.toString(stuPickLatitude));
             student.setStuPickLongitude(Double.toString(stuPickLongitude));
             student.setStuPickLocation(stuPickLoc);

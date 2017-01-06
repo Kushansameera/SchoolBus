@@ -110,23 +110,25 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//        txtLoginForgetPassword.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FirebaseAuth auth = FirebaseAuth.getInstance();
-//                String emailAddress = "kushansamee92@gmail.com";
-//
-//                auth.sendPasswordResetEmail(emailAddress)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if (task.isSuccessful()) {
-//                                    Toast.makeText(LoginActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
-//            }
-//        });
+        txtLoginForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                String emailAddress = "kushansamee92@gmail.com";
+
+                auth.sendPasswordResetEmail(emailAddress)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(LoginActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
     }
 
     @Override
@@ -192,10 +194,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void selectUserType(final String userId) {
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String userType = dataSnapshot.child("Users").child(userId).child("type").getValue().toString();
+                String userType = dataSnapshot.child(userId).child("type").getValue().toString();
                 if (userType.equals("Driver")) {
                     mProgressDialog.dismiss();
                     Intent intent = new Intent(LoginActivity.this, DriverActivity.class);

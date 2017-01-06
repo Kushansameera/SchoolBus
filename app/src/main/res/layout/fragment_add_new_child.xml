@@ -187,7 +187,7 @@
                         android:id="@+id/radioButtonEveningOnly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Evening Only"
+                        android:text="Afternoon Only"
                         android:textSize="12sp"
                         android:layout_weight="0.19" />
 

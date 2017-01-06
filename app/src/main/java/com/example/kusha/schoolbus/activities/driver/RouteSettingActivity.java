@@ -37,7 +37,7 @@ public class RouteSettingActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         //adapter.addFragment(new RouteLocationFragment(), "Pickup Locations");
         adapter.addFragment(new RouteSchoolsFragment(), "Schools");
-        adapter.addFragment(new RouteFeesFragment(), "Fee");
+        adapter.addFragment(new RouteFeesFragment(), "Vehicle");
         viewPager.setAdapter(adapter);
     }
 
