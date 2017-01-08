@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -36,6 +37,7 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
 import java.util.Calendar;
 
 public class DriverActivity extends AppCompatActivity
@@ -46,11 +48,13 @@ public class DriverActivity extends AppCompatActivity
     public static String userId;
     private static String userEmail;
     public static String driverName="";
+    View view;
     User mUser;
     Fragment fragment = null;
     TextView navName;
     TextView navEmail;
     String[] monthArray;
+    public static File folder;
 
 
     @Override
@@ -75,10 +79,30 @@ public class DriverActivity extends AppCompatActivity
         userEmail = user.getEmail().toString().trim();
         monthArray = getResources().getStringArray(R.array.months);
 
+
+        createFolder();
+        view = navigationView.getHeaderView(0);
+        setUserName();
+
+        updateLocation();
+
+
+
+        setPaymentSummery();
+
+
+    }
+
+    private void setUserName(){
         ref.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mUser = dataSnapshot.getValue(User.class);
+                navName = (TextView) view.findViewById(R.id.textDriverName);
+                navEmail = (TextView) view.findViewById(R.id.textDriverEmail);
+                navName.setText(mUser.getName());
+                navEmail.setText(userEmail);
+                driverName = mUser.getName();
 
             }
 
@@ -87,23 +111,6 @@ public class DriverActivity extends AppCompatActivity
 
             }
         });
-        updateLocation();
-        final View view = navigationView.getHeaderView(0);
-        final Handler key = new Handler();
-        key.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                navName = (TextView) view.findViewById(R.id.textDriverName);
-                navEmail = (TextView) view.findViewById(R.id.textDriverEmail);
-                navName.setText(mUser.getName());
-                navEmail.setText(userEmail);
-                driverName = mUser.getName();
-            }
-        }, 2000);
-
-        setPaymentSummery();
-
-
     }
 
     @Override
@@ -119,7 +126,7 @@ public class DriverActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.driver, menu);
+        //getMenuInflater().inflate(R.menu.driver, menu);
         return true;
     }
 
@@ -220,14 +227,6 @@ public class DriverActivity extends AppCompatActivity
         } catch (Exception e) {
             Log.d("Student", e.getMessage());
         }
-//        try{
-//            getSupportActionBar().setTitle("View Students");
-//            fragment = new ViewStudentFragment();
-//            FragmentManager fragmentManager = getFragmentManager();
-//            fragmentManager.beginTransaction().replace(R.id.main_frame_container, fragment).commit();
-//        }catch(Exception e){
-//            Log.d("Student", e.getMessage());
-//        }
     }
 
     public void changeFragmentParent() {
@@ -285,8 +284,23 @@ public class DriverActivity extends AppCompatActivity
 
     }
 
-    public void setDriverLocation(DriverLocation driverLocation) {
-        ref.child("Drivers").child(userId).child("myLocation").child("location").setValue(driverLocation);
+    public void setDriverLocation(final DriverLocation driverLocation) {
+        ref.child("Drivers").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild("updateLocation")){
+                    String locUpdateStatus = dataSnapshot.child("updateLocation").getValue().toString();
+                    if(locUpdateStatus.equals("Yes")){
+                        ref.child("Drivers").child(userId).child("myLocation").child("location").setValue(driverLocation);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
         try {
             getSupportActionBar().setTitle("Route");
             fragment = new RouteFragment();
@@ -344,5 +358,14 @@ public class DriverActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    private void createFolder(){
+        folder = new File(Environment.getExternalStorageDirectory() +
+                File.separator + "SchoolBus");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
     }
 }

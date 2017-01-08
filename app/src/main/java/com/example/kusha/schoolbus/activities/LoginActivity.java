@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setTitle("School Bus Login");
 
         mProgressDialog = new ProgressDialog(this);
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -113,20 +114,8 @@ public class LoginActivity extends AppCompatActivity {
         txtLoginForgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                String emailAddress = "kushansamee92@gmail.com";
-
-                auth.sendPasswordResetEmail(emailAddress)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
-                                }else {
-                                    Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                Intent intent = new Intent(LoginActivity.this,ForgetPasswordActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -199,22 +188,22 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String userType = dataSnapshot.child(userId).child("type").getValue().toString();
                 if (userType.equals("Driver")) {
-                    mProgressDialog.dismiss();
                     Intent intent = new Intent(LoginActivity.this, DriverActivity.class);
                     startActivity(intent);
+                    mProgressDialog.dismiss();
                 } else {
                     ref.child("Parents").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(dataSnapshot.hasChild("driver")){
-                                mProgressDialog.dismiss();
                                 Intent intent = new Intent(LoginActivity.this, SelectDriverActivity.class);
                                 startActivity(intent);
+                                mProgressDialog.dismiss();
                             }
                             else {
-                                mProgressDialog.dismiss();
                                 Intent intent = new Intent(LoginActivity.this, ParentActivity.class);
                                 startActivity(intent);
+                                mProgressDialog.dismiss();
                             }
                         }
 

@@ -42,6 +42,7 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        setTitle("School Bus Sign up");
         mfirebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
 
@@ -148,6 +149,7 @@ public class SignupActivity extends AppCompatActivity {
                             if (type.equals("Driver")) {
                                 ref.child("Drivers").child(UserId).child("email").setValue(email);
                                 ref.child("Drivers").child(UserId).child("accessKey").setValue("0");
+                                ref.child("Drivers").child(UserId).child("updateLocation").setValue("Yes");
 
                             } else {
                                 ref.child("Parents").child(UserId).child("email").setValue(email);

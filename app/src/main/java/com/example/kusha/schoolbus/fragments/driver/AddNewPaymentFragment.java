@@ -71,6 +71,7 @@ public class AddNewPaymentFragment extends Fragment {
         btnSearchStudent = (ImageButton) addNewPaymentFragment.findViewById(R.id.btnSearchStudent);
         btnAddPayment.setEnabled(false);
         monthArray = getResources().getStringArray(R.array.months);
+        spinnerYear.setSelection(1);
         ApplicationClass.bus.register(this);
 
         Calendar calendar = Calendar.getInstance();

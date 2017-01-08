@@ -19,7 +19,7 @@ public class ApplicationClass extends Application {
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
         bus = new Bus(ThreadEnforcer.MAIN);
-        //Parse.enableLocalDatastore(this);
+        Parse.enableLocalDatastore(this);
         Parse.initialize(this);
     }
 }

@@ -32,6 +32,7 @@ public class SelectChildActivity extends AppCompatActivity {
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     public FirebaseAuth mFirebaseAuth;
     private String userId;
+    int selectedRadioId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +48,22 @@ public class SelectChildActivity extends AppCompatActivity {
         userId = user.getUid().toString().trim();
         showChildren();
 
+        childRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                selectedRadioId = checkedId;
+            }
+        });
+
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int selectedRadioId = childRadioGroup.getCheckedRadioButtonId();
+
                 if(selectedRadioId==0){
                     Toast.makeText(SelectChildActivity.this, "Please Select a Child", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    selectedRadioId = childRadioGroup.getCheckedRadioButtonId();
                     RadioButton selectedRadioButton = (RadioButton)findViewById(selectedRadioId);
                     String name = selectedRadioButton.getText().toString();
                     for(int i=0;i<childrens.size();i++){

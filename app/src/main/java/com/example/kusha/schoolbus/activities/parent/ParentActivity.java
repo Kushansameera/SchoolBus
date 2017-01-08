@@ -51,6 +51,7 @@ public class ParentActivity extends AppCompatActivity
     public static String userId;
     private static String userEmail;
     User mUser;
+    View view;
     TextView navName;
     TextView navEmail;
 
@@ -84,34 +85,9 @@ public class ParentActivity extends AppCompatActivity
         userId = user.getUid().toString().trim();
         userEmail = user.getEmail().toString().trim();
 
-        ref.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // for (DataSnapshot data:dataSnapshot.getChildren()) {
-                mUser = dataSnapshot.getValue(User.class);
-                // }
 
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        final View view = navigationView.getHeaderView(0);
-        final Handler key = new Handler();
-        key.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                navName = (TextView) view.findViewById(R.id.textParentName);
-                navEmail = (TextView) view.findViewById(R.id.textParentEmail);
-//                navName.setText(mUser.getName());
-                navEmail.setText(userEmail);
-                parentName = mUser.getName();
-            }
-        }, 4000);
-        Log.d("=======>Child Name: ", selectedChildName);
+        view = navigationView.getHeaderView(0);
+        setUserName();
 
         try {
             getSupportActionBar().setTitle("Bus Location");
@@ -121,6 +97,26 @@ public class ParentActivity extends AppCompatActivity
         } catch (Exception e) {
             Log.d("Bus Location", e.getMessage());
         }
+    }
+
+    private void setUserName(){
+        ref.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mUser = dataSnapshot.getValue(User.class);
+                navName = (TextView) view.findViewById(R.id.textParentName);
+                navEmail = (TextView) view.findViewById(R.id.textParentEmail);
+                navName.setText(mUser.getName());
+                navEmail.setText(userEmail);
+                parentName = mUser.getName();
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -136,7 +132,7 @@ public class ParentActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.parent, menu);
+        //getMenuInflater().inflate(R.menu.parent, menu);
         return true;
     }
 

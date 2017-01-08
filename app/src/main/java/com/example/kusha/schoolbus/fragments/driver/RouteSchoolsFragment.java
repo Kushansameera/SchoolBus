@@ -1,6 +1,7 @@
 package com.example.kusha.schoolbus.fragments.driver;
 
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -64,7 +65,7 @@ public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback
     private String latestSchoolID = "";
     private boolean flag = false;
     private String newSchoolName = "";
-
+    private ProgressDialog progressDialog;
     EditText txtRouteSchoolName;
     ImageButton btnAddRouteSchool;
     GoogleMap googleMap;
@@ -86,6 +87,9 @@ public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback
         btnAddRouteSchool = (ImageButton) routeSchoolFragment.findViewById(R.id.btnAddRouteSchool);
         SupportPlaceAutocompleteFragment placeAutocompleteFragment = (SupportPlaceAutocompleteFragment) this.getChildFragmentManager().findFragmentById(R.id.school_autocomplete_fragment);
 
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Wait...");
+        progressDialog.setCancelable(false);
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         userId = user.getUid().toString().trim();
@@ -238,7 +242,8 @@ public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback
                 routeSchools.setSchoolLatitude(schoolLatitiude);
                 routeSchools.setSchoolLongitude(schoolLongitude);
                 ref.child("Drivers").child(userId).child("schools").child("routeSchools").child(latestSchoolID).setValue(routeSchools);
-                Toast.makeText(getActivity(), "Successfully Added Location", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                Toast.makeText(getActivity(), "School Successfully Added", Toast.LENGTH_SHORT).show();
                 txtRouteSchoolName.setText("");
                 googleMap.clear();
             }
@@ -315,6 +320,7 @@ public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void checkSchoolExists() {
+        progressDialog.show();
         Query queryRef;
         queryRef = ref.child("Drivers").child(userId).child("schools").child("routeSchools").orderByValue();
         final String oldSchoolName = txtRouteSchoolName.getText().toString();
@@ -330,6 +336,7 @@ public class RouteSchoolsFragment extends Fragment implements OnMapReadyCallback
                         }
                     }
                     if (flag) {
+                        progressDialog.dismiss();
                         Toast.makeText(getActivity(), "School Name is Already Exists", Toast.LENGTH_SHORT).show();
                         txtRouteSchoolName.setText("");
                     } else {

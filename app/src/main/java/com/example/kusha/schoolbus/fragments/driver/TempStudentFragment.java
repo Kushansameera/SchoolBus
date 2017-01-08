@@ -309,13 +309,17 @@ public class TempStudentFragment extends Fragment {
                 txtTempStuSchool.setText(student.getStuSchool());
                 txtTempStuGrade.setText(student.getStuGrade());
                 txtTempStuClass.setText(student.getStuClass());
-                if (!stuType.equals("Morning Only")) {
+                if (stuType.equals("Afternoon Only")) {
                     txtTempStuDrop.setText(student.getStuDropLocation());
                     txtTempStuPickup.setText("-");
                 }
-                if (!stuType.equals("Afternoon Only")) {
+                if (stuType.equals("Morning Only")) {
                     txtTempStuPickup.setText(student.getStuPickLocation());
                     txtTempStuDrop.setText("-");
+                }
+                else {
+                    txtTempStuPickup.setText(student.getStuPickLocation());
+                    txtTempStuDrop.setText(student.getStuDropLocation());
                 }
                 txtTempStuPickupTime.setText(student.getStuPickTime());
                 getSchoolDetails();

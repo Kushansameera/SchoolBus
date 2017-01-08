@@ -1,12 +1,17 @@
 package com.example.kusha.schoolbus.fragments.driver;
 
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -15,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.kusha.schoolbus.R;
 import com.example.kusha.schoolbus.activities.driver.DriverActivity;
+import com.example.kusha.schoolbus.application.ReportCreator;
+import com.example.kusha.schoolbus.models.PaymentSummery;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -25,7 +32,16 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -39,11 +55,18 @@ public class PaymentSummeryFragment extends Fragment {
     TextView txtTargetIncome, txtCurrentIncome, txtReceivables;
     ImageButton btnSearch;
     LinearLayout myLayout;
+    Button btnCreatePdf;
+    private PaymentSummery paymentSummery;
     private Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
+    private String year;
+    private String month;
+    private int totalIncome;
+    private int currentIncome;
+    private Bitmap pieChartImage;
 
     //private float[] yData;
     private String[] xData = {"Receivables", "Received"};
-    PieChart pieChart;
+    PieChart pieChart=null;
 
     public PaymentSummeryFragment() {
     }
@@ -61,7 +84,10 @@ public class PaymentSummeryFragment extends Fragment {
         txtReceivables = (TextView) paymentSummeryFragment.findViewById(R.id.txtReceivables);
         btnSearch = (ImageButton) paymentSummeryFragment.findViewById(R.id.btnSearchSummery);
         myLayout = (LinearLayout)paymentSummeryFragment.findViewById(R.id.myLayout);
+        btnCreatePdf = (Button)paymentSummeryFragment.findViewById(R.id.btnCreatePdf);
         //pieChart = (PieChart) paymentSummeryFragment.findViewById(R.id.summeryChart);
+        spinnerYear.setSelection(1);
+        btnCreatePdf.setEnabled(false);
         pieChart = new PieChart(paymentSummeryFragment.getContext());
         pieChart.setRotationEnabled(true);
         pieChart.setTransparentCircleAlpha(0);
@@ -69,12 +95,25 @@ public class PaymentSummeryFragment extends Fragment {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
+        btnCreatePdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paymentSummery = new PaymentSummery();
+                paymentSummery.setTargetIncome("Rs. "+String.valueOf(totalIncome));
+                paymentSummery.setReceived("Rs. "+String.valueOf(currentIncome));
+                paymentSummery.setReceivables("Rs. "+String.valueOf(totalIncome-currentIncome));
+                paymentSummery.setYear(year);
+                paymentSummery.setMonth(month);
+
+                createPdf();
+            }
+        });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String year = spinnerYear.getSelectedItem().toString();
-                final String month = spinnerMonth.getSelectedItem().toString();
+                year = spinnerYear.getSelectedItem().toString();
+                month = spinnerMonth.getSelectedItem().toString();
                 txtReceivables.setText("");
                 txtTargetIncome.setText("");
                 txtCurrentIncome.setText("");
@@ -87,9 +126,11 @@ public class PaymentSummeryFragment extends Fragment {
                                 myLayout.addView(pieChart);
                                 searchSummery(year,month);
                             }else {
+                                btnCreatePdf.setEnabled(false);
                                 Toast.makeText(getActivity(), "No Data Found", Toast.LENGTH_SHORT).show();
                             }
                         }else {
+                            btnCreatePdf.setEnabled(false);
                             Toast.makeText(getActivity(), "No Data Found", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -106,12 +147,40 @@ public class PaymentSummeryFragment extends Fragment {
         return paymentSummeryFragment;
     }
 
+    private void createPdf(){
+        try {
+            Bitmap bitmap= BitmapFactory.decodeResource(getResources(), R.drawable.buslogo);
+            ByteArrayOutputStream stream=new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+            Image imgLogo = Image.getInstance(stream.toByteArray());
+
+
+
+            stream = new ByteArrayOutputStream();
+            pieChartImage.compress(Bitmap.CompressFormat.PNG, 50, stream);
+            Image imgChart = Image.getInstance(stream.toByteArray());
+
+
+            ReportCreator newReport = new ReportCreator(DriverActivity.folder+"/PaymentSummery_"+paymentSummery.getYear()+"_"+paymentSummery.getMonth()+".pdf",paymentSummery);
+            newReport.setImgLogo(imgLogo);
+            newReport.setImgChart(imgChart);
+            newReport.createPDF();
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            File file = new File(DriverActivity.folder + "/PaymentSummery_"+paymentSummery.getYear()+"_"+paymentSummery.getMonth()+".pdf");
+            intent.setDataAndType( Uri.fromFile( file ), "application/pdf" );
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void searchSummery(String year,String month){
         ref.child("Drivers").child(DriverActivity.userId).child("budget").child("summery").child(year).child(month).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int totalIncome = Integer.parseInt(dataSnapshot.child("totalIncome").getValue().toString());
-                int currentIncome = Integer.parseInt(dataSnapshot.child("currentIncome").getValue().toString());
+                totalIncome = Integer.parseInt(dataSnapshot.child("totalIncome").getValue().toString());
+                currentIncome = Integer.parseInt(dataSnapshot.child("currentIncome").getValue().toString());
                 setFields(totalIncome,currentIncome);
             }
 
@@ -170,7 +239,9 @@ public class PaymentSummeryFragment extends Fragment {
         //create pie data object
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
+        pieChartImage = pieChart.getChartBitmap();
         pieChart.invalidate();
+        btnCreatePdf.setEnabled(true);
     }
 
 }

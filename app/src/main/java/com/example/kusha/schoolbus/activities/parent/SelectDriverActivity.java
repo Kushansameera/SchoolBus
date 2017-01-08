@@ -39,6 +39,7 @@ public class SelectDriverActivity extends AppCompatActivity {
     private RadioGroup driverRadioGroup;
     List<ManageDrivers> manageDrivers = new ArrayList<>();
     private ProgressDialog mProgressDialog;
+    int selectedRadioId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,13 @@ public class SelectDriverActivity extends AppCompatActivity {
         select = (Button) findViewById(R.id.btnDone);
         driverRadioGroup = (RadioGroup) findViewById(R.id.radioGroupDrivers);
 
+        driverRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                selectedRadioId = checkedId;
+            }
+        });
+
         showDrivers();
 
         select.setOnClickListener(new View.OnClickListener() {
@@ -61,15 +69,15 @@ public class SelectDriverActivity extends AppCompatActivity {
                 mProgressDialog.setMessage("Wait");
                 mProgressDialog.show();
                 mProgressDialog.setCancelable(false);
-                int selectedRadioId = driverRadioGroup.getCheckedRadioButtonId();
-                RadioButton selectedRadioButton = (RadioButton)findViewById(selectedRadioId);
-                if(selectedRadioId==0){
+                if (selectedRadioId == 0) {
+                    mProgressDialog.dismiss();
                     Toast.makeText(SelectDriverActivity.this, "Please Select a Driver", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
+                    selectedRadioId = driverRadioGroup.getCheckedRadioButtonId();
+                    RadioButton selectedRadioButton = (RadioButton) findViewById(selectedRadioId);
                     String name = selectedRadioButton.getText().toString();
-                    for(int i=0;i<manageDrivers.size();i++){
-                        if(name.equals(manageDrivers.get(i).getDriverName())){
+                    for (int i = 0; i < manageDrivers.size(); i++) {
+                        if (name.equals(manageDrivers.get(i).getDriverName())) {
                             ParentActivity.selectedDriverEmail = manageDrivers.get(i).getDriverEmail();
                             ParentActivity.selectedDriverID = manageDrivers.get(i).getDriverId();
                             ParentActivity.selectedDriverName = manageDrivers.get(i).getDriverName();
@@ -83,12 +91,11 @@ public class SelectDriverActivity extends AppCompatActivity {
                                 ref.child("Parents").child(userId).child("children").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.hasChild(ParentActivity.selectedDriverID)){
+                                        if (dataSnapshot.hasChild(ParentActivity.selectedDriverID)) {
                                             mProgressDialog.dismiss();
                                             Intent intent = new Intent(SelectDriverActivity.this, SelectChildActivity.class);
                                             startActivity(intent);
-                                        }
-                                        else{
+                                        } else {
                                             ParentActivity.selectedChildId = "";
                                             ParentActivity.selectedChildName = "";
                                             mProgressDialog.dismiss();
@@ -151,7 +158,6 @@ public class SelectDriverActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 }

@@ -49,6 +49,7 @@ dependencies {
     compile 'com.akexorcist:googledirectionlibrary:1.0.5'
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.parse:parse-android:1.+'
+    compile 'com.itextpdf:itext-pdfa:5.5.5'
     compile ('com.mapbox.mapboxsdk:mapbox-android-directions:1.0.0@aar'){
         transitive=true
     }

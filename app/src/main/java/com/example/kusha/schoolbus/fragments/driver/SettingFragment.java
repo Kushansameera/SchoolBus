@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ public class SettingFragment extends Fragment {
     TextView txtCurrentAccessKey;
     EditText txtNewAccessKey,txtNewPw,txtRetypePw;
     Button btnCreateNewKey,btnRemoveCurrentKey,btnChangePw;
+    private Switch locUpdate;
 
     public SettingFragment() {
 
@@ -50,6 +53,7 @@ public class SettingFragment extends Fragment {
         btnCreateNewKey = (Button)settingFragment.findViewById(R.id.btnCreateNewKey);
         btnRemoveCurrentKey = (Button)settingFragment.findViewById(R.id.btnRemoveCurrentKey);
         btnChangePw = (Button)settingFragment.findViewById(R.id.btnChangePw);
+        locUpdate = (Switch)settingFragment.findViewById(R.id.switchLocation);
         mFirebaseAuth = FirebaseAuth.getInstance();
         setCurrentAccessKey();
 
@@ -58,6 +62,17 @@ public class SettingFragment extends Fragment {
             public void onClick(View v) {
                 createNewAccessKey();
                 getCurrentAccessKey();
+            }
+        });
+
+        locUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    ref.child("Drivers").child(DriverActivity.userId).child("updateLocation").setValue("Yes");
+                }else {
+                    ref.child("Drivers").child(DriverActivity.userId).child("updateLocation").setValue("No");
+                }
             }
         });
 
@@ -111,6 +126,14 @@ public class SettingFragment extends Fragment {
                 } else {
                     btnRemoveCurrentKey.setEnabled(false);
                     txtCurrentAccessKey.setText("");
+                }
+                if(dataSnapshot.hasChild("updateLocation")){
+                    String locUpdateStatus = dataSnapshot.child("updateLocation").getValue().toString();
+                    if(locUpdateStatus.equals("Yes")){
+                        locUpdate.setChecked(true);
+                    }else if(locUpdateStatus.equals("No")){
+                        locUpdate.setChecked(false);
+                    }
                 }
             }
 

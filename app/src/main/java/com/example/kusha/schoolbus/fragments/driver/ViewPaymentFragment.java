@@ -66,6 +66,7 @@ public class ViewPaymentFragment extends Fragment {
         spinnerYear = (Spinner) viewPaymentFragment.findViewById(R.id.spinnerYear);
         spinnerMonth = (Spinner) viewPaymentFragment.findViewById(R.id.spinnerMonth);
         btnSearchPayment = (ImageButton) viewPaymentFragment.findViewById(R.id.btnSearchPayment);
+        spinnerYear.setSelection(1);
 
         rcvPaid.setLayoutManager(new LinearLayoutManager(getActivity()));
         paidStudentAdapter = new PaidStudentAdapter(getActivity(), paidStudents);

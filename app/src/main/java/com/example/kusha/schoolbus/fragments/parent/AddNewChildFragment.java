@@ -202,13 +202,7 @@ public class AddNewChildFragment extends Fragment {
                         }
 
                     }
-//                    final Handler key = new Handler();
-//                    key.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            changeFragment();
-//                        }
-//                    }, 2000);
+
                 }
 
             }
@@ -222,15 +216,19 @@ public class AddNewChildFragment extends Fragment {
                 if (studentType.equals("Morning Only")) {
                     btnStuDropLocation.setEnabled(false);
                     btnStuPickLocation.setEnabled(true);
+                    btnStuPickTime.setEnabled(true);
                     txtDropLocation.setText("");
 
                 } else if (studentType.equals("Afternoon Only")) {
                     btnStuDropLocation.setEnabled(true);
                     btnStuPickLocation.setEnabled(false);
                     txtPickLocation.setText("");
+                    btnStuPickTime.setEnabled(false);
+                    txtPickTime.setText("-");
                 } else if (studentType.equals("Both")) {
                     btnStuDropLocation.setEnabled(true);
                     btnStuPickLocation.setEnabled(true);
+                    btnStuPickTime.setEnabled(true);
                 }
             }
         });
@@ -322,7 +320,7 @@ public class AddNewChildFragment extends Fragment {
         } else if (txtDropLocation.getText().toString().trim().length() == 0 && !studentType.equals("Morning Only")) {
             Toast.makeText(getActivity(), "Please Select Drop Location", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (txtPickTime.getText().toString().trim().length() == 0) {
+        } else if (!studentType.equals("Afternoon Only") && txtPickTime.getText().toString().trim().length() == 0) {
             Toast.makeText(getActivity(), "Please Select Pickup Time", Toast.LENGTH_SHORT).show();
             return false;
         } else if (spinnerStuSchool.getSelectedItemPosition() == 0) {

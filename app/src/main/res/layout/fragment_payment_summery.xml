@@ -7,7 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -150,14 +151,37 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:id="@+id/myLayout">
-            <!--<com.github.mikephil.charting.charts.PieChart-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:id="@+id/summeryChart">-->
-            <!--</com.github.mikephil.charting.charts.PieChart>-->
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:id="@+id/myLayout"
+                android:layout_weight="0.8">
+                <!--<com.github.mikephil.charting.charts.PieChart-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:id="@+id/summeryChart">-->
+                <!--</com.github.mikephil.charting.charts.PieChart>-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btnCreatePdf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#387EF5"
+                    android:text="Create PDF"
+                    android:textColor="@android:color/background_light"
+                    android:gravity="center"
+                    android:layout_gravity="right" />
+            </LinearLayout>
+
         </LinearLayout>
 
 

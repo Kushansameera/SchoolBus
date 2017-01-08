@@ -22,7 +22,10 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class AttendanceFragment extends Fragment {
@@ -126,17 +129,21 @@ public class AttendanceFragment extends Fragment {
     }
 
     private void setFields() {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int date = calendar.get(Calendar.DATE);
+//        Calendar calendar = Calendar.getInstance();
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        int date = calendar.get(Calendar.DATE);
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormatter.setLenient(false);
+        Date today = new Date();
+        String s = dateFormatter.format(today);
         txtCurrentChildName.setText(myChild.getStuName());
         if (myChild.getStuType().equals("Both")){
             txtCurrentChildType.setText("Morning & Evening");
         }else {
             txtCurrentChildType.setText(myChild.getStuType());
         }
-        txtCurrentDate.setText(String.valueOf(year)+"-"+monthArray[month]+"-"+String.valueOf(date));
+        txtCurrentDate.setText(s);
 
         if(myChild.getStuType().equals("Morning Only")){
             for (int i = 0; i < radioGroupEvening.getChildCount(); i++) {

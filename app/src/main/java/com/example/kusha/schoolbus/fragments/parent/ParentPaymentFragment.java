@@ -48,6 +48,7 @@ public class ParentPaymentFragment extends Fragment {
         btnSearch = (ImageButton) parentPaymentFragment.findViewById(R.id.btnSearchPayment);
         txtChildName.setText(ParentActivity.selectedChildName);
         mProgressDialog = new ProgressDialog(getActivity());
+        spinnerYear.setSelection(1);
         if(ParentActivity.selectedChildId.length()==0){
             Toast.makeText(getActivity(), "Please Select a Child", Toast.LENGTH_SHORT).show();
             btnSearch.setEnabled(false);
