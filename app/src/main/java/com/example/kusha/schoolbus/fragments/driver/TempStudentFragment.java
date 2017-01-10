@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +49,7 @@ public class TempStudentFragment extends Fragment {
 
     private TextView txtTempStuType, txtTempStuName, txtTempStuSchool, txtTempStuGrade, txtTempStuClass, txtTempStuPickup, txtTempStuDrop, txtTempStuPickupTime, txtTempStuMonthlyFee;
     private Button btnAccept, btnReject, btnMonthlyFee;
-    private ImageButton tempStuImageButton;
+    private ImageView tempStuImageView;
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     private ProgressDialog progressDialog;
     private Student student;
@@ -85,7 +86,7 @@ public class TempStudentFragment extends Fragment {
         btnAccept = (Button) stuRequestFragment.findViewById(R.id.btnAccept);
         btnReject = (Button) stuRequestFragment.findViewById(R.id.btnReject);
         btnMonthlyFee = (Button) stuRequestFragment.findViewById(R.id.btnMonthlyFee);
-        tempStuImageButton = (ImageButton) stuRequestFragment.findViewById(R.id.tempStuImageButton);
+        tempStuImageView = (ImageView) stuRequestFragment.findViewById(R.id.tempStuImageView);
         mProgressDialog = new ProgressDialog(getActivity());
         monthArray = getResources().getStringArray(R.array.months);
         getTempStudentData();
@@ -337,7 +338,7 @@ public class TempStudentFragment extends Fragment {
         try {
             byte [] encodeByte= Base64.decode(url,Base64.DEFAULT);
             Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            tempStuImageButton.setImageBitmap(bitmap);
+            tempStuImageView.setImageBitmap(bitmap);
             progressDialog.dismiss();
         } catch(Exception e) {
             e.getMessage();
