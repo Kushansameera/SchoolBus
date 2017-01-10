@@ -2,7 +2,6 @@ package com.example.kusha.schoolbus.fragments.driver;
 
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +30,6 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -44,7 +39,8 @@ public class ViewStudentFragment extends Fragment {
     public static String driverId = "";
     private TextView txtCurrentStuName, txtCurrentStuSchool, txtCurrentStuGender, txtCurrentStuGrade, txtCurrentStuClass, txtCurrentStuPickup, txtCurrentStuDrop, txtCurrentStuPickupTime, txtCurrentStuMonthlyFee;
     private Button btnPerStuEdit, btnPerStuSave, btnPerStuDelete;
-    ImageButton btnParentInfo,currentStuImageButton;
+    ImageButton btnParentInfo;
+    ImageView currentStuImageView;
     Firebase ref = new Firebase("https://schoolbus-708f4.firebaseio.com/");
     private Student student;
     private User user;
@@ -76,7 +72,7 @@ public class ViewStudentFragment extends Fragment {
         btnPerStuSave = (Button) viewStudentFragment.findViewById(R.id.btnPerStuSave);
         btnPerStuDelete = (Button) viewStudentFragment.findViewById(R.id.btnPerStuDelete);
         btnParentInfo = (ImageButton) viewStudentFragment.findViewById(R.id.btnParentInfo);
-        currentStuImageButton = (ImageButton) viewStudentFragment.findViewById(R.id.currentStuImageButton);
+        currentStuImageView = (ImageView) viewStudentFragment.findViewById(R.id.currentStuImageView);
 
         disableFields();
         getStudentData();
@@ -173,7 +169,7 @@ public class ViewStudentFragment extends Fragment {
         try {
             byte [] encodeByte= Base64.decode(url,Base64.DEFAULT);
             Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            currentStuImageButton.setImageBitmap(bitmap);
+            currentStuImageView.setImageBitmap(bitmap);
             progressDialog.dismiss();
         } catch(Exception e) {
             e.getMessage();

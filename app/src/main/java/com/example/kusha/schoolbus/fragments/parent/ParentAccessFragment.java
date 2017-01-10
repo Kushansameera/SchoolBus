@@ -203,7 +203,7 @@ public class ParentAccessFragment extends Fragment {
                     if (name.equals(childrens.get(i).getStuName())) {
                         ParentActivity.selectedChildName = childrens.get(i).getStuName();
                         ParentActivity.selectedChildId = childrens.get(i).getStuId();
-                        Toast.makeText(getActivity(), "id= " + ParentActivity.selectedChildId + "\n Name= " + ParentActivity.selectedChildName, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),childrens.get(i).getStuName()+" Selected", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getActivity(), ParentActivity.class);
                         startActivity(intent);
                         break;

@@ -20,12 +20,12 @@
             android:layout_height="match_parent"
             android:weightSum="1">
 
-            <ImageButton
-                android:layout_height="100dp"
+            <ImageView
+                android:layout_height="125dp"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_stu_photo"
-                android:id="@+id/tempStuImageButton"
-                android:layout_width="100dp" />
+                android:src="@drawable/ic_stu_photo"
+                android:id="@+id/tempStuImageView"
+                android:layout_width="125dp" />
 
             <LinearLayout
                 android:orientation="horizontal"

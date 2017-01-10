@@ -2,6 +2,7 @@ package com.example.kusha.schoolbus.application;
 
 
 
+import com.example.kusha.schoolbus.activities.driver.DriverActivity;
 import com.example.kusha.schoolbus.models.PaymentSummery;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -88,6 +89,7 @@ public class ReportCreator {
         addEmptyLine(report,2);
         report.add(new Paragraph("\t\t\tPayment Summery for "+paymentSummery.getYear()+"/"+paymentSummery.getMonth(), catFont));
         report.add(new Paragraph("" +s, smallBold));
+        report.add(new Paragraph("Driver Name : "+ DriverActivity.driverName, smallBold));
         addEmptyLine(report,2);
         report.add(new Paragraph("Target Income : "+paymentSummery.getTargetIncome(), smallBold));
         addEmptyLine(report,1);

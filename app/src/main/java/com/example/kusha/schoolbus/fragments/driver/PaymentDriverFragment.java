@@ -177,7 +177,7 @@ public class PaymentDriverFragment extends Fragment {
             }
         }
         mProgressDialog.dismiss();
-        Toast.makeText(getActivity(), "Successfully Updated", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Successfully Updated", Toast.LENGTH_SHORT).show();
         ApplicationClass.bus.unregister(this);
 
     }

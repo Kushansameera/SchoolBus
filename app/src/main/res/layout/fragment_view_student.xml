@@ -18,12 +18,12 @@
             android:layout_height="wrap_content"
             android:weightSum="1">
 
-            <ImageButton
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+            <ImageView
+                android:layout_width="125dp"
+                android:layout_height="125dp"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_stu_photo"
-                android:id="@+id/currentStuImageButton" />
+                android:src="@drawable/ic_stu_photo"
+                android:id="@+id/currentStuImageView" />
 
             <LinearLayout
                 android:orientation="horizontal"
