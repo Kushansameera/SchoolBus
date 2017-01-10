@@ -164,7 +164,7 @@ public class ViewStudentFragment extends Fragment {
             }
         });
     }
-
+//
     private void getImage(String url){
         try {
             byte [] encodeByte= Base64.decode(url,Base64.DEFAULT);

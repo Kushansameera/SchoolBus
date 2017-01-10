@@ -191,7 +191,7 @@ public class ParentAccessFragment extends Fragment {
         alertDialogBuilder.setPositiveButton("Select", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                int selectedRadioId = childRadioGroup.getCheckedRadioButtonId()-childrens.size();
+///                int selectedRadioId = childRadioGroup.getCheckedRadioButtonId()-childrens.size();
 //                ParentActivity.selectedChildId = childrens.get(selectedRadioId-1).getStuId().toString().trim();
 //                ParentActivity.selectedChildName = childrens.get(selectedRadioId-1).getStuName().toString().trim();
                 //Intent intent = new Intent(SelectDriverActivity.this, ParentActivity.class);
